@@ -14,6 +14,10 @@ public class Branch {
         bank.addBranch(this);
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public void printBranchInfo() {
         System.out.println("Branch " + address + " From Bank " + bank.getName());
     }

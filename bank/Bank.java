@@ -19,6 +19,10 @@ public class Bank {
         branches.add(branch);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void printBankInfo() {
         System.out.println("Bank: " + name);
         for (Branch branch : branches) {
