@@ -10,10 +10,6 @@ public class Card extends Account {
         super(customer);
     }
 
-    public List<String> getTransactions() {
-        return transactions;
-    }
-
     @Override
     public void pay() {
         System.out.println("Card payment for: " + customer.getName());

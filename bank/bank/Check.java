@@ -14,10 +14,6 @@ public class Check extends Account {
         System.out.println("**Check Title**");
     }
 
-    public List<String> getTransactions() {
-        return transactions;
-    }
-
     @Override
     public void pay() {
         //check title
