@@ -13,10 +13,6 @@ public class Saving extends Account {
         System.out.println("**Payments**");
     };
 
-    public List<String> getTransactions() {
-        return transactions;
-    }
-
     @Override
     public void pay() {
         title();
