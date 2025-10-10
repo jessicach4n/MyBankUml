@@ -50,3 +50,5 @@ buildNumber.properties
 
 # IDEA
 .idea/*
+
+*.iml
