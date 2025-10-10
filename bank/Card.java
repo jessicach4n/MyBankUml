@@ -1,8 +1,17 @@
 package bank;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Card extends Account {
+    private List<String> transactions = new ArrayList<>();
+
     public Card(Customer customer) {
         super(customer);
+    }
+
+    public List<String> getTransactions() {
+        return transactions;
     }
 
     @Override

@@ -14,6 +14,10 @@ public class Customer {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     // Display customers info
     public void printCustomerInfo() {
         System.out.println("Customer's info: " );
