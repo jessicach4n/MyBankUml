@@ -54,3 +54,10 @@ mvn dependency:copy-dependencies -DoutputDirectory=./libs
 ---
 
 Originally developed by [@shayanaminaei](https://github.com/shayanaminaei)
+
+Run Directly with Shell Scripts:
+To run console app:
+./run.sh
+
+To run GUI app:
+./run-gui.sh

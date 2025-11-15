@@ -1,4 +1,4 @@
-package com.example.bankuml;
+package bank;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

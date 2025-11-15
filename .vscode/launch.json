@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "GUI",
+            "request": "launch",
+            "mainClass": "bank.GUI",
+            "projectName": "BankUml"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "BankUml"
+        },
+        {
+            "type": "java",
+            "name": "Run Bank Application",
+            "request": "launch",
+            "mainClass": "bank.Main",
+            "projectName": "BankUml",
+            "classPaths": [
+                "${workspaceFolder}/bank",
+                "${workspaceFolder}/libs/*"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Debug Bank Application",
+            "request": "launch",
+            "mainClass": "bank.Main",
+            "projectName": "BankUml",
+            "classPaths": [
+                "${workspaceFolder}/bank",
+                "${workspaceFolder}/libs/*"
+            ]
+        }
+    ]
+}
