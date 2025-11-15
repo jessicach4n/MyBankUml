@@ -1,4 +1,4 @@
-package bank;
+package transaction;
 
 public class Transaction {
     public void pay() {

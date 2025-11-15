@@ -1,6 +1,8 @@
-package bank;
+package account;
 
 import lombok.Getter;
+import transaction.Transaction;
+import user.Customer;
 
 import java.util.ArrayList;
 import java.util.List;

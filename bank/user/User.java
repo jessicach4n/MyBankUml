@@ -1,4 +1,4 @@
-package bank;
+package user;
 import java.util.Date;
 
 public abstract class User {

@@ -1,4 +1,4 @@
-package bank;
+package user;
 
 import lombok.Getter;
 import lombok.Setter;
