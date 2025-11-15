@@ -19,6 +19,10 @@ public abstract class Account {
         transactions.add(transaction);
     }
 
+    public List<Transaction> getTransactions() {
+        return this.transactions;
+    }
+
     public abstract void pay();
     public abstract void receipt();
 }
