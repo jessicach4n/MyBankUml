@@ -2,6 +2,9 @@ package bank;
 
 public class Main {
     public static void main(String[] args) {
+
+        GUI.launch(GUI.class, args);
+
         // New customer
         Customer customer = new Customer("Shayan Aminaei");
         customer.printCustomerInfo();
@@ -43,8 +46,9 @@ public class Main {
         System.out.println();
 
         // Transaction's test
-        System.out.println("Card   transactions count:   " + card.getTransactions().size());
-        System.out.println("Check  transactions count:   " + check.getTransactions().size());
-        System.out.println("Saving transactions count:   " + saving.getTransactions().size());
+       // System.out.println("Card   transactions count:   " + card.getTransactions().size());
+       // System.out.println("Check  transactions count:   " + check.getTransactions().size());
+       // System.out.println("Saving transactions count:   " + saving.getTransactions().size());
     }
+
 }

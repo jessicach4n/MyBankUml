@@ -1,4 +1,5 @@
-package com.example.bankuml;
+package bank;
+import java.io.File;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,22 +15,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
-
-    private void style_text(Node node, double size, boolean bold, int rgb) {
-        String family = "Arial";
-        String existing = node.getStyle();
-        if (existing == null) existing = "";
-        String weight = bold ? "bold" : "normal";
-        String color_hex = String.format("#%06X", rgb & 0xFFFFFF);
-        node.setStyle(
-                existing +
-                        (existing.isEmpty() ? "" : ";") +
-                        "-fx-font-family: '" + family + "';" +
-                        "-fx-font-size: " + size + "px;" +
-                        "-fx-font-weight: " + weight + ";" +
-                        "-fx-text-fill: " + color_hex + ";"
-        );
-    }
 
     private StackPane content_stack;
     private Pane home_view;
@@ -55,7 +40,7 @@ public class GUI extends Application {
 
         Scene scene = new Scene(root, 1200, 720);
         scene.getStylesheets().add(
-                getClass().getResource("bank.css").toExternalForm()
+                new File("bank.css").toURI().toString()
         );
         scene.getRoot().setStyle("-fx-font-family: 'Arial';");
 
@@ -454,8 +439,6 @@ public class GUI extends Application {
         return root;
     }
 
-
-
     private Pane create_account_card(String title, String type, String number, String bg_color) {
         Label l1 = new Label(title);
         Label l2 = new Label(type);
@@ -520,14 +503,26 @@ public class GUI extends Application {
         });
     }
 
+    private void style_text(Node node, double size, boolean bold, int rgb) {
+        String family = "Arial";
+        String existing = node.getStyle();
+        if (existing == null) existing = "";
+        String weight = bold ? "bold" : "normal";
+        String color_hex = String.format("#%06X", rgb & 0xFFFFFF);
+        node.setStyle(
+                existing +
+                        (existing.isEmpty() ? "" : ";") +
+                        "-fx-font-family: '" + family + "';" +
+                        "-fx-font-size: " + size + "px;" +
+                        "-fx-font-weight: " + weight + ";" +
+                        "-fx-text-fill: " + color_hex + ";"
+        );
+    }
+
     private void show_view(Pane view) {
         for (Node child : content_stack.getChildren()) {
             child.setVisible(child == view);
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     public static class Transaction {
@@ -548,4 +543,6 @@ public class GUI extends Application {
         public javafx.beans.property.StringProperty card_property() { return card; }
         public javafx.beans.property.StringProperty amount_property() { return amount; }
     }
+
 }
+

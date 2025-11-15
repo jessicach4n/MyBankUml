@@ -1,8 +1,5 @@
 package bank;
 
-import lombok.Getter;
-
-@Getter
 public class Branch {
     private final String address;
     private final Bank bank;

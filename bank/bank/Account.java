@@ -1,11 +1,9 @@
 package bank;
 
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 public abstract class Account {
     protected Customer customer;
     protected List<Transaction> transactions;
