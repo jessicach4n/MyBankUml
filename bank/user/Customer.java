@@ -1,21 +1,38 @@
 package user;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 
-@Setter
-@Getter
-public class Customer {
+public class Customer extends User{
 
     private String name;
-
-    // Constructor
-    public Customer(String name) {
+    private int age;
+    private String telNo;
+    
+    public Customer(String username, String password, String emailString, String name, int age, String telNo) {
+        super(username, password, emailString, new Role("Customer"));
         this.name = name;
+        this.age = age;
+        this.telNo = telNo;
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getTelNo() {
+        return telNo;
+    }
+
+    public void setTelNo(String telNo) {
+        this.telNo = telNo;
     }
 
     // Display customers info
