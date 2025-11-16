@@ -1,7 +1,5 @@
 package user;
 
-import java.util.Date;
-
 public class Customer extends User{
 
     private String name;
