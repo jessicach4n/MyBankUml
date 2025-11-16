@@ -2,12 +2,28 @@ package user;
 import java.util.Date;
 
 public abstract class User {
+    private static long idCounter = 0;
     private long id;
     private String username;
     private String password;
     private String emailString;
     private Role role;
     private Date createdDate;
+
+    public User(String username, String password, String emailString, Role role) {
+        // ID is generated automatically, upon the instantiation of the User
+        this.id = generateId();
+        this.username = username;
+        this.password = password;
+        this.emailString = emailString;
+        this.role = role;
+        // Created date generated automatically, upon the instantiation of the User
+        this.createdDate = new Date(); 
+    }
+
+    private long generateId() {
+        return ++idCounter;
+    }
 
     public long getId() {
         return id;
