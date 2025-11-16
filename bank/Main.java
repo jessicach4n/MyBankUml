@@ -23,10 +23,10 @@ public class Main {
         Saving saving = new Saving(customer);
 
         // Transations for each account
-        Transaction t1 = new Transaction();
-        Transaction t2 = new Transaction();
-        Transaction t3 = new Transaction();
-
+        Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
+        Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
+        Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
+        
         card.addTransaction(t1);
         check.addTransaction(t2);
         saving.addTransaction(t3);
