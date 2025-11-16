@@ -72,4 +72,9 @@ public abstract class User {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    public boolean validatePassword() {
+        // TODO
+        return true;
+    }
 }
