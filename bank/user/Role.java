@@ -6,6 +6,10 @@ public class Role {
     private String roleName;
     private List<String>  permissions;
 
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
     public long getId() {
         return id;
     }
