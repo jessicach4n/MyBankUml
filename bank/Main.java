@@ -1,4 +1,4 @@
-package bank;
+
 
 import account.Card;
 import account.Check;
@@ -11,7 +11,7 @@ import user.Customer;
 public class Main {
     public static void main(String[] args) {
         // New customer
-        Customer customer = new Customer("Shayan Aminaei");
+        Customer customer = new Customer("username", "password", "email", "Shayan Aminaei", 10, "100");
         customer.printCustomerInfo();
         System.out.println();
 
