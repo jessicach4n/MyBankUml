@@ -1,4 +1,3 @@
-// import bank.GUI;
 import account.Card;
 import account.Check;
 import account.Saving;
@@ -9,8 +8,6 @@ import user.Customer;
 
 public class Main {
     public static void main(String[] args) {
-
-        // GUI.launch(GUI.class, args);
 
         // New customer
         Customer customer = new Customer("username", "password", "email", "Shayan Aminaei", 10, "100");
