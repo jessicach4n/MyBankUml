@@ -1,9 +1,16 @@
-package bank;
+import account.Card;
+import account.Check;
+import account.Saving;
+import branch.Bank;
+import branch.Branch;
+import transaction.Transaction;
+import user.Customer;
 
 public class Main {
     public static void main(String[] args) {
+
         // New customer
-        Customer customer = new Customer("Shayan Aminaei");
+        Customer customer = new Customer("username", "password", "email", "Shayan Aminaei", 10, "100");
         customer.printCustomerInfo();
         System.out.println();
 
@@ -13,10 +20,10 @@ public class Main {
         Saving saving = new Saving(customer);
 
         // Transations for each account
-        Transaction t1 = new Transaction();
-        Transaction t2 = new Transaction();
-        Transaction t3 = new Transaction();
-
+        Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
+        Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
+        Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
+        
         card.addTransaction(t1);
         check.addTransaction(t2);
         saving.addTransaction(t3);
@@ -43,8 +50,9 @@ public class Main {
         System.out.println();
 
         // Transaction's test
-        System.out.println("Card   transactions count:   " + card.getTransactions().size());
-        System.out.println("Check  transactions count:   " + check.getTransactions().size());
-        System.out.println("Saving transactions count:   " + saving.getTransactions().size());
+       System.out.println("Card   transactions count:   " + card.getTransactions().size());
+       System.out.println("Check  transactions count:   " + check.getTransactions().size());
+       System.out.println("Saving transactions count:   " + saving.getTransactions().size());
     }
+
 }
