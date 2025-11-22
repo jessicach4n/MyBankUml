@@ -1,10 +1,14 @@
-
+package user;
 import java.util.List;
 
 public class Role {
     private long id;
     private String roleName;
     private List<String>  permissions;
+
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
 
     public long getId() {
         return id;

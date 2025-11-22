@@ -1,6 +1,9 @@
-package bank;
+package account;
 
 import java.util.List;
+
+import user.Customer;
+
 import java.util.ArrayList;
 
 public class Check extends Account {
