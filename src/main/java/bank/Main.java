@@ -1,12 +1,12 @@
 package bank;
 
-import account.Card;
-import account.Check;
-import account.Saving;
-import branch.Bank;
-import branch.Branch;
-import transaction.Transaction;
-import user.Customer;
+import bank.account.Card;
+import bank.account.Check;
+import bank.account.Saving;
+import bank.branch.Bank;
+import bank.branch.Branch;
+import bank.transaction.Transaction;
+import bank.user.Customer;
 
 public class Main {
     public static void main(String[] args) {

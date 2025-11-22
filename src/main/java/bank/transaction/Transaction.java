@@ -1,7 +1,7 @@
-package transaction;
+package bank.transaction;
 
 import java.util.Date;
-import account.Account;
+import bank.account.Account;
 
 public class Transaction {
     private static long idCounter = 0;

@@ -1,37 +1,35 @@
-package account;
+package bank.account;
 
-import transaction.Transaction;
-import user.Customer;
+import bank.transaction.Transaction;
+import bank.user.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account {
-    
-    static long idCounter = 0;
+
+    private static long idCounter = 0;
     private long id;
     private String accountNumber;
     private String accountType;
     private double balance;
     private String status;
-    protected Customer customer; // Should this be here?
-    
-    public Account(String accountNumber, String accountType, double balance, String status, Customer customer,
-    List<Transaction> transactions) {
+    protected Customer customer;
+    protected List<Transaction> transactions;
+
+    public Account(Customer customer) {
         this.id = generateId();
-        this.accountNumber = accountNumber;
-        this.accountType = accountType;
-        this.balance = balance;
-        this.status = status;
         this.customer = customer;
-        this.transactions = transactions;
+        this.transactions = new ArrayList<>();
+        this.balance = 0.0;
+        this.status = "active";
     }
-    
-    public long getId() {
-        return id;
-    }
-    
+
     private long generateId() {
         return ++idCounter;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setId(long id) {
@@ -80,12 +78,6 @@ public abstract class Account {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
-    }
-    protected List<Transaction> transactions;
-
-    public Account(Customer customer) {
-        this.customer = customer;
-        this.transactions = new ArrayList<>();
     }
 
     public void addTransaction(Transaction transaction) {

@@ -1,8 +1,8 @@
-package account;
+package bank.account;
 
 import java.util.List;
 
-import user.Customer;
+import bank.user.Customer;
 
 import java.util.ArrayList;
 

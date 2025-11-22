@@ -1,4 +1,4 @@
-package user;
+package bank.user;
 
 public class Customer extends User{
 
@@ -15,6 +15,10 @@ public class Customer extends User{
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getAge() {

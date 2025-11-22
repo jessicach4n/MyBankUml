@@ -1,4 +1,4 @@
-package user;
+package bank.user;
 import java.util.Date;
 
 public abstract class User {
@@ -6,19 +6,17 @@ public abstract class User {
     private long id;
     private String username;
     private String password;
-    private String emailString;
+    private String email;
     private Role role;
     private Date createdDate;
 
-    public User(String username, String password, String emailString, Role role) {
-        // ID is generated automatically, upon the instantiation of the User
+    public User(String username, String password, String email, Role role) {
         this.id = generateId();
         this.username = username;
         this.password = password;
-        this.emailString = emailString;
+        this.email = email;
         this.role = role;
-        // Created date generated automatically, upon the instantiation of the User
-        this.createdDate = new Date(); 
+        this.createdDate = new Date();
     }
 
     private long generateId() {
@@ -49,12 +47,12 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getEmailString() {
-        return emailString;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailString(String emailString) {
-        this.emailString = emailString;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Role getRole() {

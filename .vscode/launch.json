@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "bank.Main",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
             "name": "GUI",
             "request": "launch",
             "mainClass": "bank.GUI",
@@ -12,7 +26,7 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
-            "mainClass": "Main",
+            "mainClass": "bank.Main",
             "projectName": "BankUml"
         },
         {

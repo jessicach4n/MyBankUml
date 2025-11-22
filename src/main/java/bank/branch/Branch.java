@@ -1,4 +1,4 @@
-package branch;
+package bank.branch;
 
 public class Branch {
     private final String address;
