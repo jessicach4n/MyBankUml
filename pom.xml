@@ -114,6 +114,9 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -130,7 +133,6 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.example.demo/com.example.demo.HelloApplication</mainClass>
@@ -146,4 +148,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

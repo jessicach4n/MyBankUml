@@ -1,5 +1,5 @@
-package user;
-import branch.Branch;
+package bank.user;
+import bank.branch.Branch;
 
 public class Employee extends User{
     private long employeeId;
