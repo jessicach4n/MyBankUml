@@ -1,4 +1,4 @@
-package user;
+package bank.user;
 import java.util.List;
 
 public class Role {

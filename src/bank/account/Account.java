@@ -1,7 +1,7 @@
-package account;
+package bank.account;
 
-import transaction.Transaction;
-import user.Customer;
+import bank.transaction.Transaction;
+import bank.user.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
