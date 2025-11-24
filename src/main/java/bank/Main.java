@@ -63,19 +63,28 @@ public class Main {
             System.out.println();
 
             // Making different accounts
-            Card card = new Card(customer);
-            Check check = new Check(customer);
-            Saving saving = new Saving(customer);
+            Card card = new Card("Account Number", 0, "Status", customer);
+            Check check = new Check("Account Number", 0, "Status", customer);
+            Saving saving = new Saving("Account Number", 0, "Status", customer);
 
             // Transations for each account
             Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
             Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
             Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
 
+            // Customer testing
+            Customer johnDeer = new Customer("John_Deer", "password123", "John_Deer@gmail.com", "John Deer", 10, "(123) 456-7891");
+            
             card.addTransaction(t1);
             check.addTransaction(t2);
             saving.addTransaction(t3);
 
+            johnDeer.addAccount(card);
+            johnDeer.addAccount(check);
+            johnDeer.addAccount(card);
+            
+            johnDeer.printCustomerInfo();
+            
             // Transactions
             card.pay();
             card.receipt();
@@ -101,7 +110,6 @@ public class Main {
             System.out.println("Card   transactions count:   " + card.getTransactions().size());
             System.out.println("Check  transactions count:   " + check.getTransactions().size());
             System.out.println("Saving transactions count:   " + saving.getTransactions().size());
-
 
         } catch (Exception e) {
             System.out.println("Error creating user: " + e.getMessage());
