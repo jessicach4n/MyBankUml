@@ -13,6 +13,8 @@ public class Customer extends User{
         this.telNo = telNo;
     }
 
+    public void setName(String name) { this.name = name; }
+
     public String getName() {
         return name;
     }

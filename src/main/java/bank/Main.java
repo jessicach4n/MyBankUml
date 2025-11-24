@@ -11,7 +11,9 @@ import bank.gui.GUI;
 import bank.user.UserManager;
 import bank.user.Role;
 import bank.user.User;
+import bank.user.UserDetails;
 import javafx.application.Application;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,12 +23,40 @@ public class Main {
 
         try {
             // Admin creating a Teller and a Customer
-            User admin = userManager.createUser("adminUser", "adminPass", "admin@example.com", "Admin Name", 35, "123456789", Role.ADMIN, Role.ADMIN);
-            User teller = userManager.createUser("tellerUser", "tellerPass", "teller@example.com", "Teller Name", 30, "987654321", Role.TELLER, Role.ADMIN);
-            Customer customer = (Customer) userManager.createUser("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei", 10, "100", Role.CUSTOMER, Role.TELLER);
-            User genUser = userManager.createUser("genericUser", "genPass", "generic@example.com", "Generic Name", 25, "555555555", Role.CUSTOMER, admin.getRole());
+            UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name", 35, "123456789");
+            User admin = userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
+            System.out.println("Created admin: " + admin.getUsername() + " with role " + admin.getRole());
+
+            UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name", 30, "987654321");
+            User teller = userManager.createUser(tellerDetails, Role.TELLER, admin.getRole());
+            System.out.println("Created teller: " + teller.getUsername() + " with role " + teller.getRole());
+
+            UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei", 10, "100");
+            Customer customer = (Customer) userManager.createUser(customerDetails, Role.CUSTOMER, teller.getRole());
+            System.out.println("Created customer: " + customer.getUsername() + " with role " + customer.getRole());
+
+            // Generic user
+            UserDetails genDetails = new UserDetails("genericUser", "genPass", "generic@example.com", "Generic Name", 25, "555555555");
+            User genUser = userManager.createUser(genDetails, Role.CUSTOMER, admin.getRole());
+            System.out.println("Created generic user: " + genUser.getUsername() + " with role " + genUser.getRole());
+
+            // Assign roles
             userManager.assignRole(genUser.getId(), Role.TELLER, admin.getRole());
-            userManager.assignRole(genUser.getId(), Role.CUSTOMER, teller.getRole()); // Should throw an exception
+            System.out.println("Successfully assign role TELLER to " + genUser.getUsername());
+
+            // Attempt invalid role assignment (should throw exception)
+            try {
+                userManager.assignRole(genUser.getId(), Role.CUSTOMER, teller.getRole());
+            } catch (Exception e) {
+                System.out.println("Failed to assign role by Teller: " + e.getMessage());
+            }
+
+            // Print all users
+            System.out.println("\nAll users in system:");
+            List<User> allUsers = userManager.getUsers();
+            for (User u : allUsers) {
+                System.out.println("User: " + u.getUsername() + ", Role: " + u.getRole());
+            }
 
             // New customer
             customer.printCustomerInfo();

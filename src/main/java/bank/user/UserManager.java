@@ -21,7 +21,7 @@ public class UserManager {
     }
 
     // Create new user
-    public User createUser(String username, String password, String email, String name, int age, String tel, Role targetRole, Role currentUserRole) throws Exception {
+    public User createUser(UserDetails details, Role targetRole, Role currentUserRole) throws Exception {
         if (!validateUserCreationRights(currentUserRole, targetRole)) {
             throw new Exception("Current role not allowed to create this user.");
         }
@@ -29,9 +29,16 @@ public class UserManager {
         // Depending on role, instantiate the right subclass
         User newUser;
         switch (targetRole) {
-            case CUSTOMER -> newUser = new Customer(username, password, email, name, age, tel);
-            case TELLER -> newUser = new Teller(username, password, email);
-            case ADMIN -> newUser = new Administrator(username, password, email);
+            case CUSTOMER -> newUser = new Customer(
+                    details.getUsername(),
+                    details.getPassword(),
+                    details.getEmail(),
+                    details.getName(),
+                    details.getAge(),
+                    details.getTel()
+            );
+            case TELLER -> newUser = new Teller(details.getUsername(), details.getPassword(), details.getEmail());
+            case ADMIN -> newUser = new Administrator(details.getUsername(), details.getPassword(), details.getEmail());
             default -> throw new Exception("Unknown role: " + targetRole);
         }
 
@@ -41,21 +48,25 @@ public class UserManager {
     }
 
     // Update an existing user's info
-    public boolean updateUsername(long userId, String newUsername, String newPassword, String newEmail) {
-        Optional<User> userOpt = users.stream().filter(u -> u.getId() == userId).findFirst();
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            user.setUsername(newUsername);
-            user.setPassword(newPassword);
-            user.setEmailString(newEmail);
-            return true;
+    public void updateUser(long userId, UserDetails newDetails) throws Exception {
+        User user = users.stream()
+                .filter(u -> u.getId() == userId)
+                .findFirst()
+                .orElseThrow(() -> new Exception("User not found"));
+
+        user.setUsername(newDetails.getUsername());
+        user.setPassword(newDetails.getPassword());
+        user.setEmailString(newDetails.getEmail());
+        if (user instanceof Customer customer) {
+            customer.setName(newDetails.getName());
+            customer.setAge(newDetails.getAge());
+            customer.setTelNo(newDetails.getTel());
         }
-        return false;
     }
 
     // Assign a role to an existing user (Admin only)
-    public void assignRole(long userId, Role newRole, Role currentUserRole) throws Exception {
-        if (currentUserRole != Role.ADMIN) {
+    public void assignRole(long userId, Role newRole, Role performedByRole) throws Exception {
+        if (performedByRole != Role.ADMIN) {
             throw new Exception("Only administrators can assign roles.");
         }
         Optional<User> userOpt = users.stream().filter(u -> u.getId() == userId).findFirst();
