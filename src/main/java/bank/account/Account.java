@@ -2,6 +2,7 @@ package bank.account;
 
 import bank.transaction.Transaction;
 import bank.user.Customer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +15,17 @@ public abstract class Account {
     private double balance;
     private String status;
     protected Customer customer; // Should this be here?
+    private ArrayList<Transaction> transactions;
     
-    public Account(String accountNumber, String accountType, double balance, String status, Customer customer,
-    List<Transaction> transactions) {
+    // Account can start off with having transactions or not
+    public Account(String accountNumber, String accountType, double balance, String status, Customer customer) {
         this.id = generateId();
         this.accountNumber = accountNumber;
         this.accountType = accountType;
         this.balance = balance;
         this.status = status;
         this.customer = customer;
-        this.transactions = transactions;
+        this.transactions = new ArrayList<>();
     }
     
     public long getId() {
@@ -78,10 +80,9 @@ public abstract class Account {
         this.customer = customer;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
     }
-    protected List<Transaction> transactions;
 
     public Account(Customer customer) {
         this.customer = customer;
@@ -98,5 +99,18 @@ public abstract class Account {
 
     public abstract void pay();
     public abstract void receipt();
+
+    @Override
+    public String toString() {
+        return "[\n" +
+            "  Account ID: " + id + "\n" +
+            "  Account Number: " + accountNumber + "\n" +
+            "  Account Type: " + accountType + "\n" +
+            "  Balance: " + balance + "\n" +
+            "  Status: " + status + "\n" +
+            "  Customer: " + (customer != null ? customer.getName() : "None") + "\n" +
+            "  Transactions: " + transactions + "\n" +
+            "]";
+    }
 }
 
