@@ -1,5 +1,6 @@
 package bank.user;
 
+import bank.user.repository.InMemoryUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ class UserManagerTest {
 
     @BeforeEach
     void setup() {
-        userManager = new UserManager();
+        userManager = new UserManager(new InMemoryUserRepository());
     }
 
     @Test

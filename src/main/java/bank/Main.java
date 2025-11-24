@@ -12,6 +12,7 @@ import bank.user.UserManager;
 import bank.user.Role;
 import bank.user.User;
 import bank.user.UserDetails;
+import bank.user.repository.InMemoryUserRepository;
 import javafx.application.Application;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class Main {
     public static void main(String[] args) {
 
         // Initialize UserManager
-        UserManager userManager = new UserManager();
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        UserManager userManager = new UserManager(userRepository);
 
         try {
             // Admin creating a Teller and a Customer
