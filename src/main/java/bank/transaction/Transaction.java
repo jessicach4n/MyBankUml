@@ -91,4 +91,16 @@ public class Transaction {
     public void receipt() {
         System.out.println("Transaction receipt.");
     }
+    @Override
+    public String toString() {
+        return "[\n" +
+                "  Transaction ID: " + id + "\n" +
+                "  Date: " + date + "\n" +
+                "  Type: " + type + "\n" +
+                "  Status: " + status + "\n" +
+                "  Amount: " + amount + "\n" +
+                "  Recipient: " + recipient + "\n" +
+                "  Account: " + (account != null ? account.getAccountNumber() : "None") + "\n" +
+                "]";
+    }
 }
