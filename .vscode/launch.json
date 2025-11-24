@@ -3,6 +3,28 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "bank.Main",
+            "projectName": "bank"
+        },
+        {
+            "type": "java",
+            "name": "Run Bank JavaFX App",
+            "request": "launch",
+            "mainClass": "bank.Main",
+            "projectName": "BankUml",
+            "vmArgs": "--module-path /Users/jessica_chan/.m2/repository/org/openjfx/javafx-sdk-21.0.6/lib --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "bank"
+        },
+        {
+            "type": "java",
             "name": "GUI",
             "request": "launch",
             "mainClass": "bank.GUI",
