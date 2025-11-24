@@ -2,6 +2,7 @@ package bank.account;
 
 import bank.transaction.Transaction;
 import bank.user.Customer;
+import bank.utils.InternalLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ public abstract class Account {
     private String status;
     protected Customer customer; // Should this be here?
     private ArrayList<Transaction> transactions;
+
+    private final InternalLogger logger = new InternalLogger();
     
     // Account can start off with having transactions or not
     public Account(String accountNumber, String accountType, double balance, String status, Customer customer) {
@@ -97,6 +100,34 @@ public abstract class Account {
         return this.transactions;
     }
 
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive");
+        }
+        logger.info(customer.getName() + " (id: " + customer.getId() + ") deposited " + amount + " to " + accountNumber);
+
+        this.balance = this.balance + amount;
+
+        // Add the transaction to the transaction list
+        Transaction transaction = new Transaction("Deposit", "Completed", amount, customer.getName(), this);
+        addTransaction(transaction);
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
+        }
+        if (amount > this.balance) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+        logger.info(customer.getName() + " (id: " + customer.getId() + ") withdrew " + amount + " from account " + accountNumber);
+        this.balance = this.balance - amount;
+
+        // Add the transaction to the transaction list
+        Transaction transaction = new Transaction("Withdrawal", "Completed", amount, customer.getName(), this);
+        addTransaction(transaction);
+    }
+
     public abstract void pay();
     public abstract void receipt();
 
@@ -113,4 +144,3 @@ public abstract class Account {
             "]";
     }
 }
-
