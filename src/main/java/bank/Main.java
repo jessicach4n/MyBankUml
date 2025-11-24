@@ -1,3 +1,5 @@
+package bank;
+
 import bank.account.Card;
 import bank.account.Check;
 import bank.account.Saving;
@@ -5,10 +7,13 @@ import bank.branch.Bank;
 import bank.branch.Branch;
 import bank.transaction.Transaction;
 import bank.user.Customer;
+import bank.gui.GUI;
+import javafx.application.Application;
 
 public class Main {
     public static void main(String[] args) {
 
+        Application.launch(GUI.class, args);
         // New customer
         Customer customer = new Customer("username", "password", "email", "Shayan Aminaei", 10, "100");
         customer.printCustomerInfo();
