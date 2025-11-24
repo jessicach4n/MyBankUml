@@ -13,7 +13,10 @@ import bank.user.Role;
 import bank.user.User;
 import bank.user.UserDetails;
 import javafx.application.Application;
+
 import java.util.List;
+
+import bank.user.Administrator;
 
 public class Main {
     public static void main(String[] args) {
@@ -62,28 +65,40 @@ public class Main {
             customer.printCustomerInfo();
             System.out.println();
 
+            // Customer testing
+            Customer johnDeer = new Customer("John_Deer", "password123", "John_Deer@gmail.com", "John Deer", 10, "(123) 456-7891");
+            Administrator johnAdmin = new Administrator("John", "password456", "admin@gmail.com");
+
             // Making different accounts
-            Card card = new Card("Account Number", 0, "Status", customer);
-            Check check = new Check("Account Number", 0, "Status", customer);
-            Saving saving = new Saving("Account Number", 0, "Status", customer);
+            Card card = new Card("123", 0, "Status", johnDeer);
+            Check check = new Check("456", 0, "Status", johnDeer);
+            Saving saving = new Saving("678", 0, "Status", johnDeer);
 
             // Transations for each account
             Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
             Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
             Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
 
-            // Customer testing
-            Customer johnDeer = new Customer("John_Deer", "password123", "John_Deer@gmail.com", "John Deer", 10, "(123) 456-7891");
-            
             card.addTransaction(t1);
             check.addTransaction(t2);
             saving.addTransaction(t3);
 
             johnDeer.addAccount(card);
             johnDeer.addAccount(check);
-            johnDeer.addAccount(card);
+
+            // Deposite/Withdraw testing
+            card.deposit(1000);
+            check.deposit(2000);
             
             johnDeer.printCustomerInfo();
+            
+            // Admin testing
+            johnAdmin.viewBalance(saving);
+            johnAdmin.deposit(card, 99);
+            johnDeer.printCustomerInfo(); // Print info after the admin depositted 99$
+
+            // Look at the transactions in card
+            System.out.println(card.getTransactions());
             
             // Transactions
             card.pay();
