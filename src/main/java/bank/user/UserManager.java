@@ -1,14 +1,16 @@
 package bank.user;
 
+import bank.user.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class UserManager {
-    private final List<User> users;
+    private final UserRepository repository;
 
-    public UserManager() {
-        this.users = new ArrayList<>();
+    public UserManager(UserRepository repository) {
+        this.repository = repository;
     }
 
     // Validate if the current role can create a user of the target role
@@ -43,16 +45,16 @@ public class UserManager {
         }
 
         newUser.setRole(targetRole);
-        users.add(newUser);
+        repository.save(newUser);
         return newUser;
     }
 
     // Update an existing user's info
     public void updateUser(long userId, UserDetails newDetails) throws Exception {
-        User user = users.stream()
-                .filter(u -> u.getId() == userId)
-                .findFirst()
-                .orElseThrow(() -> new Exception("User not found"));
+        User user = repository.findById(userId);
+        if  (user == null) {
+            throw new Exception("User with id " + userId + " not found.");
+        }
 
         user.setUsername(newDetails.getUsername());
         user.setPassword(newDetails.getPassword());
@@ -69,16 +71,22 @@ public class UserManager {
         if (performedByRole != Role.ADMIN) {
             throw new Exception("Only administrators can assign roles.");
         }
-        Optional<User> userOpt = users.stream().filter(u -> u.getId() == userId).findFirst();
-        userOpt.ifPresent(user -> user.setRole(newRole));
+
+        User user = repository.findById(userId);
+        if  (user == null) {
+            throw new Exception("User with id " + userId + " not found.");
+        }
+
+        user.setRole(newRole);
+        repository.save(user);
     }
 
     public List<User> getUsers() {
-        return users;
+        return repository.findAll();
     }
 
     public User findUserById(long id) {
-        return users.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
+        return repository.findById(id);
     }
 
 }
