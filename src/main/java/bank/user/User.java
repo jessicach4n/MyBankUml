@@ -9,7 +9,7 @@ public abstract class User {
     private String emailString;
     private Role role;
     private Date createdDate;
-
+    
     public User(String username, String password, String emailString, Role role) {
         // ID is generated automatically, upon the instantiation of the User
         this.id = generateId();
@@ -77,4 +77,6 @@ public abstract class User {
         // TODO
         return true;
     }
+
+
 }
