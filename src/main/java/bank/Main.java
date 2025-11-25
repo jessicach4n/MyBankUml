@@ -48,10 +48,6 @@ public class Main {
             userManager.assignRole(genUser.getId(), Role.TELLER, admin.getRole());
             System.out.println("Successfully assign role TELLER to " + genUser.getUsername());
 
-            // New customer
-            System.out.println("IAMMDMMEE");
-            customer.printCustomerInfo();
-
             // Attempt invalid role assignment (should throw exception)
             try {
                 userManager.assignRole(genUser.getId(), Role.CUSTOMER, teller.getRole());
@@ -65,6 +61,9 @@ public class Main {
             for (User u : allUsers) {
                 System.out.println("User: " + u.getUsername() + ", Role: " + u.getRole());
             }
+
+            customer.printCustomerInfo();
+
         } catch (Exception e) {
             System.out.println("Error creating user: " + e.getMessage());
         }
