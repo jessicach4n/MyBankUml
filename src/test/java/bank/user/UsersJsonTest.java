@@ -1,15 +1,29 @@
 package bank.user;
 
 import org.junit.jupiter.api.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UsersJsonTest {
 
+    private static final Path TEST_JSON = Path.of("data/users_test.json");
+
     @BeforeEach
-    void setup() {
-        // Clear existing users before each test
-        Users.get().clear();
+    void setup() throws Exception {
+        // Copy resource template to test JSON
+        var resource = getClass().getClassLoader().getResource("bank/users.json");
+        assertNotNull(resource, "users.json resource not found");
+
+        Files.createDirectories(TEST_JSON.getParent());
+        Files.copy(Path.of(resource.toURI()), TEST_JSON, StandardCopyOption.REPLACE_EXISTING);
+
+        Users.setJsonFile(TEST_JSON);
+        Users.reset();
     }
 
     @Test
@@ -62,5 +76,50 @@ class UsersJsonTest {
         assertEquals("Bob", loadedUser2.name());
         assertEquals("bobUser", loadedUser2.username());
         assertEquals("TELLER", loadedUser2.role());
+    }
+
+    @Test
+    void testLoadUsersWithTransactions() {
+        Users.load();
+
+        List<Users.User> users = Users.get();
+        assertEquals(3, users.size(), "Should load 3 users");
+
+        // Check Kanye
+        Users.User kanye = users.get(0);
+        assertEquals(1, kanye.id());
+        assertEquals("Kanye West", kanye.name());
+        assertEquals("customer", kanye.role());
+        assertEquals(1, kanye.accounts().size());
+
+        var kanyeAccount = kanye.accounts().get(0);
+        assertEquals("Checking", kanyeAccount.type());
+        assertEquals(2500000, kanyeAccount.balance());
+        assertEquals(4, kanyeAccount.transactions().size());
+
+        var firstTransaction = kanyeAccount.transactions().get(0);
+        assertEquals(-150000, firstTransaction.amount());
+        assertEquals("Studio equipment", firstTransaction.details());
+
+        // Check Kubrick
+        Users.User kubrick = users.get(1);
+        assertEquals(2, kubrick.id());
+        assertEquals("Stanley Kubrick", kubrick.name());
+        assertEquals(1, kubrick.accounts().size());
+
+        var kubrickAccount = kubrick.accounts().get(0);
+        assertEquals("Savings", kubrickAccount.type());
+        assertEquals(4, kubrickAccount.transactions().size());
+
+        // Check Beethoven
+        Users.User beethoven = users.get(2);
+        assertEquals(3, beethoven.id());
+        assertEquals("Ludwig van Beethoven", beethoven.name());
+        assertEquals(1, beethoven.accounts().size());
+
+        var beethovenAccount = beethoven.accounts().get(0);
+        assertEquals("Checking", beethovenAccount.type());
+        assertEquals(1500000, beethovenAccount.balance());
+        assertEquals(4, beethovenAccount.transactions().size());
     }
 }
