@@ -1,17 +1,12 @@
 package bank.account;
-
-import java.util.List;
-
 import bank.user.Customer;
 
-import java.util.ArrayList;
-
 public class Saving extends Account {
-    private List<String> transactions = new ArrayList<>();
 
-    public Saving(Customer customer) {
-        super(customer);
+    public Saving(String accountNumber, double balance, String status, Customer customer) {
+        super(accountNumber, "Saving", balance, status, customer);
     }
+    
     public void title(){
         System.out.println("**Payments**");
     };
