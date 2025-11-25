@@ -6,7 +6,6 @@ public class Teller extends User {
     
     private final InternalLogger logger = new InternalLogger();
 
-public class Teller extends User  {
     public Teller(UserDetails userDetails) {
         super(userDetails, Role.TELLER);
     }

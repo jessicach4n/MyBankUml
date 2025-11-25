@@ -32,7 +32,7 @@ public class UserManager {
         Role role = Role.valueOf(pUser.role());
         User user;
         switch (role) {
-            case CUSTOMER -> user = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
+            case CUSTOMER -> user = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()), 21, "514-112-1234", null);
             case TELLER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
             case ADMIN -> user = new Administrator(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
             default -> throw new IllegalArgumentException("Unknown role: " + pUser.role());
@@ -85,7 +85,7 @@ public class UserManager {
     private static User getUser(UserDetails details, Role targetRole) throws Exception {
         User newUser;
         switch (targetRole) {
-            case CUSTOMER -> newUser = new Customer( new UserDetails(details.getUsername(), details.getPassword(), details.getEmail(), details.getName()));
+            case CUSTOMER -> newUser = new Customer( new UserDetails(details.getUsername(), details.getPassword(), details.getEmail(), details.getName()),21, "514-112-1234", null);
             case TELLER -> newUser = new Teller(new UserDetails(details.getUsername(), details.getPassword(), details.getEmail(), details.getName()));
             case ADMIN -> newUser = new Administrator(new UserDetails(details.getUsername(), details.getPassword(), details.getEmail(), details.getName()));
             default -> throw new Exception("Unknown role: " + targetRole);

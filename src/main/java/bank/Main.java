@@ -16,8 +16,6 @@ import bank.user.repository.JsonUserRepository;
 import javafx.application.Application;
 import java.util.List;
 
-import java.util.List;
-
 import bank.user.Administrator;
 
 public class Main {
@@ -69,8 +67,8 @@ public class Main {
             System.out.println();
 
             // Customer testing
-            Customer johnDeer = new Customer("John_Deer", "password123", "John_Deer@gmail.com", "John Deer", 10, "(123) 456-7891");
-            Administrator johnAdmin = new Administrator("John", "password456", "admin@gmail.com");
+            Customer johnDeer = new Customer(new UserDetails("John_Deer", "password123", "John_Deer@gmail.com", "John Deer"), 10, "(123) 456-7891", null);
+            Administrator johnAdmin = new Administrator(new UserDetails("John", "password456", "admin@gmail.com", "John Deer"));
 
             // Making different accounts
             Card card = new Card("123", 0, "Status", johnDeer);
@@ -89,7 +87,7 @@ public class Main {
             johnDeer.addAccount(card);
             johnDeer.addAccount(check);
 
-            // Deposite/Withdraw testing
+            // Deposit/Withdraw testing
             card.deposit(1000);
             check.deposit(2000);
             
