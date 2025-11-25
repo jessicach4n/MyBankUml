@@ -7,6 +7,7 @@ import bank.user.Customer;
 import java.util.ArrayList;
 
 public class Card extends Account {
+    @SuppressWarnings("unused")
     private List<String> transactions = new ArrayList<>();
 
     public Card(Customer customer) {
