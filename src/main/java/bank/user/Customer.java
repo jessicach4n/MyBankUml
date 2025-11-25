@@ -14,7 +14,11 @@ public class Customer extends User {
         super(userDetails, Role.CUSTOMER);
         this.age = age;
         this.telNo = telNo;
-        this.accounts = accounts;
+        if (accounts == null) {
+            this.accounts = new ArrayList<>();
+        } else {
+            this.accounts = accounts;
+        }
     }
 
     public void addAccount(Account account) {
@@ -60,4 +64,3 @@ public class Customer extends User {
         System.out.println();
     }
 }
-
