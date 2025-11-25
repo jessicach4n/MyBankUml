@@ -5,6 +5,7 @@ import bank.account.Check;
 import bank.account.Saving;
 import bank.branch.Bank;
 import bank.branch.Branch;
+import bank.branch.BranchManagement;
 import bank.transaction.Transaction;
 import bank.user.Customer;
 import bank.gui.GUI;
@@ -117,12 +118,7 @@ public class Main {
             System.out.println();
 
             // Bank and branches Test
-            Bank bank = new Bank("National Bank");
-            Branch branch1 = new Branch("Branch no1 ", bank);
-            Branch branch2 = new Branch("Branch no2 ", bank);
-
-            bank.printBankInfo();
-            System.out.println();
+            testBranches();
 
             // Transaction's test
             System.out.println("Card   transactions count:   " + card.getTransactions().size());
@@ -137,4 +133,83 @@ public class Main {
 
     }
 
+    // *** Delete this if you want ***, this is just code to test my methods
+    public static void testBranches() {
+        System.out.println("============= Branch/Bank/BranchManagement test =============");
+
+        // 1) create a bank (constructor takes a String bankID param, which your Bank ignores)
+        Bank myBank = new Bank("First National");
+
+        System.out.println("Created bank:");
+        System.out.println("  bankID (generated): " + myBank.getBankID());
+        System.out.println("  name: " + myBank.getName());
+
+        // 2) create BranchManagement
+        BranchManagement manager = new BranchManagement();
+
+        // 3) add branches using BranchManagement.addBranch
+        Branch b1 = manager.addBranch("Downtown Branch", "123 Main St", myBank);
+        Branch b2 = manager.addBranch("Uptown Branch", "456 Oak Ave", myBank);
+
+        // 4) inspect bank branches via getBranches and getBranch
+        System.out.println("\nBranches inside bank after additions:");
+        for (int i = 0; i < myBank.getBranches().size(); i++) {
+            Branch b = myBank.getBranch(i);
+            System.out.println("  index " + i + ": id=" + b.getBranchID()
+                + ", name=" + b.getBranchName()
+                + ", address=" + b.getAddress());
+        }
+
+        // 5) test getBranchInfo (returns the branch object)
+        System.out.println("\ngetBranchInfo for b1:");
+        Branch info = manager.getBranchInfo(b1);
+        System.out.println("  id=" + info.getBranchID() + ", name=" + info.getBranchName());
+
+        // 6) test updateBranch
+        System.out.println("\nUpdating b2 name/address...");
+        manager.updateBranch(b2, "Uptown Financial Center", "789 Elm Blvd");
+        System.out.println("  b2 now: id=" + b2.getBranchID() + ", name=" + b2.getBranchName()
+            + ", address=" + b2.getAddress());
+
+        // 7) test removeBranch (successful)
+        System.out.println("\nRemoving b1 via manager.removeBranch...");
+        boolean removed = manager.removeBranch(b1);
+        System.out.println("  remove returned: " + removed);
+        System.out.println("  branches now: " + myBank.getBranches().size());
+
+        // 8) attempt to remove the same branch again (should return false)
+        System.out.println("\nAttempting to remove b1 again...");
+        boolean removedAgain = manager.removeBranch(b1);
+        System.out.println("  remove returned: " + removedAgain);
+        System.out.println("  branches now: " + myBank.getBranches().size());
+
+        // 9) create a branch but do NOT add it to the bank, then try to remove it
+        System.out.println("\nCreate branch not added to bank, then try to remove it...");
+        Branch orphan = new Branch("Orphan Branch", "999 Nowhere Rd", myBank);
+        boolean removedOrphan = manager.removeBranch(orphan);
+        System.out.println("  removedOrphan: " + removedOrphan);
+        System.out.println("  branches in bank still: " + myBank.getBranches().size());
+
+        // 10) test getBranch with invalid index to show exception handling
+        System.out.println("\nTesting getBranch with invalid index...");
+        try {
+            myBank.getBranch(10);
+            System.out.println("  Successfully accessed index 10 (unexpected).");
+        } catch (IndexOutOfBoundsException ex) {
+            System.out.println("  Caught expected IndexOutOfBoundsException: " + ex.getMessage());
+        }
+
+        // 11) final listing
+        System.out.println("\nFinal list of branches inside bank:");
+        myBank.getBranches().forEach(b ->
+            System.out.println("  id=" + b.getBranchID()
+                + ", name=" + b.getBranchName()
+                + ", address=" + b.getAddress())
+        );
+
+        System.out.println("\n============= Test complete =============");
+    }
+
 }
+
+
