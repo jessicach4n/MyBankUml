@@ -1,4 +1,4 @@
-package bank;
+package bank.transaction;
 
 import bank.account.Card;
 import bank.account.Check;
