@@ -5,7 +5,7 @@ import bank.account.Check;
 import bank.account.Saving;
 import bank.branch.Bank;
 import bank.branch.Branch;
-import bank.branch.BranchManagement;
+import bank.branch.BranchManager;
 import bank.transaction.Transaction;
 import bank.user.Customer;
 import bank.gui.GUI;
@@ -140,7 +140,7 @@ public class Main {
         System.out.println("  name: " + myBank.getName());
 
         // 2) create BranchManagement
-        BranchManagement manager = new BranchManagement();
+        BranchManager manager = new BranchManager();
 
         // 3) add branches using BranchManagement.addBranch
         Branch b1 = manager.addBranch("Downtown Branch", "123 Main St", myBank);
@@ -202,7 +202,7 @@ public class Main {
                 + ", address=" + b.getAddress())
         );
 
-        System.out.println("\n============= Test complete =============");
+        System.out.println("\n============= Bracnh Testing complete =============");
     }
 
 }

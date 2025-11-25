@@ -1,9 +1,9 @@
 package bank.branch;
 
 // This implementation is super not robust, but I think its ok
-public class BranchManagement {
+public class BranchManager {
     
-    public BranchManagement() {
+    public BranchManager() {
 
     }
 
