@@ -48,6 +48,10 @@ public class Main {
             userManager.assignRole(genUser.getId(), Role.TELLER, admin.getRole());
             System.out.println("Successfully assign role TELLER to " + genUser.getUsername());
 
+            // New customer
+            System.out.println("IAMMDMMEE");
+            customer.printCustomerInfo();
+
             // Attempt invalid role assignment (should throw exception)
             try {
                 userManager.assignRole(genUser.getId(), Role.CUSTOMER, teller.getRole());
@@ -61,75 +65,70 @@ public class Main {
             for (User u : allUsers) {
                 System.out.println("User: " + u.getUsername() + ", Role: " + u.getRole());
             }
-
-            // New customer
-            customer.printCustomerInfo();
-            System.out.println();
-
-            // Customer testing
-            Customer johnDeer = new Customer(new UserDetails("John_Deer", "password123", "John_Deer@gmail.com", "John Deer"), 10, "(123) 456-7891", null);
-            Administrator johnAdmin = new Administrator(new UserDetails("John", "password456", "admin@gmail.com", "John Deer"));
-
-            // Making different accounts
-            Card card = new Card("123", 0, "Status", johnDeer);
-            Check check = new Check("456", 0, "Status", johnDeer);
-            Saving saving = new Saving("678", 0, "Status", johnDeer);
-
-            // Transactions for each account
-            Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
-            Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
-            Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
-
-            card.addTransaction(t1);
-            check.addTransaction(t2);
-            saving.addTransaction(t3);
-
-            johnDeer.addAccount(card);
-            johnDeer.addAccount(check);
-
-            // Deposit/Withdraw testing
-            card.deposit(1000);
-            check.deposit(2000);
-            
-            johnDeer.printCustomerInfo();
-            
-            // Admin testing
-            johnAdmin.viewBalance(saving);
-            johnAdmin.deposit(card, 99);
-            johnDeer.printCustomerInfo(); // Print info after the admin depositted 99$
-
-            // Look at the transactions in card
-            System.out.println(card.getTransactions());
-            
-            // Transactions
-            card.pay();
-            card.receipt();
-            System.out.println();
-
-            check.pay();
-            check.receipt();
-            System.out.println();
-
-            saving.pay();
-            saving.receipt();
-            System.out.println();
-
-            // Bank and branches Test
-            Bank bank = new Bank("National Bank");
-            Branch branch1 = new Branch("Branch no1 ", bank);
-            Branch branch2 = new Branch("Branch no2 ", bank);
-
-            bank.printBankInfo();
-            System.out.println();
-
-            // Transaction's test
-            System.out.println("Card   transactions count:   " + card.getTransactions().size());
-            System.out.println("Check  transactions count:   " + check.getTransactions().size());
-            System.out.println("Saving transactions count:   " + saving.getTransactions().size());
-
         } catch (Exception e) {
             System.out.println("Error creating user: " + e.getMessage());
         }
+
+        // Customer testing
+        Customer johnDeer = new Customer(new UserDetails("John_Deer", "password123", "John_Deer@gmail.com", "John Deer"), 10, "(123) 456-7891", null);
+        Administrator johnAdmin = new Administrator(new UserDetails("John", "password456", "admin@gmail.com", "John Deer"));
+
+        // Making different accounts
+        Card card = new Card("123", 0, "Status", johnDeer);
+        Check check = new Check("456", 0, "Status", johnDeer);
+        Saving saving = new Saving("678", 0, "Status", johnDeer);
+
+        // Transactions for each account
+        Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
+        Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
+        Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
+
+        card.addTransaction(t1);
+        check.addTransaction(t2);
+        saving.addTransaction(t3);
+
+        johnDeer.addAccount(card);
+        johnDeer.addAccount(check);
+
+        // Deposit/Withdraw testing
+        card.deposit(1000);
+        check.deposit(2000);
+        
+        johnDeer.printCustomerInfo();
+        
+        // Admin testing
+        johnAdmin.viewBalance(saving);
+        johnAdmin.deposit(card, 99);
+        johnDeer.printCustomerInfo(); // Print info after the admin depositted 99$
+
+        // Look at the transactions in card
+        System.out.println(card.getTransactions());
+        
+        // Transactions
+        card.pay();
+        card.receipt();
+        System.out.println();
+
+        check.pay();
+        check.receipt();
+        System.out.println();
+
+        saving.pay();
+        saving.receipt();
+        System.out.println();
+
+        // Bank and branches Test
+        Bank bank = new Bank("National Bank");
+        Branch branch1 = new Branch("Branch no1 ", bank);
+        Branch branch2 = new Branch("Branch no2 ", bank);
+
+        bank.printBankInfo();
+        System.out.println();
+
+        // Transaction's test
+        System.out.println("Card   transactions count:   " + card.getTransactions().size());
+        System.out.println("Check  transactions count:   " + check.getTransactions().size());
+        System.out.println("Saving transactions count:   " + saving.getTransactions().size());
 
         Application.launch(GUI.class, args);
 
