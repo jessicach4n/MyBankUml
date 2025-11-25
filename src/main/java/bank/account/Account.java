@@ -2,6 +2,8 @@ package bank.account;
 
 import bank.transaction.Transaction;
 import bank.user.Customer;
+import bank.utils.InternalLogger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +16,19 @@ public abstract class Account {
     private double balance;
     private String status;
     protected Customer customer; // Should this be here?
+    private ArrayList<Transaction> transactions;
+
+    private final InternalLogger logger = new InternalLogger();
     
-    public Account(String accountNumber, String accountType, double balance, String status, Customer customer,
-    List<Transaction> transactions) {
+    // Account can start off with having transactions or not
+    public Account(String accountNumber, String accountType, double balance, String status, Customer customer) {
         this.id = generateId();
         this.accountNumber = accountNumber;
         this.accountType = accountType;
         this.balance = balance;
         this.status = status;
         this.customer = customer;
-        this.transactions = transactions;
+        this.transactions = new ArrayList<>();
     }
     
     public long getId() {
@@ -78,10 +83,9 @@ public abstract class Account {
         this.customer = customer;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
     }
-    protected List<Transaction> transactions;
 
     public Account(Customer customer) {
         this.customer = customer;
@@ -96,7 +100,47 @@ public abstract class Account {
         return this.transactions;
     }
 
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive");
+        }
+        logger.info(customer.getName() + " (id: " + customer.getId() + ") deposited " + amount + " to " + accountNumber);
+
+        this.balance = this.balance + amount;
+
+        // Add the transaction to the transaction list
+        Transaction transaction = new Transaction("Deposit", "Completed", amount, customer.getName(), this);
+        addTransaction(transaction);
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
+        }
+        if (amount > this.balance) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+        logger.info(customer.getName() + " (id: " + customer.getId() + ") withdrew " + amount + " from account " + accountNumber);
+        this.balance = this.balance - amount;
+
+        // Add the transaction to the transaction list
+        Transaction transaction = new Transaction("Withdrawal", "Completed", amount, customer.getName(), this);
+        addTransaction(transaction);
+    }
+
     public abstract void pay();
     public abstract void receipt();
-}
 
+    @Override
+    public String toString() {
+        return "[\n" +
+            "  Account ID: " + id + "\n" +
+            "  Account Number: " + accountNumber + "\n" +
+            "  Account Type: " + accountType + "\n" +
+            "  Balance: " + balance + "\n" +
+            "  Status: " + status + "\n" +
+            "  Customer: " + (customer != null ? customer.getName() : "None") + "\n" +
+            "  Transactions: " + transactions + "\n" +
+            "]";
+    }
+}

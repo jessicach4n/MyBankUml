@@ -1,17 +1,10 @@
 package bank.account;
-
-import java.util.List;
-
 import bank.user.Customer;
 
-import java.util.ArrayList;
-
 public class Card extends Account {
-    @SuppressWarnings("unused")
-    private List<String> transactions = new ArrayList<>();
 
-    public Card(Customer customer) {
-        super(customer);
+    public Card(String accountNumber, double balance, String status, Customer customer) {
+        super(accountNumber, "Card", balance, status, customer);
     }
 
     @Override
