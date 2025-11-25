@@ -5,8 +5,8 @@ public class Employee extends User{
     private long employeeId;
     private Branch branch;
 
-    public Employee(String username, String password, String emailString, Role role, long employeeId, Branch branch) {
-        super(username, password, emailString, role);
+    public Employee(UserDetails userDetails, Role role, long employeeId, Branch branch) {
+        super(userDetails, role);
         super.setId(employeeId);
         this.branch = branch;
     }

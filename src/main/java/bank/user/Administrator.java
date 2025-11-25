@@ -3,9 +3,8 @@ import bank.account.Account;
 import bank.utils.InternalLogger;
 
 public class Administrator extends Teller {
-    
-    public Administrator(String username, String password, String emailString) {
-        super(username, password, emailString);
+    public Administrator(UserDetails userDetails) {
+        super(userDetails);
         super.setRole(Role.ADMIN);
     }
 

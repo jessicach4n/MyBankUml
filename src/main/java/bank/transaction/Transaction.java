@@ -13,10 +13,13 @@ public class Transaction {
     private String recipient;
     private Account account;
 
-    // Should the date be a parameter??
     public Transaction(String type, String status, double amount, String recipient, Account account) {
+        this(type, status, amount, recipient, account, new Date());
+    }
+
+    public Transaction(String type, String status, double amount, String recipient, Account account, Date date) {
         this.id = generateId();
-        this.date = new Date();
+        this.date = date;
         this.type = type;
         this.status = status;
         this.amount = amount;
