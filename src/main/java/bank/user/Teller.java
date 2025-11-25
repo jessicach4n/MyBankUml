@@ -6,8 +6,8 @@ public class Teller extends User {
     
     private final InternalLogger logger = new InternalLogger();
 
-    public Teller(String username, String password, String emailString) {
-        super(username, password, emailString, Role.TELLER);
+    public Teller(UserDetails userDetails) {
+        super(userDetails, Role.TELLER);
     }
 
     public double viewBalance(Account account) {
