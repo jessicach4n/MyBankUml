@@ -1,4 +1,4 @@
-package bank;
+package bank.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,16 +21,18 @@ public class Users {
 
     public record User(
             long id,
+            String username,
             String name,
             String role,
             String password,
+            String email,
             List<Account> accounts
     ) {}
 
     public record Account(
-            long number,
+            String number,
             String type,
-            long balance,
+            double balance,
             List<Transaction> transactions
     ) {}
 
@@ -44,7 +46,7 @@ public class Users {
             String recipient_name
     ) {}
 
-    public static void load() 
+    public static void load()
     {
         Path path = Path.of("users.json");
         try (Reader r = Files.newBufferedReader(path)) 
@@ -75,6 +77,11 @@ public class Users {
         {
             GSON.toJson(USERS, w);
         } catch (Exception ignored) {}
+    }
+
+    public static void add(User user) {
+        USERS.add(user);
+        USER_MAP.put(user.id(), user);
     }
 
     public static List<User> get() 

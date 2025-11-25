@@ -1,6 +1,6 @@
 package bank.user;
 
-import bank.user.repository.InMemoryUserRepository;
+import bank.user.repository.JsonUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ class UserManagerTest {
 
     @BeforeEach
     void setup() {
-        userManager = new UserManager(new InMemoryUserRepository());
+        userManager = new UserManager(new JsonUserRepository());
     }
 
     @Test
@@ -26,9 +26,9 @@ class UserManagerTest {
 
     @Test
     void testAdminCreatesUsers() throws Exception {
-        UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name", 35, "123456789");
-        UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name", 30, "987654321");
-        UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei", 10, "100");
+        UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name");
+        UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name");
+        UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei");
 
         User admin = userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
         User teller = userManager.createUser(tellerDetails, Role.TELLER, Role.ADMIN);
@@ -41,10 +41,10 @@ class UserManagerTest {
 
     @Test
     void testUpdateUser() throws Exception {
-        UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei", 10, "100");
-        UserDetails newCustomerDetail = new UserDetails("New Name", "New Password", "new@email.com", "Shayan Aminaei", 10, "100");
+        UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei");
+        UserDetails newCustomerDetail = new UserDetails("New Name", "New Password", "new@email.com", "Shayan Aminaei");
         Customer customer = (Customer) userManager.createUser(customerDetails, Role.CUSTOMER, Role.ADMIN);
-        userManager.updateUser(customer.getId(), newCustomerDetail);
+        customer = (Customer) userManager.updateUser(customer.getId(), newCustomerDetail);
 
         assertEquals("New Name", customer.getUsername());
         assertEquals("New Password", customer.getPassword());
@@ -53,21 +53,23 @@ class UserManagerTest {
 
     @Test
     void testAssignRole() throws Exception {
-        UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name", 35, "123456789");
-        UserDetails genDetails = new UserDetails("genericUser", "genPass", "generic@example.com", "Generic Name", 25, "555555555");
-        UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name", 30, "987654321");
+        UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name");
+        UserDetails genDetails = new UserDetails("genericUser", "genPass", "generic@example.com", "Generic Name");
+        UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name");
 
         User admin = userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
         User genUser = userManager.createUser(genDetails, Role.CUSTOMER, admin.getRole());
 
         // Admin assigns a new role
-        userManager.assignRole(genUser.getId(), Role.TELLER, admin.getRole());
+        genUser = userManager.assignRole(genUser.getId(), Role.TELLER, admin.getRole());
         assertEquals(Role.TELLER, genUser.getRole());
 
         // Teller cannot assign roles (should throw an exception)
         User teller = userManager.createUser(tellerDetails, Role.TELLER, admin.getRole());
+        User genUser2 = userManager.createUser(genDetails, Role.CUSTOMER, admin.getRole());
+
         Exception exception = assertThrows(Exception.class, () -> {
-            userManager.assignRole(genUser.getId(), Role.CUSTOMER, teller.getRole());
+            userManager.assignRole(genUser2.getId(), Role.CUSTOMER, teller.getRole());
         });
         assertTrue(exception.getMessage().contains("Only administrators can assign roles"));
     }

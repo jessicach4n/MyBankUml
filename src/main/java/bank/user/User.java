@@ -1,24 +1,45 @@
 package bank.user;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import bank.account.Account;
+
 
 public abstract class User {
     private static long idCounter = 0;
     private long id;
-    private String username;
-    private String password;
-    private String emailString;
     private Role role;
     private Date createdDate;
+    private UserDetails details;
+    private List<Account> accounts;
 
-    public User(String username, String password, String emailString, Role role) {
-        // ID is generated automatically, upon the instantiation of the User
-        this.id = generateId();
-        this.username = username;
-        this.password = password;
-        this.emailString = emailString;
+    public User(long id, UserDetails details, Role role, Date createdDate, List<Account> accounts) {
+        this.id = id;
+        this.details = details;
         this.role = role;
-        // Created date generated automatically, upon the instantiation of the User
-        this.createdDate = new Date(); 
+        this.createdDate = createdDate;
+        this.accounts = accounts != null ? new ArrayList<>(accounts) : new ArrayList<>();
+    }
+
+    public User(UserDetails details, Role role) {
+        this.id = generateId();
+        this.details = details;
+        this.role = role;
+        this.createdDate = new Date();
+        this.accounts = new ArrayList<>();
+    }
+
+    public void setDetails(UserDetails details) {
+        if (details == null) throw new IllegalArgumentException("UserDetails cannot be null");
+        this.details = details;
+    }
+
+    public void updateDetails(UserDetails newDetails) {
+        setUsername(newDetails.getUsername());
+        setPassword(newDetails.getPassword());
+        setEmailString(newDetails.getEmail());
+        setName(newDetails.getName());
     }
 
     private long generateId() {
@@ -34,27 +55,27 @@ public abstract class User {
     }
 
     public String getUsername() {
-        return username;
+        return this.details.getUsername();
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.details.setUsername(username);
     }
 
     public String getPassword() {
-        return password;
+        return this.details.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.details.setPassword(password);
     }
 
     public String getEmailString() {
-        return emailString;
+        return this.details.getEmail();
     }
 
     public void setEmailString(String emailString) {
-        this.emailString = emailString;
+        this.details.setEmail(emailString);
     }
 
     public Role getRole() {
@@ -73,8 +94,28 @@ public abstract class User {
         this.createdDate = createdDate;
     }
 
+    public String getName() { return this.details.getName(); }
+
+    public void setName(String newName) { this.details.setName(newName); }
+
     public boolean validatePassword() {
         // TODO
         return true;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void addAccount(Account account) {
+        this.accounts.add(account);
+    }
+
+    public void removeAccount(String accountNumber) {
+        this.accounts.removeIf(a -> a.getAccountNumber().equals(accountNumber));
     }
 }

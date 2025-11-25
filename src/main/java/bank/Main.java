@@ -12,7 +12,7 @@ import bank.user.UserManager;
 import bank.user.Role;
 import bank.user.User;
 import bank.user.UserDetails;
-import bank.user.repository.InMemoryUserRepository;
+import bank.user.repository.JsonUserRepository;
 import javafx.application.Application;
 import java.util.List;
 
@@ -20,25 +20,25 @@ public class Main {
     public static void main(String[] args) {
 
         // Initialize UserManager
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        JsonUserRepository userRepository = new JsonUserRepository();
         UserManager userManager = new UserManager(userRepository);
 
         try {
             // Admin creating a Teller and a Customer
-            UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name", 35, "123456789");
+            UserDetails adminDetails = new UserDetails("adminUser", "adminPass", "admin@example.com", "Admin Name");
             User admin = userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
             System.out.println("Created admin: " + admin.getUsername() + " with role " + admin.getRole());
 
-            UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name", 30, "987654321");
+            UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name");
             User teller = userManager.createUser(tellerDetails, Role.TELLER, admin.getRole());
             System.out.println("Created teller: " + teller.getUsername() + " with role " + teller.getRole());
 
-            UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei", 10, "100");
+            UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei");
             Customer customer = (Customer) userManager.createUser(customerDetails, Role.CUSTOMER, teller.getRole());
             System.out.println("Created customer: " + customer.getUsername() + " with role " + customer.getRole());
 
             // Generic user
-            UserDetails genDetails = new UserDetails("genericUser", "genPass", "generic@example.com", "Generic Name", 25, "555555555");
+            UserDetails genDetails = new UserDetails("genericUser", "genPass", "generic@example.com", "Generic Name");
             User genUser = userManager.createUser(genDetails, Role.CUSTOMER, admin.getRole());
             System.out.println("Created generic user: " + genUser.getUsername() + " with role " + genUser.getRole());
 
@@ -69,7 +69,7 @@ public class Main {
             Check check = new Check(customer);
             Saving saving = new Saving(customer);
 
-            // Transations for each account
+            // Transactions for each account
             Transaction t1 = new Transaction("type", "status", 100, "recipient", card);
             Transaction t2 = new Transaction("type", "status", 100, "recipient", check);
             Transaction t3 = new Transaction("type", "status", 100, "recipient", saving);
