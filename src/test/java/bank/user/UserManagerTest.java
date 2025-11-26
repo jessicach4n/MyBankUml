@@ -30,8 +30,8 @@ class UserManagerTest {
         UserDetails tellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name");
         UserDetails customerDetails = new UserDetails("customerUser", "customerPass", "customer@example.com", "Shayan Aminaei");
 
-        User admin = userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
-        User teller = userManager.createUser(tellerDetails, Role.TELLER, Role.ADMIN);
+        Administrator admin = (Administrator) userManager.createUser(adminDetails, Role.ADMIN, Role.ADMIN);
+        Teller teller =  (Teller) userManager.createUser(tellerDetails, Role.TELLER, Role.ADMIN);
         Customer customer = (Customer) userManager.createUser(customerDetails, Role.CUSTOMER, Role.TELLER);
 
         assertEquals(Role.ADMIN, admin.getRole());
