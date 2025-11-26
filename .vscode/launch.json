@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MyBankUML",
+            "request": "launch",
+            "mainClass": "bank.MyBankUML",
+            "projectName": "bank"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "bank.Main",

@@ -54,9 +54,6 @@
     </dependencies>
 
     <build>
-<!--       <sourceDirectory>src</sourceDirectory>-->
-<!--       <testSourceDirectory>src/test</testSourceDirectory>-->
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -76,7 +73,8 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>bank/bank.gui.GUI</mainClass>
+                            <!-- CORRECTED MAIN CLASS: bank.MyBankUML -->
+                            <mainClass>bank.MyBankUML</mainClass> 
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -89,5 +87,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
