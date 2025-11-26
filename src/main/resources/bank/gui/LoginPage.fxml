@@ -14,9 +14,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(to bottom right, #E0F7E0, #F0FFF0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="175.0" layoutY="110.0" prefHeight="280.0" prefWidth="350.0" style="-fx-background-color: #20A88E;" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="110.0">
+      <VBox alignment="TOP_CENTER" layoutX="175.0" layoutY="110.0" prefHeight="280.0" prefWidth="350.0" style="-fx-background-color: #20A88E;" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="110.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="125.0" prefWidth="350.0">
+            <HBox alignment="CENTER" prefHeight="125.0" prefWidth="350.0" VBox.vgrow="NEVER">
                <children>
                   <ImageView fitHeight="130.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>

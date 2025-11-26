@@ -15,13 +15,11 @@ public class MyBankUML extends Application {
     public void start(Stage primaryStage) throws Exception {
         
         // src/main/resources/bank/gui/TellerHomePage.fxml
-        URL fxmlUrl = getClass().getResource("/bank/gui/TellerHomePage.fxml");
+        URL fxmlUrl = getClass().getResource("/bank/gui/LoginPage.fxml");
         // --------------------------------
         
         if (fxmlUrl == null) {
-            // Include helpful instructions in the error message for debugging the path
-            System.err.println("FATAL ERROR: Cannot find TellerHomePage.fxml.");
-            System.err.println("Ensure the file exists in src/main/resources/bank/gui/ and the path in MyBankUML.java is correct.");
+            System.err.println("FATAL ERROR: Cannot find LoginPage.fxml.");
             return;
         }
 
@@ -32,7 +30,7 @@ public class MyBankUML extends Application {
         Scene scene = new Scene(root, 1000, 700); 
 
         // 4. Set the Stage properties
-        primaryStage.setTitle("MYBank Teller Home Page");
+        primaryStage.setTitle("MyBankUML");
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(900);
