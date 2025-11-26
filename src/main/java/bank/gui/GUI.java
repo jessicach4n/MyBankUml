@@ -1,5 +1,6 @@
 package bank.gui;
 
+import bank.user.Users;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class GUI extends Application {
 
@@ -40,6 +42,30 @@ public class GUI extends Application {
     private Pane withdraw_view;
     private Pane deposit_view;
     private Pane success_view;
+    private Pane loginOverlay;
+
+    private AuthManager authManager = new AuthManager();
+
+    private ToggleButton accounts_btn;
+    private ToggleButton deposit_btn;
+    private ToggleButton withdraw_btn;
+    private Button settings_btn;
+
+    private TextField loginUserIdField;
+    private PasswordField loginPasswordField;
+
+    private Label sidebarInitials;
+    private Label sidebarName;
+    private Label sidebarRole;
+    private VBox profileBox;
+    private Button sidebarLoginButton;
+    private Button sidebarLogoutButton;
+
+    private Label acctTypeValue;
+    private Label acctNumValue;
+    private Label balValue;
+    private VBox accountTilesBox;
+    private TableView<Transaction> transactionsTable;
 
     @Override
     public void start(Stage stage) {
@@ -49,8 +75,9 @@ public class GUI extends Application {
         withdraw_view = build_withdraw_view();
         deposit_view = build_deposit_view();
         success_view = build_success_view();
+        loginOverlay = build_login_overlay();
 
-        content_stack.getChildren().addAll(home_view, withdraw_view, deposit_view, success_view);
+        content_stack.getChildren().addAll(home_view, withdraw_view, deposit_view, success_view, loginOverlay);
         show_view(home_view);
 
         Node sidebar = build_sidebar();
@@ -66,28 +93,34 @@ public class GUI extends Application {
         stage.setTitle("MYBank");
         stage.setScene(scene);
         stage.show();
+
+        showLoginPanel();
     }
 
     private Node build_sidebar() {
         Label app_label = new Label("BankUML");
         Circle avatar_circle = new Circle(50, Color.BLACK);
-        Label initials = new Label("JD");
-        Label name = new Label("John Deer");
-        Label role = new Label("Client");
+        sidebarInitials = new Label("??");
+        sidebarName = new Label("Guest");
+        sidebarRole = new Label("Not signed in");
 
         ToggleGroup group = new ToggleGroup();
-        ToggleButton accounts_btn = new ToggleButton("Accounts");
-        ToggleButton deposit_btn = new ToggleButton("Deposit");
-        ToggleButton withdraw_btn = new ToggleButton("Withdraw");
+        accounts_btn = new ToggleButton("Accounts");
+        deposit_btn = new ToggleButton("Deposit");
+        withdraw_btn = new ToggleButton("Withdraw");
 
-        Button settings_btn = new Button("Settings");
+        settings_btn = new Button("Settings");
+        sidebarLoginButton = new Button("Log In");
+        sidebarLogoutButton = new Button("Log Out");
         Region spacer = new Region();
 
         style_text(app_label, 16, false, 0x000000);
-        style_text(initials, 40, true, 0xFFFFFF);
-        style_text(name, 16, true, 0x000000);
-        style_text(role, 14, false, 0x000000);
+        style_text(sidebarInitials, 40, true, 0xFFFFFF);
+        style_text(sidebarName, 16, true, 0x000000);
+        style_text(sidebarRole, 14, false, 0x000000);
         style_text(settings_btn, 16, false, 0xFFFFFF);
+        style_text(sidebarLoginButton, 14, true, 0xFFFFFF);
+        style_text(sidebarLogoutButton, 14, true, 0xFFFFFF);
 
         accounts_btn.setToggleGroup(group);
         deposit_btn.setToggleGroup(group);
@@ -120,20 +153,32 @@ public class GUI extends Application {
             if (!accounts_btn.isSelected()) {
                 accounts_btn.setSelected(true);
             }
-            show_view(home_view);
+            if (ensureLoggedIn()) show_view(home_view);
         });
         deposit_btn.setOnAction(e -> {
             if (!deposit_btn.isSelected()) {
                 deposit_btn.setSelected(true);
             }
-            show_view(deposit_view);
+            if (ensureLoggedIn()) show_view(deposit_view);
         });
         withdraw_btn.setOnAction(e -> {
             if (!withdraw_btn.isSelected()) {
                 withdraw_btn.setSelected(true);
             }
-            show_view(withdraw_view);
+            if (ensureLoggedIn()) show_view(withdraw_view);
         });
+
+        sidebarLoginButton.setMaxWidth(Double.MAX_VALUE);
+        sidebarLoginButton.setPrefHeight(44);
+        sidebarLoginButton.setStyle("-fx-background-color: #00796b; -fx-text-fill: white; -fx-background-radius: 8;");
+        sidebarLoginButton.setOnAction(e -> showLoginPanel());
+
+        sidebarLogoutButton.setMaxWidth(Double.MAX_VALUE);
+        sidebarLogoutButton.setPrefHeight(44);
+        sidebarLogoutButton.setStyle("-fx-background-color: #cc4b37; -fx-text-fill: white; -fx-background-radius: 8;");
+        sidebarLogoutButton.setOnAction(e -> handleLogout());
+        sidebarLogoutButton.setVisible(false);
+        sidebarLogoutButton.setManaged(false);
 
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
@@ -149,15 +194,17 @@ public class GUI extends Application {
         );
         style_text(settings_btn, 16, false, 0xFFFFFF);
 
-        StackPane avatar = new StackPane(avatar_circle, initials);
+        StackPane avatar = new StackPane(avatar_circle, sidebarInitials);
         avatar.setAlignment(Pos.CENTER);
 
-        VBox profile_box = new VBox(6, avatar, name, role);
-        profile_box.setAlignment(Pos.CENTER);
-        profile_box.setPadding(new Insets(10, 0, 10, 0));
-        profile_box.setMaxWidth(Double.MAX_VALUE);
+        profileBox = new VBox(6, avatar, sidebarName, sidebarRole);
+        profileBox.setAlignment(Pos.CENTER);
+        profileBox.setPadding(new Insets(10, 0, 10, 0));
+        profileBox.setMaxWidth(Double.MAX_VALUE);
+        profileBox.setVisible(false);
+        profileBox.setManaged(false);
 
-        VBox header_box = new VBox(12, app_label, profile_box);
+        VBox header_box = new VBox(12, app_label, profileBox, sidebarLoginButton, sidebarLogoutButton);
         header_box.setPadding(new Insets(20, 20, 10, 20));
         header_box.setFillWidth(true);
         header_box.setAlignment(Pos.TOP_LEFT);
@@ -177,11 +224,11 @@ public class GUI extends Application {
 
     private Pane build_home_view() {
         Label acct_type_label = new Label("Account Type");
-        Label acct_type = new Label("Student");
+        acctTypeValue = new Label("-");
         Label acct_num_label = new Label("Account Number");
-        Label acct_num = new Label("879302145678");
+        acctNumValue = new Label("-");
         Label bal_label = new Label("Balance");
-        Label bal_value = new Label("$ 1187.89");
+        balValue = new Label("$ -");
 
         Button transfer_btn = new Button("Make A Transfer");
         Button pay_bills_btn = new Button("Pay Bills");
@@ -192,18 +239,18 @@ public class GUI extends Application {
         Label filter_label = new Label("Filter by: Date");
         Region spacer = new Region();
 
-        TableView<Transaction> table = new TableView<>();
+        transactionsTable = new TableView<>();
         TableColumn<Transaction, String> merchant_col = create_header_column("Merchant");
         TableColumn<Transaction, String> date_col = create_header_column("Date");
         TableColumn<Transaction, String> card_col = create_header_column("Card");
         TableColumn<Transaction, String> amount_col = create_header_column("Amount");
 
         style_text(acct_type_label, 12, false, 0x000000);
-        style_text(acct_type, 28, true, 0x000000);
+        style_text(acctTypeValue, 28, true, 0x000000);
         style_text(acct_num_label, 12, false, 0x000000);
-        style_text(acct_num, 18, true, 0x000000);
+        style_text(acctNumValue, 18, true, 0x000000);
         style_text(bal_label, 12, false, 0x000000);
-        style_text(bal_value, 24, true, 0x000000);
+        style_text(balValue, 24, true, 0x000000);
 
         style_text(transfer_btn, 14, true, 0x000000);
         style_text(pay_bills_btn, 14, true, 0x000000);
@@ -226,9 +273,9 @@ public class GUI extends Application {
         transfer_btn.setOnAction(e -> show_view(deposit_view));
         pay_bills_btn.setOnAction(e -> show_view(withdraw_view));
 
-        table.setPrefHeight(230);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        table.setStyle(
+        transactionsTable.setPrefHeight(230);
+        transactionsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        transactionsTable.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-control-inner-background: white;" +
                         "-fx-control-inner-background-alt: white;" +
@@ -254,20 +301,12 @@ public class GUI extends Application {
         style_body_column(card_col);
         style_body_column(amount_col);
 
-        table.getColumns().addAll(merchant_col, date_col, card_col, amount_col);
-
-        table.getItems().setAll(
-                new Transaction("Concordia University", "10/22/2025", "Visa Debit", "$ 2671.89"),
-                new Transaction("Tim Hortons", "10/22/2025", "Visa Credit", "$ 1.79"),
-                new Transaction("Pharmaprix", "10/21/2025", "Visa Credit", "$ 89.12"),
-                new Transaction("IGA", "10/21/2025", "Visa Credit", "$ 101.10"),
-                new Transaction("Indigo", "10/20/2025", "Visa Credit", "$ 45.17")
-        );
+        transactionsTable.getColumns().addAll(merchant_col, date_col, card_col, amount_col);
 
         VBox summary_box = new VBox(8,
-                acct_type_label, acct_type,
-                acct_num_label, acct_num,
-                bal_label, bal_value
+                acct_type_label, acctTypeValue,
+                acct_num_label, acctNumValue,
+                bal_label, balValue
         );
 
         VBox button_box = new VBox(10, transfer_btn, pay_bills_btn);
@@ -278,14 +317,9 @@ public class GUI extends Application {
         left_card.setPrefWidth(360);
         left_card.setStyle("-fx-background-color: white; -fx-background-radius: 4;");
 
-        VBox account_tiles = new VBox(14,
-                create_account_card("Checking Account", "Visa Debit",
-                        "4519 8030 3345 1825", "#b8ffe9"),
-                create_account_card("Visa Account", "Visa Credit",
-                        "4515 1992 1276 5628", "#bcded7")
-        );
+        accountTilesBox = new VBox(14);
 
-        VBox right_card = new VBox(18, accounts_title, account_tiles);
+        VBox right_card = new VBox(18, accounts_title, accountTilesBox);
         right_card.setPadding(new Insets(24));
         right_card.setPrefWidth(420);
         right_card.setStyle("-fx-background-color: white; -fx-background-radius: 4;");
@@ -295,7 +329,7 @@ public class GUI extends Application {
 
         HBox header = new HBox(history_label, spacer, filter_label);
 
-        VBox trans_card = new VBox(16, header, table);
+        VBox trans_card = new VBox(16, header, transactionsTable);
         trans_card.setPadding(new Insets(24));
         trans_card.setMaxWidth(Double.MAX_VALUE);
         trans_card.setStyle("-fx-background-color: white; -fx-background-radius: 4;");
@@ -490,6 +524,197 @@ public class GUI extends Application {
         grid.add(v, 1, row);
     }
 
+    private Pane build_login_overlay() {
+        StackPane overlay = new StackPane();
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.4);");
+
+        VBox card = new VBox(20);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setPadding(new Insets(24));
+        card.setMaxWidth(380);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 12;");
+
+        HBox header = new HBox();
+        Region spacer = new Region();
+        Button close = new Button("X");
+        close.setOnAction(e -> hideLoginPanel());
+        close.setStyle("-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 16;");
+        header.getChildren().addAll(spacer, close);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label title = new Label("Sign in to MYBank");
+        style_text(title, 24, true, 0x000000);
+        Label subtitle = new Label("Enter your user ID and password to continue.");
+        style_text(subtitle, 14, false, 0x000000);
+
+        loginUserIdField = new TextField();
+        loginUserIdField.setPromptText("User ID");
+        loginUserIdField.setPrefWidth(280);
+        loginPasswordField = new PasswordField();
+        loginPasswordField.setPromptText("Password");
+        loginPasswordField.setPrefWidth(280);
+        Button loginButton = new Button("Log In");
+        loginButton.setPrefWidth(280);
+        loginButton.setDefaultButton(true);
+
+        style_text(loginUserIdField, 14, false, 0x000000);
+        style_text(loginPasswordField, 14, false, 0x000000);
+        style_text(loginButton, 16, true, 0xFFFFFF);
+
+        String inputStyle = "-fx-background-color: white;" +
+                "-fx-border-color: #D0D7DE;" +
+                "-fx-border-radius: 8;" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 10 12;";
+        loginUserIdField.setStyle(inputStyle);
+        loginPasswordField.setStyle(inputStyle);
+        loginButton.setStyle(
+                "-fx-background-color: #00A693;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 12 0;" +
+                        "-fx-border-radius: 8;"
+        );
+
+        loginButton.setOnAction(e -> handleLogin());
+        loginUserIdField.setOnAction(e -> handleLogin());
+        loginPasswordField.setOnAction(e -> handleLogin());
+
+        VBox.setMargin(loginUserIdField, new Insets(0, 0, 4, 0));
+        VBox.setMargin(loginPasswordField, new Insets(0, 0, 4, 0));
+
+        card.getChildren().addAll(header, title, subtitle, loginUserIdField, loginPasswordField, loginButton);
+        overlay.getChildren().add(card);
+        StackPane.setAlignment(card, Pos.CENTER);
+        overlay.setVisible(false);
+        return overlay;
+    }
+
+    private void showLoginPanel() {
+        loginOverlay.setVisible(true);
+    }
+
+    private void hideLoginPanel() {
+        loginOverlay.setVisible(false);
+    }
+
+    private void unlockAppAfterLogin() {
+        loginOverlay.setVisible(false);
+        profileBox.setVisible(true);
+        profileBox.setManaged(true);
+        sidebarLoginButton.setVisible(false);
+        sidebarLoginButton.setManaged(false);
+        sidebarLogoutButton.setVisible(true);
+        sidebarLogoutButton.setManaged(true);
+    }
+
+    private boolean ensureLoggedIn() {
+        if (authManager.isLoggedIn()) return true;
+        showLoginPanel();
+        showLoginError("Please log in first.");
+        return false;
+    }
+
+    private void handleLogin() {
+        try {
+            long userId = Long.parseLong(loginUserIdField.getText().trim());
+            Optional<Users.User> user = authManager.login(userId, loginPasswordField.getText());
+            if (user.isPresent()) {
+                applyUserToUI(user.get());
+                unlockAppAfterLogin();
+                show_view(home_view);
+            } else {
+                showLoginError("Invalid user id or password. Please try again.");
+            }
+        } catch (NumberFormatException ex) {
+            showLoginError("User id must be a number.");
+        }
+    }
+
+    private void handleLogout() {
+        authManager.logout();
+        sidebarInitials.setText("??");
+        sidebarName.setText("Guest");
+        sidebarRole.setText("Not signed in");
+        acctTypeValue.setText("-");
+        acctNumValue.setText("-");
+        balValue.setText("$ -");
+        accountTilesBox.getChildren().clear();
+        transactionsTable.getItems().clear();
+        profileBox.setVisible(false);
+        profileBox.setManaged(false);
+        sidebarLoginButton.setVisible(true);
+        sidebarLoginButton.setManaged(true);
+        sidebarLogoutButton.setVisible(false);
+        sidebarLogoutButton.setManaged(false);
+        show_view(home_view);
+        showLoginPanel();
+    }
+
+    private void applyUserToUI(Users.User user) {
+        String initials = user.name() != null && !user.name().isBlank()
+                ? user.name().codePoints()
+                .filter(Character::isLetter)
+                .mapToObj(cp -> String.valueOf((char) cp))
+                .limit(2)
+                .reduce("", String::concat)
+                .toUpperCase()
+                : "US";
+        sidebarInitials.setText(initials);
+        sidebarName.setText(user.name() == null ? "Unknown" : user.name());
+        sidebarRole.setText(user.role() == null ? "Unknown role" : user.role());
+
+        Users.Account first = (user.accounts() != null && !user.accounts().isEmpty())
+                ? user.accounts().get(0)
+                : null;
+        if (first != null) {
+            acctTypeValue.setText(first.type());
+            acctNumValue.setText(String.valueOf(first.number()));
+            balValue.setText("$ " + first.balance());
+        } else {
+            acctTypeValue.setText("-");
+            acctNumValue.setText("-");
+            balValue.setText("$ -");
+        }
+
+        accountTilesBox.getChildren().clear();
+        if (user.accounts() != null) {
+            for (Users.Account acc : user.accounts()) {
+                accountTilesBox.getChildren().add(
+                        create_account_card(acc.type(), acc.type(), String.valueOf(acc.number()), "#b8ffe9")
+                );
+            }
+        }
+
+        transactionsTable.getItems().clear();
+        if (first != null && first.transactions() != null) {
+            for (Users.Transaction t : first.transactions()) {
+                transactionsTable.getItems().add(
+                        new Transaction(
+                                t.details(),
+                                String.valueOf(t.date()),
+                                accLabelForTransaction(first),
+                                formatAmount(t.amount())
+                        )
+                );
+            }
+        }
+    }
+
+    private String formatAmount(double amount) {
+        return String.format("$ %.2f", amount);
+    }
+
+    private String accLabelForTransaction(Users.Account acc) {
+        return acc.type() + " (" + acc.number() + ")";
+    }
+
+    private void showLoginError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.setHeaderText(null);
+        alert.setTitle("Login Required");
+        alert.showAndWait();
+    }
+
     private TableColumn<Transaction, String> create_header_column(String title) {
         TableColumn<Transaction, String> col = new TableColumn<>();
         Label header_label = new Label(title);
@@ -531,6 +756,7 @@ public class GUI extends Application {
 
     private void show_view(Pane view) {
         for (Node child : content_stack.getChildren()) {
+            if (child == loginOverlay) continue;
             child.setVisible(child == view);
         }
     }
