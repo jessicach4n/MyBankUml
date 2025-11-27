@@ -72,6 +72,7 @@ public class Users {
                     for (User u : USERS) {
                         USER_MAP.put(u.id(), u);
                     }
+                    LOGGER.info("Loaded " + USERS.size() + " users from resources");
                     return;
                 }
             }
@@ -79,30 +80,18 @@ public class Users {
             // Silent fail, try fallback
         }
 
-        // Fallback: try loading from current directory
-        Path path = Path.of("users.json");
-        try (Reader r = Files.newBufferedReader(path))
-        {
-            User[] arr = GSON.fromJson(r, User[].class);
-            if (arr == null)
-            {
-                USERS = new ArrayList<>();
-                USER_MAP = new HashMap<>();
-                return;
+        // Fallback: try loading from jsonFile path (data/users.json or custom path)
+        try (Reader reader = Files.newBufferedReader(jsonFile)) {
+            User[] arr = GSON.fromJson(reader, User[].class);
+            if (arr == null) arr = new User[0];
+
+            USERS = new ArrayList<>(List.of(arr));
+            USER_MAP = new HashMap<>();
+            for (User u : USERS) {
+                USER_MAP.put(u.id(), u);
             }
 
-            try (Reader reader = Files.newBufferedReader(jsonFile)) {
-                User[] arr = GSON.fromJson(reader, User[].class);
-                if (arr == null) arr = new User[0];
-
-                USERS = new ArrayList<>(List.of(arr));
-                USER_MAP = new HashMap<>();
-                for (User u : USERS) {
-                    USER_MAP.put(u.id(), u);
-                }
-
-                LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
-            }
+            LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
         } catch (Exception e) {
             USERS = new ArrayList<>();
             USER_MAP = new HashMap<>();
