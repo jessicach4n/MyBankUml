@@ -23,6 +23,13 @@ import java.util.ResourceBundle;
 
 public class AdminManageBranchController implements Initializable {
 
+    // --- LEFT SIDEBAR BUTTONS ---
+    @FXML
+    private Button btnUsers;
+
+    @FXML
+    private Button btnBranch;
+
     // Sidebar profile UI
     @FXML private Circle profileCircle;
     @FXML private Label initialsLabel;
@@ -67,6 +74,8 @@ public class AdminManageBranchController implements Initializable {
 
         // Add temp data for testing
         loadTempBranches();
+
+        btnUsers.setOnAction(event -> navigateToUsers());
     }
 
     /** Adds temporary sample branches to the table for testing */
@@ -160,6 +169,19 @@ public class AdminManageBranchController implements Initializable {
             initialsLabel.setText(initials);
         } else if (parts.length == 1) {
             initialsLabel.setText(parts[0].substring(0, 1).toUpperCase());
+        }
+    }
+
+    // --- Navigation Handlers ---
+    private void navigateToUsers() {
+        try {
+            System.out.println("Already on Users page");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminHomePage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) btnBranch.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

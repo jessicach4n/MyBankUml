@@ -169,14 +169,14 @@ public class AdminController {
 
     private void navigateToBranch() {
         System.out.println("Navigating to Branch page...");
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/BranchPage.fxml"));
-//            Parent root = loader.load();
-//            Stage stage = (Stage) btnBranch.getScene().getWindow();
-//            stage.setScene(new Scene(root));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminManageBranchPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) btnBranch.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // --- Logout Handler (Navigation Logic) ---
