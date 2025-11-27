@@ -74,4 +74,20 @@ public class CustomerInformationController {
             LOGGER.error("Could not navigate to TellerOpenNewAccount.fxml: " + e.getMessage());
         }
     }
+
+    @FXML
+    private void handleCloseAccount(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(
+                Objects.requireNonNull(getClass().getResource("/bank/gui/TellerAccountClosed.fxml"))
+            );
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Could not navigate to TellerAccountClosed.fxml: " + e.getMessage());
+        }
+    }
 }
