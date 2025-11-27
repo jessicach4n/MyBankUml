@@ -58,33 +58,40 @@ public class Users {
             String recipient_name
     ) {}
 
-    public static void load() {
-        try {
-            if (!Files.exists(jsonFile)) {
-                Files.createDirectories(jsonFile.getParent());
-
-                var resource = Users.class.getClassLoader().getResource("bank/users.json");
-                if (resource != null) {
-                    Files.copy(Path.of(resource.toURI()), jsonFile);
-                    LOGGER.info("Created data/users.json from template resource.");
-                } else {
-                    Files.writeString(jsonFile, "[]");
-                    LOGGER.warning("Resource users.json not found. Created empty data/users.json.");
+    public static void load()
+    {
+        // Try loading from resources folder first (for packaged app)
+        try (Reader r = new java.io.InputStreamReader(
+                Users.class.getResourceAsStream("/bank/users.json")))
+        {
+            if (r != null) {
+                User[] arr = GSON.fromJson(r, User[].class);
+                if (arr != null) {
+                    USERS = new ArrayList<>(List.of(arr));
+                    USER_MAP = new HashMap<>();
+                    for (User u : USERS) {
+                        USER_MAP.put(u.id(), u);
+                    }
+                    LOGGER.info("Loaded " + USERS.size() + " users from resources");
+                    return;
                 }
             }
+        } catch (Exception e) {
+            // Silent fail, try fallback
+        }
 
-            try (Reader reader = Files.newBufferedReader(jsonFile)) {
-                User[] arr = GSON.fromJson(reader, User[].class);
-                if (arr == null) arr = new User[0];
+        // Fallback: try loading from jsonFile path (data/users.json or custom path)
+        try (Reader reader = Files.newBufferedReader(jsonFile)) {
+            User[] arr = GSON.fromJson(reader, User[].class);
+            if (arr == null) arr = new User[0];
 
-                USERS = new ArrayList<>(List.of(arr));
-                USER_MAP = new HashMap<>();
-                for (User u : USERS) {
-                    USER_MAP.put(u.id(), u);
-                }
-
-                LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
+            USERS = new ArrayList<>(List.of(arr));
+            USER_MAP = new HashMap<>();
+            for (User u : USERS) {
+                USER_MAP.put(u.id(), u);
             }
+
+            LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
         } catch (Exception e) {
             USERS = new ArrayList<>();
             USER_MAP = new HashMap<>();

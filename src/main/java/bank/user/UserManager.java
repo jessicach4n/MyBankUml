@@ -6,12 +6,61 @@ import bank.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserManager {
     private final UserRepository repository;
+    private final Authentication authentication;
 
     public UserManager(UserRepository repository) {
         this.repository = repository;
+        this.authentication = new Authentication(repository);
+    }
+
+    /**
+     * Authenticate a user by username and password.
+     *
+     * @param username the username
+     * @param password the password
+     * @return Optional containing the domain User if successful, empty otherwise
+     */
+    public Optional<User> login(String username, String password) {
+        Optional<Users.User> persistenceUser = authentication.authenticateByUsername(username, password);
+        return persistenceUser.map(UserManager::convertFromPersistence);
+    }
+
+    /**
+     * Authenticate a user by user ID and password.
+     *
+     * @param userId the user ID
+     * @param password the password
+     * @return Optional containing the domain User if successful, empty otherwise
+     */
+    public Optional<User> loginById(long userId, String password) {
+        Optional<Users.User> persistenceUser = authentication.authenticateById(userId, password);
+        return persistenceUser.map(UserManager::convertFromPersistence);
+    }
+
+    /**
+     * Change a user's password.
+     *
+     * @param userId the user ID
+     * @param currentPassword the current password
+     * @param newPassword the new password
+     * @return true if successful, false otherwise
+     */
+    public boolean changePassword(long userId, String currentPassword, String newPassword) {
+        return authentication.changePassword(userId, currentPassword, newPassword);
+    }
+
+    /**
+     * Check if a username already exists.
+     *
+     * @param username the username to check
+     * @return true if exists, false otherwise
+     */
+    public boolean usernameExists(String username) {
+        return authentication.userExists(username);
     }
 
     // Convert domain User -> persistence User
@@ -34,6 +83,7 @@ public class UserManager {
         switch (role) {
             case CUSTOMER -> user = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()), 21, "514-112-1234", null);
             case TELLER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
+            case MANAGER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name())); // Using Teller class temporarily
             case ADMIN -> user = new Administrator(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
             default -> throw new IllegalArgumentException("Unknown role: " + pUser.role());
         }

@@ -14,10 +14,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="bank.controller.CustomerInformationController"
-            prefHeight="600.0" prefWidth="900.0">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.CustomerInformationController">
+   
    <!-- LEFT SIDEBAR -->
    <left>
       <VBox prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #2CBF99;" BorderPane.alignment="CENTER">
@@ -79,6 +77,16 @@
                   <Insets left="20.0" />
                </padding>
                <alignment>CENTER_LEFT</alignment>
+            </Button>
+
+            <!-- Spacer to push logout button to bottom -->
+            <Pane VBox.vgrow="ALWAYS" />
+
+            <!-- Logout Button -->
+            <Button fx:id="logoutButton" onAction="#handleLogout" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 1 0 0 0;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </VBox>
