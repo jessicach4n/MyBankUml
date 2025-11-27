@@ -83,6 +83,7 @@ public class UserManager {
         switch (role) {
             case CUSTOMER -> user = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()), 21, "514-112-1234", null);
             case TELLER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
+            case MANAGER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name())); // Using Teller class temporarily
             case ADMIN -> user = new Administrator(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
             default -> throw new IllegalArgumentException("Unknown role: " + pUser.role());
         }

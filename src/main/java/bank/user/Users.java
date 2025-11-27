@@ -60,12 +60,11 @@ public class Users {
                     for (User u : USERS) {
                         USER_MAP.put(u.id(), u);
                     }
-                    System.out.println("[USERS] Loaded " + USERS.size() + " users from resources");
                     return;
                 }
             }
         } catch (Exception e) {
-            System.err.println("[USERS] Failed to load from resources: " + e.getMessage());
+            // Silent fail, try fallback
         }
 
         // Fallback: try loading from current directory
@@ -85,9 +84,7 @@ public class Users {
             {
                 USER_MAP.put(u.id(), u);
             }
-            System.out.println("[USERS] Loaded " + USERS.size() + " users from file system");
         } catch (Exception e) {
-            System.err.println("[USERS] Failed to load users from both locations!");
             USERS = new ArrayList<>();
             USER_MAP = new HashMap<>();
         }

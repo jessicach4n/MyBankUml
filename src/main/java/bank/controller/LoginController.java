@@ -90,22 +90,43 @@ public class LoginController {
 
     /**
      * Navigate to the appropriate page based on the user's role.
+     * - CUSTOMER: CustomerInformation page
+     * - TELLER: TellerHomePage
+     * - MANAGER: ManagerHomePage (to be implemented)
+     * - ADMIN: AdminHomePage (to be implemented)
      */
     private void navigateBasedOnRole(ActionEvent event) {
         try {
             String fxmlPath;
+            String roleDescription;
 
             switch (currentUser.getRole()) {
-                case TELLER:
-                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
-                    break;
-                case ADMIN:
-                    // TODO: Create AdminHomePage.fxml
-                    fxmlPath = "/bank/gui/TellerHomePage.fxml"; // Temporary
-                    break;
                 case CUSTOMER:
                     fxmlPath = "/bank/gui/CustomerInformation.fxml";
+                    roleDescription = "Customer Portal";
+                    System.out.println("Redirecting to Customer page for: " + currentUser.getName());
                     break;
+
+                case TELLER:
+                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
+                    roleDescription = "Teller Portal";
+                    System.out.println("Redirecting to Teller page for: " + currentUser.getName());
+                    break;
+
+                case MANAGER:
+                    // TODO: Create ManagerHomePage.fxml - Using TellerHomePage temporarily
+                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
+                    roleDescription = "Manager Portal (Temporary)";
+                    System.out.println("Redirecting to Manager page (temporary: Teller) for: " + currentUser.getName());
+                    break;
+
+                case ADMIN:
+                    // TODO: Create AdminHomePage.fxml - Using TellerHomePage temporarily
+                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
+                    roleDescription = "Admin Portal (Temporary)";
+                    System.out.println("Redirecting to Admin page (temporary: Teller) for: " + currentUser.getName());
+                    break;
+
                 default:
                     showAlert(Alert.AlertType.ERROR, "Error",
                              "Unknown user role: " + currentUser.getRole());
@@ -119,11 +140,13 @@ public class LoginController {
             // Get the controller and pass the current user if needed
             Object controller = loader.getController();
             if (controller instanceof TellerController) {
-                // If you want to pass user info to TellerController, you can add a method
+                // You can add setCurrentUser method to TellerController later
                 // ((TellerController) controller).setCurrentUser(currentUser);
+                System.out.println("Loaded TellerController for " + roleDescription);
             } else if (controller instanceof CustomerInformationController) {
                 // Pass user info to CustomerInformationController
                 ((CustomerInformationController) controller).setCurrentUser(currentUser);
+                System.out.println("Loaded CustomerInformationController with user: " + currentUser.getName());
             }
 
             // Get the current stage and set the new scene
@@ -132,10 +155,12 @@ public class LoginController {
             stage.setScene(scene);
             stage.show();
 
+            System.out.println("Successfully navigated to " + roleDescription);
+
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Navigation Error",
-                     "Could not load the home page. Please contact support.");
+                     "Could not load the home page. Error: " + e.getMessage());
         }
     }
 
