@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AdminController {
@@ -131,8 +132,16 @@ public class AdminController {
     // --- Handle Create Account button ---
     @FXML
     private void handleCreateAccount(ActionEvent event) {
-        System.out.println("Navigating to Create Account page...");
-        // TODO: Load create account page
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminCreateAccountPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Create New Account");
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to AdminCreateAccountPage.fxml: " + e.getMessage());
+        }
     }
 
     // --- Navigation Handlers ---
@@ -143,14 +152,14 @@ public class AdminController {
 
     private void navigateToBranch() {
         System.out.println("Navigating to Branch page...");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/BranchPage.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) btnBranch.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/BranchPage.fxml"));
+//            Parent root = loader.load();
+//            Stage stage = (Stage) btnBranch.getScene().getWindow();
+//            stage.setScene(new Scene(root));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     // --- Logout Handler (Navigation Logic) ---
@@ -161,7 +170,7 @@ public class AdminController {
 
             // Load the logoutSuccessful.fxml page
             // NOTE: Update the path below to match your actual file location!
-            Parent root = FXMLLoader.load(getClass().getResource("/bank/gui/LogoutSuccessful.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/LogoutSuccessful.fxml")));
 
             // Get the current stage (window)
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
