@@ -24,4 +24,26 @@ public class Teller extends User {
         logger.info(this.getRole() + " (username: " + getUsername() + ", id: " + getId() + ") withdrew " + amount + " from account " + account.getAccountNumber());
         account.withdraw(amount);
     }
+
+    public void closeAccount(long userId, String accountNumber) {
+        Users.load();
+        var list = Users.get();
+
+        for (var u : list) {
+            if (u.id() == userId) {
+
+                // remove the account
+                u.accounts().removeIf(acc -> acc.number().equals(accountNumber));
+
+                // delete user if no accounts left
+                if (u.accounts().isEmpty()) {
+                    list.remove(u);
+                }
+
+                break;
+            }
+        }
+
+        Users.save();
+    }
 }

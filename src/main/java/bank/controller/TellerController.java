@@ -142,6 +142,9 @@ public class TellerController { // Renamed from AccountController
             // Create a Customer object
             Customer customer = new Customer(new UserDetails(username, u.password(), u.email(), name),
                     0, null, null);
+            System.out.println(customer.getId());
+            customer.setId(u.id());
+            System.out.println(customer.getId());
 
             // Add accounts
             if (u.accounts() != null) {

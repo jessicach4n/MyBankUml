@@ -1,7 +1,13 @@
 package bank.controller;
 
 import bank.account.Account;
+import bank.user.Administrator;
 import bank.user.Customer;
+import bank.user.Role;
+import bank.user.Teller;
+import bank.user.UserDetails;
+import bank.user.UserManager;
+import bank.user.repository.JsonUserRepository;
 import bank.utils.InternalLogger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +33,18 @@ public class CustomerInformationController {
     private Account account;
 
     private static final InternalLogger LOGGER = new InternalLogger();
+
+    private static final Teller STATIC_TELLER;
+
+    static {
+        try {
+            UserManager staticUserManager = new UserManager(new JsonUserRepository());
+            UserDetails staticTellerDetails = new UserDetails("tellerUser", "tellerPass", "teller@example.com", "Teller Name");
+            STATIC_TELLER = (Teller) staticUserManager.createUser(staticTellerDetails, Role.TELLER, Role.ADMIN);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize static teller", e);
+        }
+    }
 
     /** Called by TellerController when switching screens */
     public void setAccount(Account account) {
@@ -78,6 +96,11 @@ public class CustomerInformationController {
     @FXML
     private void handleCloseAccount(ActionEvent event) {
         try {
+            STATIC_TELLER.closeAccount(
+            account.getCustomer().getId(),
+            account.getAccountNumber()
+            );
+            System.out.println("Deleted user " + account.getCustomer().getName() + " / " + account.getId());
             Parent root = FXMLLoader.load(
                 Objects.requireNonNull(getClass().getResource("/bank/gui/TellerAccountClosed.fxml"))
             );
@@ -86,7 +109,7 @@ public class CustomerInformationController {
             stage.setScene(new Scene(root));
             stage.show();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("Could not navigate to TellerAccountClosed.fxml: " + e.getMessage());
         }
     }
