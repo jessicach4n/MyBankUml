@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class AdminAddNewBranchController {
 
@@ -59,9 +60,13 @@ public class AdminAddNewBranchController {
     }
 
     private void handleCancel() {
-        // Clear fields
+        // Clear fields (optional)
         branchNameField.clear();
         locationField.clear();
         System.out.println("Branch creation canceled.");
+
+        // Close the current window
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 }
