@@ -1,11 +1,11 @@
 [
   {
     "id": 1,
-    "username": null,
+    "username": "kanye",
     "name": "Kanye West",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "kanye123",
-    "email": null,
+    "email": "kanye@mybank.com",
     "accounts": [
       {
         "number": "1001",
@@ -54,11 +54,11 @@
   },
   {
     "id": 2,
-    "username": null,
+    "username": "kubrick",
     "name": "Stanley Kubrick",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "kubrick123",
-    "email": null,
+    "email": "kubrick@mybank.com",
     "accounts": [
       {
         "number": "2001",
@@ -107,11 +107,11 @@
   },
   {
     "id": 3,
-    "username": null,
+    "username": "beethoven",
     "name": "Ludwig van Beethoven",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "beethoven123",
-    "email": null,
+    "email": "beethoven@mybank.com",
     "accounts": [
       {
         "number": "3001",
@@ -160,11 +160,47 @@
   },
   {
     "id": 4,
-    "username": "daveUser",
-    "name": "Dave",
-    "role": "CUSTOMER",
-    "password": "pass789",
-    "email": "dave@email.com",
+    "username": "johndoe",
+    "name": "John Doe",
+    "role": "TELLER",
+    "password": "teller123",
+    "email": "john@mybank.com",
+    "accounts": []
+  },
+  {
+    "id": 5,
+    "username": "janeroe",
+    "name": "Jane Roe",
+    "role": "TELLER",
+    "password": "teller123",
+    "email": "jane@mybank.com",
+    "accounts": []
+  },
+  {
+    "id": 6,
+    "username": "bobsmith",
+    "name": "Bob Smith",
+    "role": "MANAGER",
+    "password": "manager123",
+    "email": "bob@mybank.com",
+    "accounts": []
+  },
+  {
+    "id": 7,
+    "username": "admin",
+    "name": "Daniel Kim",
+    "role": "ADMIN",
+    "password": "admin123",
+    "email": "admin@mybank.com",
+    "accounts": []
+  },
+  {
+    "id": 8,
+    "username": "jiming",
+    "name": "jiming",
+    "role": "TELLER",
+    "password": "jiming123",
+    "email": "jiming@mybank.com",
     "accounts": []
   }
 ]

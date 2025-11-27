@@ -121,10 +121,9 @@ public class LoginController {
                     break;
 
                 case ADMIN:
-                    // TODO: Create AdminHomePage.fxml - Using TellerHomePage temporarily
-                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
-                    roleDescription = "Admin Portal (Temporary)";
-                    System.out.println("Redirecting to Admin page (temporary: Teller) for: " + currentUser.getName());
+                    fxmlPath = "/bank/gui/AdminHomePage.fxml";
+                    roleDescription = "Admin Portal";
+                    System.out.println("Redirecting to Admin page for: " + currentUser.getName());
                     break;
 
                 default:
