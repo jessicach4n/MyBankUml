@@ -58,6 +58,22 @@ public class AdminManageBranchController implements Initializable {
 
         // Load admin info
         loadAdminInfo();
+
+        // Add temp data for testing
+        loadTempBranches();
+    }
+
+    /** Adds temporary sample branches to the table for testing */
+    private void loadTempBranches() {
+        branchObservableList.clear();
+
+        branchObservableList.addAll(
+                new Branch( "Downtown Branch", "123 Main St", currentBank),
+                new Branch( "Uptown Branch", "456 Elm St", currentBank),
+                new Branch( "Suburban Branch", "789 Oak St", currentBank)
+        );
+
+        branchTable.setItems(branchObservableList);
     }
 
     /** Reloads the branches from the manager into the table */
