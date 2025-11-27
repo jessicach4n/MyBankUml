@@ -1,9 +1,11 @@
 [
   {
     "id": 1,
+    "username": "kanye",
     "name": "Kanye West",
     "role": "customer",
     "password": "kanye123",
+    "email": "kanye@mybank.com",
     "accounts": [
       {
         "number": 1001,
@@ -52,9 +54,11 @@
   },
   {
     "id": 2,
+    "username": "kubrick",
     "name": "Stanley Kubrick",
     "role": "customer",
     "password": "kubrick123",
+    "email": "kubrick@mybank.com",
     "accounts": [
       {
         "number": 2001,
@@ -103,9 +107,11 @@
   },
   {
     "id": 3,
+    "username": "beethoven",
     "name": "Ludwig van Beethoven",
     "role": "customer",
     "password": "beethoven123",
+    "email": "beethoven@mybank.com",
     "accounts": [
       {
         "number": 3001,
