@@ -184,5 +184,14 @@
     "password": "manager123",
     "email": "bob@mybank.com",
     "accounts": []
+  },
+  {
+    "id": 7,
+    "username": "admin",
+    "name": "Daniel Kim",
+    "role": "ADMIN",
+    "password": "admin123",
+    "email": "admin@mybank.com",
+    "accounts": []
   }
 ]
