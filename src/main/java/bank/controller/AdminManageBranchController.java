@@ -6,12 +6,18 @@ import bank.branch.BranchManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -120,11 +126,27 @@ public class AdminManageBranchController implements Initializable {
         }
     }
 
-    /** Handles Add Branch button click */
     @FXML
     private void handleAddNewBranch() {
-        System.out.println("Add branch clicked.");
-        // TODO: open a popup or new scene to create a branch
+        try {
+            // Load the FXML for adding a new branch
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminAddNewBranchPage.fxml"));
+            Parent root = loader.load();
+
+            // Create a new stage (window) for the add branch form
+            Stage stage = new Stage();
+            stage.setTitle("Add New Branch");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Blocks input to other windows until closed
+            stage.showAndWait(); // Wait for the window to close
+
+            // Optional: reload the branches after adding a new one
+            reloadBranches();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load AdminAddNewBranch.fxml");
+        }
     }
 
     /** Load the admin profile info dynamically */
