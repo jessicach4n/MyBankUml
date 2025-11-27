@@ -44,7 +44,10 @@ public class OpenNewAccountController {
             showAlert(Alert.AlertType.WARNING, "No Selection", "Please select an account type.");
             return;
         }
-        addAccount(selectedType);
+        else {
+            showAlert(Alert.AlertType.INFORMATION, "Account created!", "Account Created!!!");
+            addAccount(selectedType);
+        }
     }
     
     
