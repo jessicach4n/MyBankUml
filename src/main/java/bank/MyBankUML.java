@@ -15,7 +15,8 @@ public class MyBankUML extends Application {
     public void start(Stage primaryStage) throws Exception {
         
         // src/main/resources/bank/gui/TellerHomePage.fxml
-        URL fxmlUrl = getClass().getResource("/bank/gui/TellerHomePage.fxml");
+        // URL fxmlUrl = getClass().getResource("/bank/gui/TellerHomePage.fxml");
+        URL fxmlUrl = getClass().getResource("/bank/gui/LoginPage.fxml");
         // --------------------------------
         
         if (fxmlUrl == null) {
