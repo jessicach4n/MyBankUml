@@ -1,5 +1,7 @@
 package bank.branch;
 
+import java.util.List;
+
 // This implementation is super not robust, but I think its ok
 public class BranchManager {
     
@@ -27,5 +29,9 @@ public class BranchManager {
     public void updateBranch(Branch branch, String newName, String newAddress) {
         branch.setAddress(newAddress);
         branch.setBranchName(newName);
+    }
+
+    public List<Branch> getBranchList(Bank bank) {
+        return bank.getBranches();
     }
 }

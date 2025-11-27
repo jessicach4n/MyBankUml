@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="bank.controller.AdminManageBranchController"
+      style="-fx-font-family: 'Segoe UI', Arial, sans-serif;">
+
+    <!-- SIDEBAR -->
+    <VBox prefWidth="250" style="-fx-background-color: #38a88e;">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 20;">
+            <Label text="MYBank" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label text=" XML" style="-fx-text-fill: white; -fx-font-size: 10px; -fx-translate-y: -4px;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="→" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
+        </HBox>
+
+        <!-- Profile Section -->
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 15 0 30 0;">
+
+            <StackPane alignment="CENTER">
+                <Circle fx:id="profileCircle" radius="40" fill="#555555" />
+                <Label fx:id="initialsLabel"
+                       text="JD"
+                       style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+            </StackPane>
+
+            <Label fx:id="fullNameLabel"
+                   text="Full Name"
+                   style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" />
+
+            <Label text="Administrator"
+                   style="-fx-text-fill: #e0e0e0; -fx-font-size: 12px;" />
+        </VBox>
+
+        <Region style="-fx-min-height: 1; -fx-background-color: #58c0a7;"/>
+
+        <!-- Sidebar Menu -->
+        <VBox>
+            <Label text="Users"
+                   style="-fx-text-fill: white; -fx-font-size: 14px;
+                          -fx-padding: 10 20; -fx-pref-width: 250;" />
+
+            <VBox style="-fx-background-color: white;">
+                <Label text="Branch"
+                       style="-fx-text-fill: #38a88e; -fx-font-size: 14px;
+                              -fx-font-weight: bold; -fx-padding: 10 20; -fx-pref-width: 250;" />
+            </VBox>
+        </VBox>
+
+        <Pane VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+    <!-- MAIN CONTENT -->
+    <VBox HBox.hgrow="ALWAYS" style="-fx-padding: 30 50; -fx-background-color: white;">
+
+        <Label text="Manage Branch"
+               style="-fx-font-size: 28px; -fx-font-weight: 500; -fx-padding: 0 0 30 0;" />
+
+        <Button fx:id="addBranchButton"
+                text="Add a new branch"
+                onAction="#handleAddNewBranch"
+                style="-fx-background-color: #cccccc; -fx-text-fill: #333333;
+                       -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 3;
+                       -fx-border-color: #aaaaaa; -fx-border-radius: 3; -fx-border-width: 1px;"/>
+
+        <Region minHeight="20"/>
+
+        <!-- TABLE -->
+        <TableView fx:id="branchTable" VBox.vgrow="ALWAYS"
+                   style="-fx-border-color: #dddddd; -fx-border-width: 1; -fx-background-color: white;">
+
+            <columns>
+
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="nameColumn" text="Branch Name" prefWidth="150">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="branchName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="locationColumn" text="Location" prefWidth="250">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="location"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="deleteColumn" text="" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="deleteAction"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+            </columns>
+
+        </TableView>
+
+        <Pane VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+</HBox>
