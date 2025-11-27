@@ -23,6 +23,7 @@ public class CustomerInformationController {
 
     @FXML private Button back_btn;
     @FXML private Button close_account_btn;
+    @FXML private Button make_transaction_btn;
 
     private Account account;
 
@@ -50,6 +51,32 @@ public class CustomerInformationController {
     private void initialize() {
         back_btn.setOnAction(e -> goBack());
         close_account_btn.setOnAction(e -> openClosingAccount());
+        make_transaction_btn.setOnAction(e -> openTransactionPage());
+    }
+
+    private void openTransactionPage() {
+        if (account == null) {
+            LOGGER.error("Cannot open transaction page: Account data is missing.");
+            return;
+        }
+
+        try {
+            // Load the new FXML for the Transaction Page
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/bank/gui/TransactionPage.fxml")));
+            Parent root = loader.load();
+
+            // Get the controller of the new page and pass the Account object
+            TransactionController controller = loader.getController();
+            controller.setAccount(account);
+            
+            // Switch to the new scene
+            Stage stage = (Stage) make_transaction_btn.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to the Transaction Page: " + e.getMessage());
+        }
     }
 
     private void openClosingAccount() {

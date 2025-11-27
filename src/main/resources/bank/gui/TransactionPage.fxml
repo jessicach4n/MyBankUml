@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<!-- Controller updated to a standard package path -->
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.TransactionController">
+
+    <!-- Left Sidebar (Matching ClosingAccountController style: #2CBF99) -->
+    <left>
+        <VBox prefWidth="240.0" style="-fx-background-color: #2CBF99;" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Logo and Arrow -->
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="10.0">
+                    <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="MYBank">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                        </Text>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <!-- Arrow Icon -->
+                        <Label text="➔" textFill="WHITE">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <style>-fx-rotate: 180; -fx-border-color: white; -fx-border-radius: 3; -fx-padding: 0 4 0 4;</style>
+                        </Label>
+                    </children>
+                </HBox>
+
+                <!-- User Profile -->
+                <VBox alignment="CENTER" spacing="5.0" prefHeight="200.0">
+                    <children>
+                        <StackPane prefHeight="80.0" prefWidth="80.0">
+                            <children>
+                                <Circle fill="#333333" radius="40.0" />
+                                <Text fill="WHITE" text="JD">
+                                    <font>
+                                        <Font name="System Bold" size="32.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </StackPane>
+
+                        <Label text="Alice Wonderland" textFill="#1e1e1e">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Teller" textFill="#1e1e1e">
+                            <font>
+                                <Font size="12.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                    </VBox.margin>
+                </VBox>
+
+                <!-- Navigation Button (Active look, matching the template) -->
+                <Button mnemonicParsing="false"
+                        prefHeight="40.0" prefWidth="240.0"
+                        style="-fx-background-color: #FFFFFF; -fx-background-radius: 0;"
+                        text="Manage Accounts" textFill="#1e1e1e">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets left="20.0" />
+                    </padding>
+                    <alignment>CENTER_LEFT</alignment>
+                </Button>
+
+                <Region VBox.vgrow="ALWAYS" />
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox spacing="30.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="TOP_LEFT">
+            <padding>
+                <!-- Matching template padding -->
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+            <children>
+                <!-- Header -->
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Label text="Customer Transaction">
+                     <font><Font name="System Bold" size="24.0"/></font>
+                  </Label>
+               </children>
+            </HBox>
+
+            <!-- Customer Info -->
+                <HBox spacing="40.0">
+                    <children>
+
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label text="Customer Name" textFill="#666"/>
+                                <TextField fx:id="customer_name_fld" editable="false" prefHeight="35.0" prefWidth="250.0">
+                                    <font><Font name="System Bold" size="17.0"/></font>
+                                </TextField>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label text="Account Number" textFill="#666"/>
+                                <TextField fx:id="account_num_fld" editable="false" prefHeight="35.0" prefWidth="250.0">
+                                    <font><Font name="System Bold" size="17.0"/></font>
+                                </TextField>
+                            </children>
+                        </VBox>
+
+                    </children>
+                </HBox>
+
+                <!-- Transaction Form Grid -->
+                <GridPane hgap="40.0" vgap="10.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+
+                    <!-- Row 0: From/To Labels -->
+                    <Label text="From Account" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label text="To Account" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <!-- Row 1: From/To Dropdowns -->
+                    <ComboBox fx:id="fromAccountComboBox" prefHeight="35.0" prefWidth="300.0" promptText="Select an Account..." GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="toAccountComboBox" prefHeight="35.0" prefWidth="300.0" promptText="Select an Account..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <!-- Row 2: Sender/Recipient Balance Labels -->
+                    <VBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <children>
+                            <Label text="Sender Balance" textFill="#616161" />
+                            <Label fx:id="senderBalanceLabel" text="\$ 0.00">
+                                <font>
+                                    <Font name="System Bold" size="16.0" />
+                                </font>
+                            </Label>
+                        </children>
+                    </VBox>
+                    <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <children>
+                            <Label text="Recipient Balance" textFill="#616161" />
+                            <Label fx:id="recipientBalanceLabel" text="\$ -">
+                                <font>
+                                    <Font name="System Bold" size="16.0" />
+                                </font>
+                            </Label>
+                        </children>
+                    </VBox>
+
+                    <!-- Row 3: Amount to Transfer -->
+                    <VBox GridPane.columnSpan="2" GridPane.rowIndex="3" spacing="5.0">
+                        <children>
+                            <Label text="Amount to Transfer" />
+                            <TextField fx:id="amountField" prefHeight="35.0" prefWidth="300.0" promptText="\$0.00" />
+                        </children>
+                    </VBox>
+                </GridPane>
+
+                <!-- Confirmation Checkbox -->
+                <CheckBox fx:id="confirmCheckbox" mnemonicParsing="false" onAction="#handleCheckboxAction" text="I confirm the transfer amount is correct." />
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <!-- Action Buttons (Styled for theme consistency) -->
+                <HBox alignment="BOTTOM_LEFT" spacing="20.0" style="-fx-padding: 20 0 0 0;">
+                    <children>
+                        <!-- Submit Button (Primary action - Green) -->
+                        <Button fx:id="submitButton"
+                                mnemonicParsing="false"
+                                onAction="#handleSubmit"
+                                prefHeight="40.0" prefWidth="120.0"
+                                style="-fx-background-color: #DDDDDD; -fx-text-fill: #000; -fx-background-radius: 4;"
+                                text="Submit">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                        <!-- Cancel Button (Secondary action - Grey) -->
+                        <Button mnemonicParsing="false"
+                                onAction="#handleCancel"
+                                prefHeight="40.0" prefWidth="120.0"
+                               style="-fx-background-color: #DDDDDD; -fx-text-fill: #000; -fx-background-radius: 4;"
+                                text="Cancel">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
