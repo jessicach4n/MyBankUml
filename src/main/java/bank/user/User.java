@@ -12,7 +12,7 @@ public abstract class User {
     private Role role;
     private Date createdDate;
     private UserDetails details;
-    private List<Account> accounts;
+    protected List<Account> accounts;
 
     public User(long id, UserDetails details, Role role, Date createdDate, List<Account> accounts) {
         this.id = id;

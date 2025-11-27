@@ -30,6 +30,15 @@ public abstract class Account {
         this.customer = customer;
         this.transactions = new ArrayList<>();
     }
+
+    public Account(String accountNumber, String accountType, double balance, String status) {
+        this.id = generateId();
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+        this.status = status;
+        this.transactions = new ArrayList<>();
+    }
     
     public long getId() {
         return id;
