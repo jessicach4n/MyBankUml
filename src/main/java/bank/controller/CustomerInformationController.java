@@ -3,8 +3,10 @@ package bank.controller;
 import bank.account.Account;
 import bank.user.Customer;
 import bank.utils.InternalLogger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,6 +59,19 @@ public class CustomerInformationController {
             stage.show();
         } catch (IOException ex) {
             LOGGER.error("Failed to open CustomerInformation.fxml: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleOpenNewAccount(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/TellerOpenNewAccount.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Could not navigate to TellerOpenNewAccount.fxml: " + e.getMessage());
         }
     }
 }

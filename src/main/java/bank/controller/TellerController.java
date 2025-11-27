@@ -48,6 +48,9 @@ public class TellerController { // Renamed from AccountController
     @FXML
     private Button exitButton; // The Exit button (for logout)
 
+    @FXML
+    private Button open_new_account_button;
+
     private static final InternalLogger LOGGER = new InternalLogger();
 
     // --- Initialization ---

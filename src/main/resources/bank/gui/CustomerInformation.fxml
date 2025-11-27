@@ -223,7 +223,7 @@
                            </children>
                         </HBox>
 
-                        <Button fx:id="open_new_account_btn" mnemonicParsing="false" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Open New Account">
+                        <Button fx:id="open_new_account_btn" mnemonicParsing="false" onAction="#handleOpenNewAccount" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Open New Account">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
