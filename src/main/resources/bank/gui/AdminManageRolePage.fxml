@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<?import javafx.scene.shape.Circle?>
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="bank.controller.AdminManageRolePage"
+      style="-fx-font-family: 'Segoe UI', Arial, sans-serif;">
+
+    <!-- LEFT SIDEBAR -->
+    <VBox prefWidth="250.0" style="-fx-background-color: #38a88e;">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 20;">
+            <Label text="MYBank" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label text=" XML" style="-fx-text-fill: white; -fx-font-size: 10px; -fx-translate-y: -4px;"/>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label text="→" style="-fx-text-fill: white; -fx-font-size: 20px;" />
+        </HBox>
+
+        <!-- User Profile -->
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 15 0 30 0;">
+
+            <!-- Circle avatar container -->
+            <StackPane alignment="CENTER">
+                <!-- background circle -->
+                <Circle fx:id="profileCircle"
+                        radius="40"
+                        fill="#555555" />
+
+                <!-- initials -->
+                <Label fx:id="initialsLabel"
+                       text="JD"
+                       style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;" />
+            </StackPane>
+
+            <Label fx:id="fullNameLabel"
+                   text="Full Name"
+                   style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" />
+
+            <Label text="Administrator"
+                   style="-fx-text-fill: #e0e0e0; -fx-font-size: 12px;" />
+        </VBox>
+
+        <!-- Menu -->
+        <VBox>
+            <Label text="Users"
+                   style="-fx-background-color: white; -fx-text-fill: #38a88e; -fx-font-size: 14px;
+                          -fx-font-weight: bold; -fx-padding: 10 20; -fx-pref-width: 250;" />
+            <Label text="Branch"
+                   style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-pref-width: 250;" />
+        </VBox>
+
+        <Pane VBox.vgrow="ALWAYS" />
+    </VBox>
+
+    <!-- RIGHT CONTENT AREA -->
+    <VBox HBox.hgrow="ALWAYS" style="-fx-padding: 30 50; -fx-background-color: white;">
+
+        <Label fx:id="userNameLabel"
+               text="User Full Name"
+               style="-fx-font-size: 28px; -fx-font-weight: 500; -fx-padding: 0 0 30 0;" />
+
+        <VBox spacing="20">
+
+            <Label text="Position" style="-fx-font-size: 14px;" />
+            <TextField fx:id="positionField"
+                       promptText="Enter position"
+                       prefWidth="300"
+                       style="-fx-background-radius: 5; -fx-border-color: #cccccc;
+                              -fx-border-radius: 5; -fx-padding: 8; -fx-border-width: 1px;" />
+
+            <Label text="Role" style="-fx-font-size: 14px;" />
+            <ComboBox fx:id="roleComboBox" prefWidth="150"
+                      promptText="Select Role"
+                      style="-fx-background-radius: 5; -fx-border-color: #cccccc;
+                             -fx-border-radius: 5; -fx-padding: 4; -fx-border-width: 1px;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Admin" />
+                        <String fx:value="Teller" />
+                        <String fx:value="Manager" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Pane VBox.vgrow="ALWAYS" minHeight="50" />
+
+            <HBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                <Button fx:id="submitButton" text="Submit"
+                        style="-fx-background-color: #555555; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;"
+                        onAction="#handleSubmit" />
+                <Button fx:id="cancelButton" text="Cancel"
+                        style="-fx-background-color: #cccccc; -fx-text-fill: #333333;
+                               -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;"
+                        onAction="#handleCancel" />
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>
