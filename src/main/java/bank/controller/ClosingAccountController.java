@@ -52,9 +52,15 @@ public class ClosingAccountController {
      */
     @FXML
     private void initialize() {
-        // Assuming back_btn handles navigation back, similar to the pattern in CustomerInformationController
+    
         if (back_btn != null) {
             back_btn.setOnAction(e -> goBack());
+        }
+        if (cancel_btn != null) {
+            cancel_btn.setOnAction(e -> goBack());
+        }
+        if (confirm_btn != null) {
+            confirm_btn.setOnAction(e -> handleConfirm());
         }
     }
 
@@ -77,15 +83,11 @@ public class ClosingAccountController {
         goBack();
     }
 
-    /**
-     * Handler for the 'Confirm' button.
-     * Contains the core logic to close the account after confirmation.
-     */
+
     @FXML
     private void handleConfirm() {
         if (accountToClose == null) {
             LOGGER.warn("Attempted to close a null account.");
-            // Display an error message to the user here
             return;
         }
 
@@ -98,28 +100,30 @@ public class ClosingAccountController {
         } catch (IOException ex) {
             LOGGER.error("Failed to open CustomerInformation.fxml: " + ex.getMessage());
         }
-git checkout -b <new-branch-name>
 
         LOGGER.info("Confirmed closure for account: " + accountToClose.getAccountNumber());
         
-        // In a real scenario, you'd add logic here to check balance and close account.
         
         LOGGER.info("Account " + accountToClose.getAccountNumber() + " successfully processed for closure.");
-        // --- End of Logic Placeholder ---
-
-        // Navigate back or to a confirmation screen
+    
         goBack();
     }
 
   
     private void goBack() {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/CustomerInformation.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/CustomerInformation.fxml"));
+            Parent root = loader.load();
+
+            CustomerInformationController controller = loader.getController();
+            controller.setAccount(accountToClose);
+
             Stage stage = (Stage) back_btn.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException ex) {
-            LOGGER.error("Failed to open CustomerInformation.fxml: " + ex.getMessage());
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to the Customer information page.: " + e.getMessage());
         }
     }
 }
