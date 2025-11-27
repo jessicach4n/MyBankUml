@@ -3,7 +3,7 @@
     "id": 1,
     "username": "kanye",
     "name": "Kanye West",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "kanye123",
     "email": "kanye@mybank.com",
     "accounts": [
@@ -56,7 +56,7 @@
     "id": 2,
     "username": "kubrick",
     "name": "Stanley Kubrick",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "kubrick123",
     "email": "kubrick@mybank.com",
     "accounts": [
@@ -109,7 +109,7 @@
     "id": 3,
     "username": "beethoven",
     "name": "Ludwig van Beethoven",
-    "role": "customer",
+    "role": "CUSTOMER",
     "password": "beethoven123",
     "email": "beethoven@mybank.com",
     "accounts": [

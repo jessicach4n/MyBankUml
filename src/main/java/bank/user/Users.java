@@ -48,11 +48,32 @@ public class Users {
 
     public static void load()
     {
+        // Try loading from resources folder first (for packaged app)
+        try (Reader r = new java.io.InputStreamReader(
+                Users.class.getResourceAsStream("/bank/users.json")))
+        {
+            if (r != null) {
+                User[] arr = GSON.fromJson(r, User[].class);
+                if (arr != null) {
+                    USERS = new ArrayList<>(List.of(arr));
+                    USER_MAP = new HashMap<>();
+                    for (User u : USERS) {
+                        USER_MAP.put(u.id(), u);
+                    }
+                    System.out.println("[USERS] Loaded " + USERS.size() + " users from resources");
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[USERS] Failed to load from resources: " + e.getMessage());
+        }
+
+        // Fallback: try loading from current directory
         Path path = Path.of("users.json");
-        try (Reader r = Files.newBufferedReader(path)) 
+        try (Reader r = Files.newBufferedReader(path))
         {
             User[] arr = GSON.fromJson(r, User[].class);
-            if (arr == null) 
+            if (arr == null)
             {
                 USERS = new ArrayList<>();
                 USER_MAP = new HashMap<>();
@@ -64,7 +85,9 @@ public class Users {
             {
                 USER_MAP.put(u.id(), u);
             }
+            System.out.println("[USERS] Loaded " + USERS.size() + " users from file system");
         } catch (Exception e) {
+            System.err.println("[USERS] Failed to load users from both locations!");
             USERS = new ArrayList<>();
             USER_MAP = new HashMap<>();
         }

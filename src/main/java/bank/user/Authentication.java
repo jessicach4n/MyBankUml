@@ -24,8 +24,17 @@ public class Authentication {
      */
     public Optional<Users.User> authenticateByUsername(String username, String password) {
         if (username == null || password == null || username.trim().isEmpty()) {
+            System.out.println("[AUTH] Username or password is null/empty");
             return Optional.empty();
         }
+
+        System.out.println("[AUTH] Attempting login for username: " + username);
+        System.out.println("[AUTH] Total users in repository: " + repository.getAll().size());
+
+        // Debug: print all usernames
+        repository.getAll().forEach(u ->
+            System.out.println("[AUTH] Available user: " + u.username() + " (id: " + u.id() + ")")
+        );
 
         // Search for user by username
         Users.User user = repository.getAll().stream()
@@ -34,14 +43,21 @@ public class Authentication {
                 .orElse(null);
 
         if (user == null) {
+            System.out.println("[AUTH] User not found: " + username);
             return Optional.empty();
         }
+
+        System.out.println("[AUTH] User found: " + user.username());
+        System.out.println("[AUTH] Stored password: " + user.password());
+        System.out.println("[AUTH] Provided password: " + password);
 
         // Verify password
         if (!password.equals(user.password())) {
+            System.out.println("[AUTH] Password mismatch!");
             return Optional.empty();
         }
 
+        System.out.println("[AUTH] Authentication successful!");
         return Optional.of(user);
     }
 
