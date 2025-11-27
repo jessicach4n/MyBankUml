@@ -28,13 +28,14 @@ public class MyBankUML extends Application {
         Parent root = FXMLLoader.load(fxmlUrl);
 
         // 3. Set up the Scene
-        Scene scene = new Scene(root, 1000, 700); 
+        Scene scene = new Scene(root);
+        primaryStage.setWidth(900);
+        primaryStage.setHeight(700);
+        primaryStage.setResizable(false);
 
         // 4. Set the Stage properties
         primaryStage.setTitle("MyBankUML");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(600);
-        primaryStage.setMinWidth(900);
         primaryStage.show();
     }
 
