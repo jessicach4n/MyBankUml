@@ -1,0 +1,24 @@
+/* Login Button Hover Effect */
+.button {
+    -fx-background-color: #20A88E;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1a8c76;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-background-color: #157060;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Text Field Focus Effect */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #20A88E;
+    -fx-border-width: 2;
+}

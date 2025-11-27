@@ -5,67 +5,88 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(to bottom right, #E0F7E0, #F0FFF0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.LoginController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #E0F7E0, #F0FFF0);" stylesheets="@login.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.LoginController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="175.0" layoutY="110.0" prefHeight="280.0" prefWidth="350.0" style="-fx-background-color: #20A88E;" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="110.0">
+      <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0.5, 0, 4);">
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
          <children>
-            <HBox alignment="CENTER" prefHeight="125.0" prefWidth="350.0" VBox.vgrow="NEVER">
+            <!-- Title Section -->
+            <VBox alignment="CENTER" spacing="8.0">
                <children>
-                  <ImageView fitHeight="130.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../Downloads/logo-removebg-preview.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets right="15.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label text="MyBank" textFill="WHITE">
+                  <Label text="MyBank" textFill="#20A88E">
                      <font>
-                        <Font name="System Bold" size="36.0" />
+                        <Font name="System Bold" size="42.0" />
                      </font>
                   </Label>
-                  <Label textFill="WHITE">
+                  <Label text="Welcome Back" textFill="#666666">
                      <font>
-                        <Font size="10.0" />
+                        <Font size="16.0" />
                      </font>
-                     <padding>
-                        <Insets bottom="10.0" />
-                     </padding>
                   </Label>
                </children>
                <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </VBox>
+
+            <!-- Username Field -->
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="Username" textFill="#333333">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="usernameField" prefHeight="45.0" promptText="Enter your username" style="-fx-background-color: #F5F5F5; -fx-background-radius: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-padding: 12;">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="Password" textFill="#333333">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="passwordField" prefHeight="45.0" promptText="Enter your password" style="-fx-background-color: #F5F5F5; -fx-background-radius: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-padding: 12;">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </PasswordField>
+               </children>
+            </VBox>
+
+            <!-- Login Button -->
+            <Button fx:id="loginButton" maxWidth="Infinity" mnemonicParsing="false" prefHeight="50.0" style="-fx-background-color: #20A88E; -fx-background-radius: 10; -fx-cursor: hand;" text="Login" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
-            </HBox>
-            <TextField fx:id="usernameField" alignment="CENTER" prefHeight="40.0" prefWidth="320.0" promptText="Card Number / Username">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="10.0" />
-               </VBox.margin>
-            </TextField>
-            <PasswordField fx:id="passwordField" alignment="CENTER" prefHeight="40.0" prefWidth="320.0" promptText="Password">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
-               </VBox.margin>
-            </PasswordField>
-            <Button fx:id="loginButton" mnemonicParsing="false" style="-fx-background-color: #333333;" text="Login" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <padding>
-                  <Insets bottom="8.0" left="25.0" right="25.0" top="8.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
             </Button>
+
+            <!-- Footer Text -->
+            <Label text="Secure Banking System" textFill="#999999">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
          </children>
       </VBox>
    </children>
-</AnchorPane>
+</StackPane>
