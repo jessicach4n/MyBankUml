@@ -4,6 +4,8 @@ import bank.account.Account;
 import bank.account.Card;
 import bank.user.Customer;
 import bank.user.UserDetails;
+import bank.utils.InternalLogger;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,22 +41,58 @@ public class TellerController { // Renamed from AccountController
     @FXML
     private Button exitButton; // The Exit button (for logout)
 
+    private static final InternalLogger LOGGER = new InternalLogger();
+
     // --- Initialization ---
     @FXML
     public void initialize() {
         // 1. Configure the Table Columns
-        accountNumberColumn.setCellValueFactory(new PropertyValueFactory<>("accountNumber"));
-        holderNameColumn.setCellValueFactory(new PropertyValueFactory<>("holderName"));
-        accountTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        accountNumberColumn.setCellValueFactory(
+                cellData -> new ReadOnlyStringWrapper(cellData.getValue().getAccountNumber())
+        );
 
-        // 2. Load the data into the TableView
+        holderNameColumn.setCellValueFactory(
+                cellData -> new ReadOnlyStringWrapper(cellData.getValue().getCustomer().getName())
+        );
+
+        accountTypeColumn.setCellValueFactory(
+                cellData -> new ReadOnlyStringWrapper(cellData.getValue().getAccountType())
+        );
+ // 2. Load the data into the TableView
         accountsTable.setItems(getAccountData());
         
         // Optional: Select the first item for demonstration
         if (!accountsTable.getItems().isEmpty()) {
              accountsTable.getSelectionModel().select(0);
         }
+
+        accountsTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // double-click
+                Account selected = accountsTable.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    openCustomerInformation(selected);
+                }
+            }
+        });
     }
+
+    private void openCustomerInformation(Account account) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/CustomerInformation.fxml"));
+            Parent root = loader.load();
+
+            CustomerInformationController controller = loader.getController();
+            controller.setAccount(account);
+
+            Stage stage = (Stage) accountsTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to the Customer information page.: " + e.getMessage());
+        }
+    }
+
 
     // --- Logout Handler (Navigation Logic) ---
     @FXML
@@ -75,9 +113,7 @@ public class TellerController { // Renamed from AccountController
             stage.show();
             
         } catch (IOException e) {
-            e.printStackTrace();
-            // Handle file loading errors gracefully
-            System.err.println("Could not load logoutSuccessful.fxml. Check path.");
+            LOGGER.error("Could not load logoutSuccessful.fxml. Check path: " + e.getMessage());
         }
     }
 
