@@ -33,6 +33,10 @@ public class Customer extends User {
         return this.accounts.get(index);
     }
 
+    public ArrayList<Account> getAccounts() {
+        return this.accounts;
+    }
+
     public int getAge() {
         return age;
     }
