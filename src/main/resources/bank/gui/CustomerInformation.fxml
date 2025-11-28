@@ -79,6 +79,26 @@
                <alignment>CENTER_LEFT</alignment>
             </Button>
 
+            <Button fx:id="depositButton" onAction="#handleNavigateDeposit" mnemonicParsing="false" prefHeight="40.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-background-radius: 0;" text="Deposit" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <alignment>CENTER_LEFT</alignment>
+            </Button>
+
+            <Button fx:id="withdrawButton" onAction="#handleNavigateWithdraw" mnemonicParsing="false" prefHeight="40.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-background-radius: 0;" text="Withdraw" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <alignment>CENTER_LEFT</alignment>
+            </Button>
+
             <!-- Spacer to push logout button to bottom -->
             <Pane VBox.vgrow="ALWAYS" />
 
