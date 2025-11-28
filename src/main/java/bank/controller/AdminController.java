@@ -2,6 +2,9 @@ package bank.controller;
 
 import bank.user.Users;
 import bank.user.Users.User;
+import bank.branch.Bank;
+import bank.branch.Branch;
+import bank.branch.BranchManager;
 import bank.utils.InternalLogger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,11 +56,20 @@ public class AdminController {
 
     private static final InternalLogger LOGGER = new InternalLogger();
 
+    private BranchManager branchManager;
+    private Bank currentBank;
+
     @FXML
     public void initialize() {
         loadUsers();
         configureTableColumns();
         setupEventHandlers();
+    }
+
+    public void initializeAdminContext(BranchManager branchManager, Bank bank) {
+        System.out.println("Initializing Admin Context");
+        this.branchManager = branchManager;
+        this.currentBank = bank;
     }
 
     private void loadUsers() {
@@ -140,11 +153,29 @@ public class AdminController {
         usersTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
-    // --- Open user details (placeholder for future page) ---
+    // --- Open AdminManageRolePage in a popup window ---
     private void openUserDetails(User user) {
-        System.out.println("Opening details for: " + user.name() + " (" + user.role() + ")");
-        // TODO: Load detailed user view
+        try {
+            // Load the FXML for the AdminManageRolePage
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminManageRolePage.fxml"));
+            Parent root = loader.load();
+
+            // Optionally, pass the user to the controller
+            AdminManageRoleController controller = loader.getController();
+            controller.setUserData(user.name(), getPositionFromRole(user.role()), user.role()); // Make sure you have a method to accept the user
+
+            // Create a new stage (popup window)
+            Stage stage = new Stage();
+            stage.setTitle("Manage Roles - " + user.name());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with other windows
+            stage.showAndWait(); // Show as modal popup
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to open AdminManageRolePage for user: " + user.name());
+        }
     }
+
 
     // --- Handle Create Account button ---
     @FXML
@@ -169,14 +200,16 @@ public class AdminController {
 
     private void navigateToBranch() {
         System.out.println("Navigating to Branch page...");
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/BranchPage.fxml"));
-//            Parent root = loader.load();
-//            Stage stage = (Stage) btnBranch.getScene().getWindow();
-//            stage.setScene(new Scene(root));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminManageBranchPage.fxml"));
+            Parent root = loader.load();
+            AdminManageBranchController controller = loader.getController();
+            controller.setBranchManager(this.branchManager, this.currentBank);
+            Stage stage = (Stage) btnBranch.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // --- Logout Handler (Navigation Logic) ---

@@ -1,0 +1,16 @@
+{
+  "branches": [
+    { "branchID": 1, "branchName": "Downtown Branch", "address": "100 Main St" },
+    { "branchID": 2, "branchName": "Uptown Branch", "address": "200 Elm St" },
+    { "branchID": 3, "branchName": "Midtown Branch", "address": "300 Oak Ave" },
+    { "branchID": 4, "branchName": "Westside Branch", "address": "400 Pine Rd" },
+    { "branchID": 5, "branchName": "Eastside Branch", "address": "500 Maple Ln" },
+    { "branchID": 6, "branchName": "Lakeside Branch", "address": "600 Lakeview Dr" },
+    { "branchID": 7, "branchName": "Riverside Branch", "address": "700 River St" },
+    { "branchID": 8, "branchName": "Hilltop Branch", "address": "800 Hill Rd" },
+    { "branchID": 9, "branchName": "Greenfield Branch", "address": "900 Green St" },
+    { "branchID": 10, "branchName": "Brookside Branch", "address": "1010 Brook Ln" },
+    { "branchID": 11, "branchName": "Sunnyvale Branch", "address": "1110 Sunny St" },
+    { "branchID": 12, "branchName": "Cedarwood Branch", "address": "1210 Cedar Ave" }
+  ]
+}

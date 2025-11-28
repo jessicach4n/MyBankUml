@@ -146,12 +146,6 @@
                                     </font>
                                 </TextField>
                                 <Pane HBox.hgrow="ALWAYS" />
-                                <Label text="Filter by:" textFill="#666666" />
-                                <Hyperlink text="Role" underline="true" textFill="#20a88e" style="-fx-border-color: transparent;">
-                                    <font>
-                                        <Font name="System Bold" size="12.0" />
-                                    </font>
-                                </Hyperlink>
                             </children>
                             <VBox.margin>
                                 <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />

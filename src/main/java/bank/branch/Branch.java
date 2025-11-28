@@ -6,7 +6,7 @@ public class Branch {
     private final int branchID;
     private String branchName;
     private String address;
-    private final Bank bank;
+    private transient Bank bank;
 
     // Constructor requires all four core attributes
     public Branch(String branchName, String address, Bank bank) {
@@ -34,6 +34,10 @@ public class Branch {
 
     public Bank getBank() {
         return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
     
     public void setBranchName(String branchName) {
