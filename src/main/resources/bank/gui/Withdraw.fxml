@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.WithdrawController">
+
+   <!-- LEFT SIDEBAR -->
+   <left>
+      <VBox prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #2CBF99;" BorderPane.alignment="CENTER">
+         <children>
+            <!-- Logo Area -->
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="10.0">
+               <padding>
+                  <Insets left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="MYBank">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Text>
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <Label text="➔" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <style>-fx-rotate: 180; -fx-border-color: white; -fx-border-radius: 3; -fx-padding: 0 4 0 4;</style>
+                  </Label>
+               </children>
+            </HBox>
+
+            <!-- User Profile -->
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+               <children>
+                  <StackPane prefHeight="80.0" prefWidth="80.0">
+                     <children>
+                        <Circle fill="#333333" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                        <Text fx:id="profileInitials" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="JD">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Label fx:id="profileName" text="Customer Name" textFill="#1e1e1e">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="profileRole" text="Customer" textFill="#1e1e1e">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+
+            <!-- Spacer -->
+            <Pane VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </left>
+
+   <!-- MAIN CONTENT -->
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" style="-fx-background-color: #FFFFFF;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="40.0" left="60.0" right="60.0" top="40.0" />
+         </padding>
+         <children>
+
+            <!-- Header -->
+            <Label text="Withdraw - Pay Bills">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+
+            <!-- Form Fields -->
+            <VBox spacing="20.0" prefHeight="400.0" VBox.vgrow="ALWAYS">
+               <children>
+
+                  <!-- From Account -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label text="From Account" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="fromAccountCombo" prefHeight="40.0" prefWidth="500.0" promptText="Select account" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;" />
+                     </children>
+                  </VBox>
+
+                  <!-- Recipient Name -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label text="Recipient Name" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="recipientField" prefHeight="40.0" prefWidth="500.0" promptText="Enter recipient name" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+
+                  <!-- Bill Type -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label text="Bill Type" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="billTypeField" prefHeight="40.0" prefWidth="500.0" promptText="Enter bill type (e.g., Electricity, Water)" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+
+                  <!-- Amount -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label text="Amount" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="amountField" prefHeight="40.0" prefWidth="500.0" promptText="Enter amount" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </TextField>
+                     </children>
+                  </VBox>
+
+                  <!-- Message Label -->
+                  <Label fx:id="messageLabel" text="" textFill="#DC3545" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+
+               </children>
+            </VBox>
+
+            <!-- Buttons -->
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Button fx:id="submitButton" onAction="#handleSubmit" mnemonicParsing="false" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #2CBF99; -fx-text-fill: white; -fx-background-radius: 4;" text="Submit">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="backButton" onAction="#handleBack" mnemonicParsing="false" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #1e1e1e; -fx-background-radius: 4;" text="Back">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
