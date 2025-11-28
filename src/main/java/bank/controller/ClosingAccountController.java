@@ -27,17 +27,12 @@ public class ClosingAccountController {
     private Account accountToClose;
     private static final InternalLogger LOGGER = new InternalLogger();
 
-    /**
-     * @param account The account object selected for closure.
-     */
+
     public void setAccount(Account account) {
         this.accountToClose = account;
         fillFields();
     }
 
-    /**
-     * Fills UI fields with data from the selected account.
-     */
     private void fillFields() {
         if (accountToClose == null) return;
 
@@ -47,9 +42,7 @@ public class ClosingAccountController {
         account_num_fld.setText(accountToClose.getAccountNumber());
     }
     
-    /**
-     * Initializes the controller and sets up button actions if not defined in FXML.
-     */
+
     @FXML
     private void initialize() {
     
@@ -65,19 +58,11 @@ public class ClosingAccountController {
     }
 
 
-    /**
-     * Handler for the sidebar 'Manage Accounts' button (or assumed to be handled by back_btn).
-     * Navigates back to the main teller view (TellerHomePage).
-     */
     @FXML
     private void navigateToManageAccounts() {
         goBack();
     }
 
-    /**
-     * Handler for the 'Cancel' button.
-     * Cancels the closing operation and navigates back to the main teller view.
-     */
     @FXML
     private void handleCancel() {
         goBack();
@@ -90,26 +75,32 @@ public class ClosingAccountController {
             LOGGER.warn("Attempted to close a null account.");
             return;
         }
-
+    
         try {
-            // fix name
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/CloseSuccess.fxml")));
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getResource("/bank/gui/TellerAccountClosed.fxml"))
+            );
+            Parent root = loader.load();
+    
+            // TellerAccountClosedController controller = loader.getController();
+    
+            // controller.setClosedAccount(accountToClose);
+    
             Stage stage = (Stage) back_btn.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException ex) {
-            LOGGER.error("Failed to open CustomerInformation.fxml: " + ex.getMessage());
-        }
-
-        LOGGER.info("Confirmed closure for account: " + accountToClose.getAccountNumber());
-        
-        
-        LOGGER.info("Account " + accountToClose.getAccountNumber() + " successfully processed for closure.");
     
-        goBack();
+            LOGGER.info("Navigated to TellerAccountClosed.fxml for account: "
+                    + accountToClose.getAccountNumber());
+    
+        } catch (IOException ex) {
+            LOGGER.error("Failed to open TellerAccountClosed.fxml: " + ex.getMessage());
+        }
+    
+        LOGGER.info("Account " + accountToClose.getAccountNumber() + " successfully processed for closure.");
     }
+    
 
-  
     private void goBack() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/CustomerInformation.fxml"));

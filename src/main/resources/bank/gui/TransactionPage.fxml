@@ -196,10 +196,10 @@
 
                 <Region VBox.vgrow="ALWAYS" />
 
-                <!-- Action Buttons (Styled for theme consistency) -->
+                <!-- Action Buttons -->
                 <HBox alignment="BOTTOM_LEFT" spacing="20.0" style="-fx-padding: 20 0 0 0;">
                     <children>
-                        <!-- Submit Button (Primary action - Green) -->
+                        <!-- Submit Button  -->
                         <Button fx:id="submitButton"
                                 mnemonicParsing="false"
                                 onAction="#handleSubmit"
@@ -210,7 +210,7 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Button>
-                        <!-- Cancel Button (Secondary action - Grey) -->
+                        <!-- Cancel Button -->
                         <Button mnemonicParsing="false"
                                 onAction="#handleCancel"
                                 prefHeight="40.0" prefWidth="120.0"
