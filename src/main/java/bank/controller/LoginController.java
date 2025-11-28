@@ -1,5 +1,8 @@
 package bank.controller;
 
+import bank.branch.Bank;
+import bank.branch.Branch;
+import bank.branch.BranchManager;
 import bank.user.User;
 import bank.user.UserManager;
 import bank.user.repository.JsonUserRepository;
@@ -35,7 +38,8 @@ public class LoginController {
 
     private UserManager userManager;
     private User currentUser;  // Stores the authenticated user
-
+    private BranchManager branchManager;
+    private Bank bank;
     /**
      * Initialize the controller.
      * Sets up the UserManager and configures the login button action.
@@ -51,6 +55,9 @@ public class LoginController {
 
         // Optional: Add Enter key support for password field
         passwordField.setOnAction(this::handleLogin);
+
+        branchManager = new BranchManager();
+        bank = new Bank("BankUML");
     }
 
     /**
@@ -113,13 +120,6 @@ public class LoginController {
                     System.out.println("Redirecting to Teller page for: " + currentUser.getName());
                     break;
 
-                case MANAGER:
-                    // TODO: Create ManagerHomePage.fxml - Using TellerHomePage temporarily
-                    fxmlPath = "/bank/gui/TellerHomePage.fxml";
-                    roleDescription = "Manager Portal (Temporary)";
-                    System.out.println("Redirecting to Manager page (temporary: Teller) for: " + currentUser.getName());
-                    break;
-
                 case ADMIN:
                     fxmlPath = "/bank/gui/AdminHomePage.fxml";
                     roleDescription = "Admin Portal";
@@ -146,6 +146,9 @@ public class LoginController {
                 // Pass user info to CustomerInformationController
                 ((CustomerInformationController) controller).setCurrentUser(currentUser);
                 System.out.println("Loaded CustomerInformationController with user: " + currentUser.getName());
+            } else if (controller instanceof AdminController adminController) {
+                branchManager.loadBranches(bank);
+                adminController.initializeAdminContext(branchManager, bank);
             }
 
             // Get the current stage and set the new scene
