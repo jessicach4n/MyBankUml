@@ -56,7 +56,8 @@ public class AdminManageBranchController implements Initializable {
     public void setBranchManager(BranchManager manager, Bank bank) {
         this.branchManager = manager;
         this.currentBank = bank;
-        loadTempBranches();
+        reloadBranches();
+//        loadTempBranches();
     }
 
     @Override

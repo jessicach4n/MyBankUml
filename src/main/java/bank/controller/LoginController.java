@@ -147,6 +147,7 @@ public class LoginController {
                 ((CustomerInformationController) controller).setCurrentUser(currentUser);
                 System.out.println("Loaded CustomerInformationController with user: " + currentUser.getName());
             } else if (controller instanceof AdminController adminController) {
+                branchManager.loadBranches(bank);
                 adminController.initializeAdminContext(branchManager, bank);
             }
 

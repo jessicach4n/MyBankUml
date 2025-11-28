@@ -1,37 +1,93 @@
 package bank.branch;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 // This implementation is super not robust, but I think its ok
 public class BranchManager {
+
+    private static final String BRANCH_FILE = "data/branches.json";
+    private final Gson gson = new Gson();
     
     public BranchManager() {
 
     }
 
-    // Return the newly created Branch object
-    public Branch addBranch(String branchName, String address, Bank bank) {
-        Branch newBranch = new Branch(branchName, address, bank);
-        bank.addBranch(newBranch);
-        System.out.println("Branch added successfully: " + branchName);
-        return newBranch;
+    /** Load branches from JSON into a bank */
+    public void loadBranches(Bank bank) {
+        try (Reader reader = new FileReader(BRANCH_FILE)) {
+            Type type = new TypeToken<Map<String, List<Branch>>>() {}.getType();
+            Map<String, List<Branch>> map = gson.fromJson(reader, type);
+            if (map != null && map.containsKey("branches")) {
+                List<Branch> loaded = map.get("branches");
+                for (Branch b : loaded) {
+                    b.setBank(bank); // assign the bank reference
+                    bank.addBranch(b);
+                }
+            }
+            System.out.println("[BranchManager]: Loaded " + bank.getBranches().size() + " branches from JSON.");
+        } catch (FileNotFoundException e) {
+            System.out.println("[BranchManager]: Branch JSON file not found. Starting with empty list.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Returns true if the branch was found and removed, false otherwise.
-    public boolean removeBranch(Branch branch) {
-        return branch.getBank().removeBranch(branch); 
+    /** Save branches to JSON */
+    private void saveBranches(Bank bank) {
+        try (Writer writer = new FileWriter(BRANCH_FILE)) {
+            Map<String, List<Branch>> map = Map.of("branches", bank.getBranches());
+            gson.toJson(map, writer);
+            System.out.println("[BranchManager]: Saved " + bank.getBranches().size() + " branches to JSON.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Branch getBranchInfo(Branch branch) {
+    /** Add a branch and save */
+    public Branch addBranch(String name, String address, Bank bank) {
+        Branch branch = new Branch(name, address, bank);
+        bank.addBranch(branch);
+        saveBranches(bank);
+        System.out.println("[BranchManager]: Branch added: " + name);
         return branch;
     }
 
-    public void updateBranch(Branch branch, String newName, String newAddress) {
-        branch.setAddress(newAddress);
-        branch.setBranchName(newName);
+    /** Remove a branch and save */
+    public boolean removeBranch(Branch branch) {
+        Bank bank = branch.getBank();
+        if (bank == null) {
+            System.out.println("[BranchManager]: Bank is null");
+            return false;
+        }
+
+        boolean success = bank.getBranches().removeIf(b -> b.getBranchID() == branch.getBranchID());
+        if (success) {
+            saveBranches(bank);
+            System.out.println("[BranchManager]: Branch removed: " + branch.getBranchName());
+        } else {
+            System.out.println("[BranchManager]: Could not remove branch: " + branch.getBranchID());
+        }
+        return success;
     }
 
     public List<Branch> getBranchList(Bank bank) {
         return bank.getBranches();
+    }
+
+    public void updateBranch(Branch branch, String newName, String newAddress) {
+        branch.setBranchName(newName);
+        branch.setAddress(newAddress);
+        saveBranches(branch.getBank());
+        System.out.println("[BranchManager]: Branch updated: " + branch.getBranchName());
+    }
+
+    public Branch getBranchInfo(Branch branch) {
+        return branch;
     }
 }
