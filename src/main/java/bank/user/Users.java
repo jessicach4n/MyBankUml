@@ -58,38 +58,52 @@ public class Users {
             String recipient_name
     ) {}
 
-    public static void load() {
-        try {
-            if (!Files.exists(jsonFile)) {
-                Files.createDirectories(jsonFile.getParent());
+    public static void load()
+    {
+        // Try loading from jsonFile path (data/users.json or custom path) first
+        // This ensures we read from the same location we write to
+        try (Reader reader = Files.newBufferedReader(jsonFile)) {
+            User[] arr = GSON.fromJson(reader, User[].class);
+            if (arr == null) arr = new User[0];
 
-                var resource = Users.class.getClassLoader().getResource("bank/users.json");
-                if (resource != null) {
-                    Files.copy(Path.of(resource.toURI()), jsonFile);
-                    LOGGER.info("Created data/users.json from template resource.");
-                } else {
-                    Files.writeString(jsonFile, "[]");
-                    LOGGER.warning("Resource users.json not found. Created empty data/users.json.");
-                }
+            USERS = new ArrayList<>(List.of(arr));
+            USER_MAP = new HashMap<>();
+            for (User u : USERS) {
+                USER_MAP.put(u.id(), u);
             }
 
-            try (Reader reader = Files.newBufferedReader(jsonFile)) {
-                User[] arr = GSON.fromJson(reader, User[].class);
-                if (arr == null) arr = new User[0];
+            LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
+            return;
+        } catch (Exception e) {
+            LOGGER.warning("Could not load from " + jsonFile.toAbsolutePath() + ", trying resources");
+        }
 
-                USERS = new ArrayList<>(List.of(arr));
-                USER_MAP = new HashMap<>();
-                for (User u : USERS) {
-                    USER_MAP.put(u.id(), u);
+        // Fallback: try loading from resources folder (for initial setup)
+        try (Reader r = new java.io.InputStreamReader(
+                Users.class.getResourceAsStream("/bank/users.json")))
+        {
+            if (r != null) {
+                User[] arr = GSON.fromJson(r, User[].class);
+                if (arr != null) {
+                    USERS = new ArrayList<>(List.of(arr));
+                    USER_MAP = new HashMap<>();
+                    for (User u : USERS) {
+                        USER_MAP.put(u.id(), u);
+                    }
+                    LOGGER.info("Loaded " + USERS.size() + " users from resources");
+                    // Save to data folder immediately so future loads use the same file
+                    save();
+                    return;
                 }
-
-                LOGGER.info("Loaded " + USERS.size() + " users from " + jsonFile.toAbsolutePath());
             }
         } catch (Exception e) {
-            USERS = new ArrayList<>();
-            USER_MAP = new HashMap<>();
-            LOGGER.log(Level.SEVERE, "Failed to load users from " + jsonFile.toAbsolutePath(), e);
+            LOGGER.log(Level.SEVERE, "Failed to load users from resources", e);
         }
+
+        // If both fail, start with empty list
+        USERS = new ArrayList<>();
+        USER_MAP = new HashMap<>();
+        LOGGER.warning("Starting with empty user list");
     }
 
     public static void save() {

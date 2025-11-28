@@ -1,6 +1,7 @@
 package bank.user;
 
 import java.util.ArrayList;
+import java.util.List;
 import bank.account.Account;
 
 public class Customer extends User {
@@ -30,6 +31,10 @@ public class Customer extends User {
 
     public Account getAccount(int index) {
         return this.accounts.get(index);
+    }
+
+    public List<Account> getAccounts() {
+        return this.accounts;
     }
 
     public int getAge() {

@@ -96,7 +96,8 @@ public class TellerController { // Renamed from AccountController
             Parent root = loader.load();
 
             CustomerInformationController controller = loader.getController();
-            controller.setAccount(account);
+            // TODO: Add setAccount method to CustomerInformationController if needed
+            // controller.setAccount(account);
 
             Stage stage = (Stage) accountsTable.getScene().getWindow();
             stage.setScene(new Scene(root));

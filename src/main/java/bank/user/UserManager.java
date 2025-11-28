@@ -1,17 +1,69 @@
 package bank.user;
 
 import bank.account.Account;
+import bank.account.Card;
+import bank.account.Check;
+import bank.account.Saving;
 import bank.user.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserManager {
     private final UserRepository repository;
+    private final Authentication authentication;
 
     public UserManager(UserRepository repository) {
         this.repository = repository;
+        this.authentication = new Authentication(repository);
+    }
+
+    /**
+     * Authenticate a user by username and password.
+     *
+     * @param username the username
+     * @param password the password
+     * @return Optional containing the domain User if successful, empty otherwise
+     */
+    public Optional<User> login(String username, String password) {
+        Optional<Users.User> persistenceUser = authentication.authenticateByUsername(username, password);
+        return persistenceUser.map(UserManager::convertFromPersistence);
+    }
+
+    /**
+     * Authenticate a user by user ID and password.
+     *
+     * @param userId the user ID
+     * @param password the password
+     * @return Optional containing the domain User if successful, empty otherwise
+     */
+    public Optional<User> loginById(long userId, String password) {
+        Optional<Users.User> persistenceUser = authentication.authenticateById(userId, password);
+        return persistenceUser.map(UserManager::convertFromPersistence);
+    }
+
+    /**
+     * Change a user's password.
+     *
+     * @param userId the user ID
+     * @param currentPassword the current password
+     * @param newPassword the new password
+     * @return true if successful, false otherwise
+     */
+    public boolean changePassword(long userId, String currentPassword, String newPassword) {
+        return authentication.changePassword(userId, currentPassword, newPassword);
+    }
+
+    /**
+     * Check if a username already exists.
+     *
+     * @param username the username to check
+     * @return true if exists, false otherwise
+     */
+    public boolean usernameExists(String username) {
+        return authentication.userExists(username);
     }
 
     // Convert domain User -> persistence User
@@ -32,14 +84,81 @@ public class UserManager {
         Role role = Role.valueOf(pUser.role());
         User user;
         switch (role) {
-            case CUSTOMER -> user = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()), 21, "514-112-1234", null);
+            case CUSTOMER -> {
+                Customer customer = new Customer(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()), 21, "514-112-1234", null);
+                // Store the persistence accounts in the customer for UI display
+                if (pUser.accounts() != null && !pUser.accounts().isEmpty()) {
+                    for (Users.Account pAccount : pUser.accounts()) {
+                        // Create a domain Account from persistence - handling the circular dependency
+                        Account domainAccount = convertAccountFromPersistence(pAccount, customer);
+                        customer.addAccount(domainAccount);
+                    }
+                }
+                user = customer;
+            }
             case TELLER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
+            case MANAGER -> user = new Teller(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name())); // Using Teller class temporarily
             case ADMIN -> user = new Administrator(new UserDetails(pUser.username(), pUser.password(), pUser.email(), pUser.name()));
             default -> throw new IllegalArgumentException("Unknown role: " + pUser.role());
         }
         user.setId(pUser.id());
         user.setRole(role);
         return user;
+    }
+
+    // Helper method to convert persistence Account to domain Account
+    private static Account convertAccountFromPersistence(Users.Account pAccount, Customer customer) {
+        Account account;
+        switch (pAccount.type()) {
+            case "Checking":
+                account = new Check(pAccount.number(), pAccount.balance(), "Active", customer);
+                break;
+            case "Savings":
+                account = new Saving(pAccount.number(), pAccount.balance(), "Active", customer);
+                break;
+            case "Card":
+                account = new Card(pAccount.number(), pAccount.balance(), "Active", customer);
+                break;
+            default:
+                // Default to Check if unknown type
+                account = new Check(pAccount.number(), pAccount.balance(), "Active", customer);
+        }
+
+        // Convert and add transactions
+        if (pAccount.transactions() != null && !pAccount.transactions().isEmpty()) {
+            for (Users.Transaction pTrans : pAccount.transactions()) {
+                bank.transaction.Transaction domainTransaction = convertTransactionFromPersistence(pTrans, account);
+                account.addTransaction(domainTransaction);
+            }
+        }
+
+        return account;
+    }
+
+    // Helper method to convert persistence Transaction to domain Transaction
+    private static bank.transaction.Transaction convertTransactionFromPersistence(Users.Transaction pTrans, Account account) {
+        // Convert date format from YYYYMMDD integer to Date object
+        int dateInt = (int) pTrans.date();
+        int year = dateInt / 10000;
+        int month = (dateInt % 10000) / 100;
+        int day = dateInt % 100;
+
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.set(year, month - 1, day); // Month is 0-based in Calendar
+        java.util.Date date = cal.getTime();
+
+        // Determine transaction type and recipient based on amount
+        String type = pTrans.amount() >= 0 ? "Deposit" : "Withdrawal";
+        String recipient = pTrans.recipient_name();
+
+        return new bank.transaction.Transaction(
+            type,
+            "Completed",
+            pTrans.amount(),
+            recipient,
+            account,
+            date
+        );
     }
 
     private static List<Users.Account> convertAccountsToPersistence(List<Account> domainAccounts) {

@@ -14,10 +14,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="bank.controller.CustomerInformationController"
-            prefHeight="600.0" prefWidth="900.0">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.CustomerInformationController">
+   
    <!-- LEFT SIDEBAR -->
    <left>
       <VBox prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #2CBF99;" BorderPane.alignment="CENTER">
@@ -50,19 +48,19 @@
                   <StackPane prefHeight="80.0" prefWidth="80.0">
                      <children>
                         <Circle fill="#333333" radius="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="JD">
+                        <Text fx:id="profileInitials" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="JD">
                            <font>
                               <Font name="System Bold" size="32.0" />
                            </font>
                         </Text>
                      </children>
                   </StackPane>
-                  <Label text="Alice Wonderland" textFill="#1e1e1e">
+                  <Label fx:id="profileName" text="Alice Wonderland" textFill="#1e1e1e">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label text="Teller" textFill="#1e1e1e">
+                  <Label fx:id="profileRole" text="Customer" textFill="#1e1e1e">
                      <font>
                         <Font size="12.0" />
                      </font>
@@ -79,6 +77,16 @@
                   <Insets left="20.0" />
                </padding>
                <alignment>CENTER_LEFT</alignment>
+            </Button>
+
+            <!-- Spacer to push logout button to bottom -->
+            <Pane VBox.vgrow="ALWAYS" />
+
+            <!-- Logout Button -->
+            <Button fx:id="logoutButton" onAction="#handleLogout" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 1 0 0 0;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
             </Button>
          </children>
       </VBox>
@@ -118,7 +126,7 @@
                   <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Customer Name" textFill="#666666" />
-                        <TextField fx:id="customer_name_fld" editable="false" prefHeight="40.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E0E0E0; -fx-border-radius: 3;" text="John Doe">
+                        <TextField fx:id="customerNameField" editable="false" prefHeight="40.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E0E0E0; -fx-border-radius: 3;" text="John Doe">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
@@ -128,7 +136,7 @@
                   <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Account Number" textFill="#666666" />
-                        <TextField fx:id="account_num_fld" editable="false" prefHeight="40.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E0E0E0; -fx-border-radius: 3;" text="879302145678">
+                        <TextField fx:id="accountNumberField" editable="false" prefHeight="40.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #E0E0E0; -fx-border-radius: 3;" text="879302145678">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
@@ -146,7 +154,7 @@
                   <VBox spacing="10.0" prefWidth="250.0">
                      <children>
                         <Label text="Balance" textFill="#666666" />
-                        <Label fx:id="balance_lbl" text="\$ 1187.89">
+                        <Label fx:id="balanceLabel" text="\$ 1187.89">
                            <font>
                               <Font name="System Bold" size="28.0" />
                            </font>
@@ -232,6 +240,47 @@
                   </VBox>
                </children>
             </HBox>
+
+            <!-- Transaction History Section -->
+            <VBox spacing="10.0">
+               <children>
+                  <Label text="Transaction History" textFill="#666666">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+
+                  <!-- Transaction Table Header -->
+                  <HBox spacing="10.0" style="-fx-background-color: #F5F5F5; -fx-padding: 10;">
+                     <children>
+                        <Label prefWidth="100.0" text="Date" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label prefWidth="250.0" text="Description" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label prefWidth="100.0" text="Amount" textFill="#666666" alignment="CENTER_RIGHT">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+
+                  <!-- Transaction List Container -->
+                  <VBox fx:id="transactionList" spacing="0.0" style="-fx-border-color: #E0E0E0; -fx-border-width: 1; -fx-background-color: white;">
+                     <children>
+                        <!-- Transactions will be added dynamically -->
+                        <Label text="No transactions found" style="-fx-padding: 20; -fx-text-fill: #999999;" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
 
             <!-- Footer (Back Button) -->
             <HBox alignment="BOTTOM_RIGHT">
