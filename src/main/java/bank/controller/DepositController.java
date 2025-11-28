@@ -5,7 +5,6 @@ import bank.user.Customer;
 import bank.user.User;
 import bank.user.UserManager;
 import bank.user.Users;
-import bank.user.repository.JsonUserRepository;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,9 +22,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -65,16 +61,14 @@ public class DepositController {
 
     private User currentUser;
     private UserManager userManager;
-    private JsonUserRepository repository;
 
     /**
      * Initialize the controller.
      */
     @FXML
     public void initialize() {
-        // Initialize UserManager and repository
-        repository = new JsonUserRepository();
-        userManager = new UserManager(repository);
+        // Initialize UserManager
+        userManager = new UserManager(new bank.user.repository.JsonUserRepository());
     }
 
     /**
@@ -160,17 +154,6 @@ public class DepositController {
     }
 
     /**
-     * Get current date in YYYYMMDD format as long.
-     */
-    private long getCurrentDateAsLong() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1; // 0-based, so add 1
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return (long) (year * 10000 + month * 100 + day);
-    }
-
-    /**
      * Handle submit button - process deposit transaction.
      */
     @FXML
@@ -224,80 +207,17 @@ public class DepositController {
         }
 
         try {
-            // Step 3: Create persistence transactions
-            long dateAsLong = getCurrentDateAsLong();
-            long amountLong = (long) amount;
-
-            // Withdrawal transaction (negative amount)
-            Users.Transaction withdrawalTx = new Users.Transaction(
-                dateAsLong,
-                -amountLong,
-                description,
-                0,
-                Long.parseLong(fromAccount.getAccountNumber()),
-                0,
-                "Transfer to " + toAccount.getAccountNumber()
+            // Step 3: Execute transaction using the helper method
+            Users.transaction(
+                currentUser.getId(),                // User 1 ID (sender)
+                fromAccount.getAccountNumber(),     // Account 1 number (from)
+                currentUser.getId(),                // User 2 ID (receiver - same user)
+                toAccount.getAccountNumber(),       // Account 2 number (to)
+                amount,                             // Amount
+                description                         // Details
             );
 
-            // Deposit transaction (positive amount)
-            Users.Transaction depositTx = new Users.Transaction(
-                dateAsLong,
-                amountLong,
-                description,
-                Long.parseLong(toAccount.getAccountNumber()),
-                0,
-                0,
-                "Transfer from " + fromAccount.getAccountNumber()
-            );
-
-            // Step 4: Update persistence user
-            Users.User pUser = repository.getById(currentUser.getId());
-
-            // Add both transactions
-            Users.User withFirstTx = userManager.addTransaction(pUser, fromAccount.getAccountNumber(), withdrawalTx);
-            Users.User withBothTx = userManager.addTransaction(withFirstTx, toAccount.getAccountNumber(), depositTx);
-
-            // Update account balances
-            List<Users.Account> updatedAccounts = new ArrayList<>();
-            for (Users.Account pAccount : withBothTx.accounts()) {
-                if (pAccount.number().equals(fromAccount.getAccountNumber())) {
-                    // Decrease source balance
-                    Users.Account updated = new Users.Account(
-                        pAccount.number(),
-                        pAccount.type(),
-                        pAccount.balance() - amount,
-                        pAccount.transactions()
-                    );
-                    updatedAccounts.add(updated);
-                } else if (pAccount.number().equals(toAccount.getAccountNumber())) {
-                    // Increase destination balance
-                    Users.Account updated = new Users.Account(
-                        pAccount.number(),
-                        pAccount.type(),
-                        pAccount.balance() + amount,
-                        pAccount.transactions()
-                    );
-                    updatedAccounts.add(updated);
-                } else {
-                    updatedAccounts.add(pAccount);
-                }
-            }
-
-            // Create final user with updated balances
-            Users.User finalPUser = new Users.User(
-                withBothTx.id(),
-                withBothTx.username(),
-                withBothTx.name(),
-                withBothTx.role(),
-                withBothTx.password(),
-                withBothTx.email(),
-                updatedAccounts
-            );
-
-            // Save to JSON (auto-saves)
-            repository.update(finalPUser);
-
-            // Step 5: Success flow
+            // Step 4: Success flow
             messageLabel.setText("Deposit successful!");
             messageLabel.setStyle("-fx-text-fill: #28A745;");
 

@@ -134,4 +134,146 @@ public class Users {
         USER_MAP.clear();
         LOGGER.info("Reset in-memory users.");
     }
+
+    /**
+     * Execute a transaction between two accounts (can be same user or different users).
+     * Creates two transactions: withdrawal from account 1, deposit to account 2.
+     * Updates both account balances and saves to JSON.
+     *
+     * @param u1 User 1 ID (sender)
+     * @param a1 Account 1 number (from)
+     * @param u2 User 2 ID (receiver)
+     * @param a2 Account 2 number (to)
+     * @param amount Amount to transfer
+     * @param details Transaction description
+     */
+    public static void transaction(long u1, String a1, long u2, String a2, double amount, String details) {
+        long date = bank.Convert.date(java.time.LocalDate.now().toString());
+
+        User U1 = Users.get(u1);
+        User U2 = Users.get(u2);
+
+        Account A1 = null;
+        Account A2 = null;
+        for (Account a : U1.accounts()) {
+            if (a.number().equals(a1)) {
+                A1 = a;
+                break;
+            }
+        }
+        for (Account a : U2.accounts()) {
+            if (a.number().equals(a2)) {
+                A2 = a;
+                break;
+            }
+        }
+        if (A1 == null || A2 == null) {
+            LOGGER.warning("Transaction failed: account not found");
+            return;
+        }
+
+        Transaction T1 = new Transaction(
+                date,
+                (long) -amount,
+                details,
+                Long.parseLong(A2.number()),
+                Long.parseLong(A1.number()),
+                U2.id(),
+                U2.name()
+        );
+        Transaction T2 = new Transaction(
+                date,
+                (long) amount,
+                details,
+                Long.parseLong(A2.number()),
+                Long.parseLong(A1.number()),
+                U1.id(),
+                U1.name()
+        );
+
+        A1.transactions().add(T1);
+        A2.transactions().add(T2);
+
+        Account A1b = new Account(
+                A1.number(),
+                A1.type(),
+                A1.balance() - amount,
+                A1.transactions()
+        );
+
+        Account A2b = new Account(
+                A2.number(),
+                A2.type(),
+                A2.balance() + amount,
+                A2.transactions()
+        );
+
+        int i1 = U1.accounts().indexOf(A1);
+        int i2 = U2.accounts().indexOf(A2);
+
+        U1.accounts().set(i1, A1b);
+        U2.accounts().set(i2, A2b);
+
+        Users.save();
+        LOGGER.info("Transaction completed: " + amount + " from " + a1 + " to " + a2);
+    }
+
+    /**
+     * Execute a withdrawal to an external recipient (non-user).
+     * Creates one withdrawal transaction and updates account balance.
+     *
+     * @param userId User ID
+     * @param accountNumber Account number to withdraw from
+     * @param amount Amount to withdraw
+     * @param recipientName External recipient name
+     * @param details Transaction description
+     */
+    public static void withdraw(long userId, String accountNumber, double amount, String recipientName, String details) {
+        long date = bank.Convert.date(java.time.LocalDate.now().toString());
+
+        User user = Users.get(userId);
+        if (user == null) {
+            LOGGER.warning("Withdrawal failed: user not found");
+            return;
+        }
+
+        Account account = null;
+        for (Account a : user.accounts()) {
+            if (a.number().equals(accountNumber)) {
+                account = a;
+                break;
+            }
+        }
+        if (account == null) {
+            LOGGER.warning("Withdrawal failed: account not found");
+            return;
+        }
+
+        // Create withdrawal transaction (negative amount, external recipient)
+        Transaction withdrawal = new Transaction(
+                date,
+                (long) -amount,
+                details,
+                0,  // No destination account (external)
+                Long.parseLong(accountNumber),
+                0,  // No recipient ID (external)
+                recipientName
+        );
+
+        account.transactions().add(withdrawal);
+
+        // Update account with new balance
+        Account updatedAccount = new Account(
+                account.number(),
+                account.type(),
+                account.balance() - amount,
+                account.transactions()
+        );
+
+        int index = user.accounts().indexOf(account);
+        user.accounts().set(index, updatedAccount);
+
+        Users.save();
+        LOGGER.info("Withdrawal completed: " + amount + " from " + accountNumber + " to " + recipientName);
+    }
 }

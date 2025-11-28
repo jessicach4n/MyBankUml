@@ -5,7 +5,6 @@ import bank.user.Customer;
 import bank.user.User;
 import bank.user.UserManager;
 import bank.user.Users;
-import bank.user.repository.JsonUserRepository;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,9 +22,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -65,16 +61,14 @@ public class WithdrawController {
 
     private User currentUser;
     private UserManager userManager;
-    private JsonUserRepository repository;
 
     /**
      * Initialize the controller.
      */
     @FXML
     public void initialize() {
-        // Initialize UserManager and repository
-        repository = new JsonUserRepository();
-        userManager = new UserManager(repository);
+        // Initialize UserManager
+        userManager = new UserManager(new bank.user.repository.JsonUserRepository());
     }
 
     /**
@@ -159,17 +153,6 @@ public class WithdrawController {
     }
 
     /**
-     * Get current date in YYYYMMDD format as long.
-     */
-    private long getCurrentDateAsLong() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1; // 0-based, so add 1
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return (long) (year * 10000 + month * 100 + day);
-    }
-
-    /**
      * Handle submit button - process withdrawal transaction.
      */
     @FXML
@@ -216,59 +199,16 @@ public class WithdrawController {
         }
 
         try {
-            // Step 3: Create persistence transaction
-            long dateAsLong = getCurrentDateAsLong();
-            long amountLong = (long) amount;
-
-            // Withdrawal transaction (negative amount, external recipient)
-            Users.Transaction withdrawalTx = new Users.Transaction(
-                dateAsLong,
-                -amountLong,
-                billType,
-                0,
-                Long.parseLong(fromAccount.getAccountNumber()),
-                0,
-                recipientName
+            // Step 3: Execute withdrawal using the helper method
+            Users.withdraw(
+                currentUser.getId(),
+                fromAccount.getAccountNumber(),
+                amount,
+                recipientName,
+                billType
             );
 
-            // Step 4: Update persistence user
-            Users.User pUser = repository.getById(currentUser.getId());
-
-            // Add transaction
-            Users.User withTx = userManager.addTransaction(pUser, fromAccount.getAccountNumber(), withdrawalTx);
-
-            // Update account balance
-            List<Users.Account> updatedAccounts = new ArrayList<>();
-            for (Users.Account pAccount : withTx.accounts()) {
-                if (pAccount.number().equals(fromAccount.getAccountNumber())) {
-                    // Decrease balance
-                    Users.Account updated = new Users.Account(
-                        pAccount.number(),
-                        pAccount.type(),
-                        pAccount.balance() - amount,
-                        pAccount.transactions()
-                    );
-                    updatedAccounts.add(updated);
-                } else {
-                    updatedAccounts.add(pAccount);
-                }
-            }
-
-            // Create final user with updated balance
-            Users.User finalPUser = new Users.User(
-                withTx.id(),
-                withTx.username(),
-                withTx.name(),
-                withTx.role(),
-                withTx.password(),
-                withTx.email(),
-                updatedAccounts
-            );
-
-            // Save to JSON (auto-saves)
-            repository.update(finalPUser);
-
-            // Step 5: Success flow
+            // Step 4: Success flow
             messageLabel.setText("Payment successful!");
             messageLabel.setStyle("-fx-text-fill: #28A745;");
 
