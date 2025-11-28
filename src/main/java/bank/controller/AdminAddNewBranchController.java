@@ -1,41 +1,50 @@
-package bank.controller; // replace with your actual package
+package bank.controller;
 
+import bank.branch.Bank;
+import bank.branch.Branch;
+import bank.branch.BranchManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class AdminAddNewBranchController {
 
-    // Branch form fields
     @FXML
     private TextField branchNameField;
 
     @FXML
     private TextField locationField;
 
-    // Buttons
     @FXML
     private Button submitButton;
 
     @FXML
     private Button cancelButton;
 
-    // Optional: Sidebar labels
     @FXML
-    private Label userInitialsLabel; // "JD"
+    private Label userInitialsLabel;
 
     @FXML
-    private Label userNameLabel; // "Daniel Kim"
+    private Label userNameLabel;
 
     @FXML
-    private Label userRoleLabel; // "Administrator"
+    private Label userRoleLabel;
+
+    // Bank context
+    private Bank bank;
+    private BranchManager branchManager;
+
+    /** Call this after loading FXML to set the bank context */
+    public void setBankContext(Bank bank, BranchManager branchManager) {
+        this.bank = bank;
+        this.branchManager = branchManager;
+    }
 
     @FXML
     public void initialize() {
-        // Initialize logic if needed
         submitButton.setOnAction(event -> handleSubmit());
         cancelButton.setOnAction(event -> handleCancel());
     }
@@ -45,28 +54,40 @@ public class AdminAddNewBranchController {
         String location = locationField.getText().trim();
 
         if (branchName.isEmpty() || location.isEmpty()) {
-            System.out.println("Please fill out all fields.");
+            showError("Please fill out all fields.");
             return;
         }
 
-        // Replace this with your actual branch creation logic
-        System.out.println("Branch submitted:");
-        System.out.println("Name: " + branchName);
-        System.out.println("Location: " + location);
+        if (bank == null || branchManager == null) {
+            showError("Bank context is not set!");
+            return;
+        }
 
-        // Optionally clear fields after submission
-        branchNameField.clear();
-        locationField.clear();
+        try {
+            Branch newBranch = branchManager.addBranch(branchName, location, bank);
+            if (newBranch != null) {
+                // Close the window after successful addition
+                Stage stage = (Stage) submitButton.getScene().getWindow();
+                stage.close();
+            } else {
+                showError("Failed to add branch. Please try again.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("An error occurred while adding the branch.");
+        }
     }
 
     private void handleCancel() {
-        // Clear fields (optional)
-        branchNameField.clear();
-        locationField.clear();
-        System.out.println("Branch creation canceled.");
-
-        // Close the current window
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Branch Creation Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

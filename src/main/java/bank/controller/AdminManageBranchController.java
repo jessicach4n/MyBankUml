@@ -141,6 +141,10 @@ public class AdminManageBranchController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminAddNewBranchPage.fxml"));
             Parent root = loader.load();
 
+            // Get the controller and set the bank context
+            AdminAddNewBranchController controller = loader.getController();
+            controller.setBankContext(currentBank, branchManager); // pass your current bank and branch manager
+
             // Create a new stage (window) for the add branch form
             Stage stage = new Stage();
             stage.setTitle("Add New Branch");
@@ -171,16 +175,24 @@ public class AdminManageBranchController implements Initializable {
         }
     }
 
-    // --- Navigation Handlers ---
     private void navigateToUsers() {
         try {
-            System.out.println("Already on Users page");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminHomePage.fxml"));
             Parent root = loader.load();
+
+            // Get the controller for the new page
+            AdminController controller = loader.getController();
+
+            // Pass the current Bank and BranchManager context
+            controller.initializeAdminContext(branchManager, currentBank);
+
+            // Set the scene
             Stage stage = (Stage) btnBranch.getScene().getWindow();
             stage.setScene(new Scene(root));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

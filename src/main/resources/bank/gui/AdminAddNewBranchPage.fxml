@@ -65,7 +65,7 @@
 
                 <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                     <Label text="Location" />
-                    <TextField fx:id="locationField" prefWidth="300.0" promptText="Teller" />
+                    <TextField fx:id="locationField" prefWidth="300.0" promptText="123 StreetName..." />
                 </VBox>
             </GridPane>
 
