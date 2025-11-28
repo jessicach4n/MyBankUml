@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #E0F7E0, #F0FFF0);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.controller.LogoutSuccessfulController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="400.0" maxWidth="450.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0.5, 0, 4);">
+         <padding>
+            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+         </padding>
+         <children>
+            <!-- Success Icon -->
+            <Label text="✓" textFill="#20A88E" style="-fx-background-color: #E0F7E0; -fx-background-radius: 50; -fx-padding: 20;">
+               <font>
+                  <Font name="System Bold" size="48.0" />
+               </font>
+            </Label>
+
+            <!-- Success Message -->
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Label text="Logout Successful!" textFill="#333333">
+                     <font>
+                        <Font name="System Bold" size="28.0" />
+                     </font>
+                  </Label>
+                  <Label text="You have been safely logged out." textFill="#666666">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+
+            <!-- Return to Login Button -->
+            <Button onAction="#handleReturnToLogin" maxWidth="Infinity" prefHeight="50.0" style="-fx-background-color: #20A88E; -fx-background-radius: 10; -fx-cursor: hand;" text="Return to Login" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+
+            <!-- Footer Text -->
+            <Label text="Thank you for using MyBank" textFill="#999999">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</StackPane>
