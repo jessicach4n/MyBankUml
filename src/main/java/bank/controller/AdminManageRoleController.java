@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-public class AdminManageRolePage {
+public class AdminManageRoleController {
 
     // Profile UI Elements
     @FXML private Label initialsLabel;

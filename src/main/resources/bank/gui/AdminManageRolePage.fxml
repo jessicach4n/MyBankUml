@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Circle?>
 <HBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="bank.controller.AdminManageRolePage"
+      fx:controller="bank.controller.AdminManageRoleController"
       style="-fx-font-family: 'Segoe UI', Arial, sans-serif;">
 
     <!-- LEFT SIDEBAR -->
