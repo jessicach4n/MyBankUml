@@ -56,7 +56,7 @@ public class AdminManageBranchController implements Initializable {
     public void setBranchManager(BranchManager manager, Bank bank) {
         this.branchManager = manager;
         this.currentBank = bank;
-        reloadBranches();
+        loadTempBranches();
     }
 
     @Override
@@ -72,11 +72,9 @@ public class AdminManageBranchController implements Initializable {
         // Load admin info
         loadAdminInfo();
 
-        // Add temp data for testing
-        loadTempBranches();
-
         btnUsers.setOnAction(event -> navigateToUsers());
     }
+
 
     /** Adds temporary sample branches to the table for testing */
     private void loadTempBranches() {

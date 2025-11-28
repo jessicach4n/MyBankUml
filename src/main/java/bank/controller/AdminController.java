@@ -2,6 +2,9 @@ package bank.controller;
 
 import bank.user.Users;
 import bank.user.Users.User;
+import bank.branch.Bank;
+import bank.branch.Branch;
+import bank.branch.BranchManager;
 import bank.utils.InternalLogger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,11 +55,20 @@ public class AdminController {
 
     private static final InternalLogger LOGGER = new InternalLogger();
 
+    private BranchManager branchManager;
+    private Bank currentBank;
+
     @FXML
     public void initialize() {
         loadUsers();
         configureTableColumns();
         setupEventHandlers();
+    }
+
+    public void initializeAdminContext(BranchManager branchManager, Bank bank) {
+        System.out.println("Initializing Admin Context");
+        this.branchManager = branchManager;
+        this.currentBank = bank;
     }
 
     private void loadUsers() {
@@ -172,6 +184,8 @@ public class AdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminManageBranchPage.fxml"));
             Parent root = loader.load();
+            AdminManageBranchController controller = loader.getController();
+            controller.setBranchManager(this.branchManager, this.currentBank);
             Stage stage = (Stage) btnBranch.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {

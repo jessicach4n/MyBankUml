@@ -108,11 +108,7 @@
                     </cellValueFactory>
                 </TableColumn>
 
-                <TableColumn fx:id="deleteColumn" text="" prefWidth="100">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="deleteAction"/>
-                    </cellValueFactory>
-                </TableColumn>
+                <TableColumn fx:id="deleteColumn" text="" prefWidth="100" />
 
             </columns>
 
