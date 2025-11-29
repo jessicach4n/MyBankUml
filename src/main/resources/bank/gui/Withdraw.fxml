@@ -82,7 +82,7 @@
          <children>
 
             <!-- Header -->
-            <Label text="Withdraw - Pay Bills">
+            <Label text="Transfer to Another Customer">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -100,35 +100,43 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="fromAccountCombo" prefHeight="40.0" prefWidth="500.0" promptText="Select account" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;" />
+                        <ComboBox fx:id="fromAccountCombo" prefHeight="40.0" prefWidth="500.0" promptText="Select your account" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;" />
                      </children>
                   </VBox>
 
-                  <!-- Recipient Name -->
+                  <!-- Recipient Customer -->
                   <VBox spacing="8.0">
                      <children>
-                        <Label text="Recipient Name" textFill="#666666">
+                        <Label text="Recipient Customer" textFill="#666666">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="recipientField" prefHeight="40.0" prefWidth="500.0" promptText="Enter recipient name" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
-                           <padding>
-                              <Insets left="15.0" />
-                           </padding>
-                        </TextField>
+                        <ComboBox fx:id="recipientCustomerCombo" prefHeight="40.0" prefWidth="500.0" promptText="Select recipient customer" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;" />
                      </children>
                   </VBox>
 
-                  <!-- Bill Type -->
+                  <!-- Recipient Account -->
                   <VBox spacing="8.0">
                      <children>
-                        <Label text="Bill Type" textFill="#666666">
+                        <Label text="Recipient Account" textFill="#666666">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="billTypeField" prefHeight="40.0" prefWidth="500.0" promptText="Enter bill type (e.g., Electricity, Water)" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
+                        <ComboBox fx:id="recipientAccountCombo" prefHeight="40.0" prefWidth="500.0" promptText="Select recipient account" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;" />
+                     </children>
+                  </VBox>
+
+                  <!-- Description -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label text="Description" textFill="#666666">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="descriptionField" prefHeight="40.0" prefWidth="500.0" promptText="Enter transfer description" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 4;">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
