@@ -5,8 +5,8 @@ import bank.user.repository.UserRepository;
 import java.util.Optional;
 
 /**
- * Authentication service that validates user credentials.
- * Supports authentication by both username and user ID.
+ * Authentication service that validates user credentials
+ * Supports authentication by both username and user ID
  */
 public class Authentication {
     private final UserRepository repository;
@@ -16,7 +16,7 @@ public class Authentication {
     }
 
     /**
-     * Authenticate a user by username and password.
+     * Authenticate a user by username and password
      *
      * @param username the username to authenticate
      * @param password the password to verify
@@ -46,7 +46,7 @@ public class Authentication {
     }
 
     /**
-     * Authenticate a user by user ID and password.
+     * Authenticate a user by user ID and password
      *
      * @param userId the user ID to authenticate
      * @param password the password to verify
@@ -71,12 +71,10 @@ public class Authentication {
     }
 
     /**
-     * Change a user's password.
-     *
      * @param userId the user ID
      * @param currentPassword the current password (for verification)
      * @param newPassword the new password to set
-     * @return true if password was changed successfully, false otherwise
+     * @return true if password was changed successfully, false othrewise
      */
     public boolean changePassword(long userId, String currentPassword, String newPassword) {
         // Verify current password
@@ -93,7 +91,7 @@ public class Authentication {
             user.username(),
             user.name(),
             user.role(),
-            newPassword,  // new password
+            newPassword,
             user.email(),
             user.accounts()
         );
@@ -104,7 +102,7 @@ public class Authentication {
     }
 
     /**
-     * Verify if a user exists by username.
+     * Verify if a user exists by username
      *
      * @param username the username to check
      * @return true if user exists, false otherwise

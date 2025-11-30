@@ -33,9 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TellerController { // Renamed from AccountController
+public class TellerController {
 
-    // --- FXML IDs Injected from Scene Builder ---
     @FXML
     private TableView<Account> accountsTable;
 
@@ -49,7 +48,7 @@ public class TellerController { // Renamed from AccountController
     private TableColumn<Account, String> accountTypeColumn;
 
     @FXML
-    private Button exitButton; // The Exit button (for logout)
+    private Button exitButton; // for logout
 
     @FXML
     private Button open_new_account_button;
@@ -58,14 +57,10 @@ public class TellerController { // Renamed from AccountController
 
     private bank.user.User currentTellerUser;
 
-    /**
-     * Set the current teller user (called from login).
-     */
     public void setCurrentTeller(bank.user.User teller) {
         this.currentTellerUser = teller;
     }
 
-    // --- Initialization ---
     @FXML
     public void initialize() {
         // 1. Configure the Table Columns
@@ -84,7 +79,6 @@ public class TellerController { // Renamed from AccountController
         // 2. Load the data into the TableView
         accountsTable.setItems(getAccountData());
 
-        // Optional: Select the first item for demonstration
         if (!accountsTable.getItems().isEmpty()) {
             accountsTable.getSelectionModel().select(0);
         }
@@ -121,9 +115,6 @@ public class TellerController { // Renamed from AccountController
         }
     }
 
-    /**
-     * Navigate to Open New Account page
-     */
     @FXML
     private void handleOpenNewAccount(javafx.event.ActionEvent event) {
         try {
@@ -190,14 +181,10 @@ public class TellerController { // Renamed from AccountController
         try {
             System.out.println("Teller logged out. Redirecting to logoutSuccessful.fxml...");
 
-            // Load the logoutSuccessful.fxml page
-            // NOTE: Update the path below to match your actual file location!
             Parent root = FXMLLoader.load(getClass().getResource("/bank/gui/LogoutSuccessful.fxml"));
 
-            // Get the current stage (window)
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Set the new scene
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -208,7 +195,6 @@ public class TellerController { // Renamed from AccountController
     }
 
     private ObservableList<Account> getAccountData() {
-        // Make sure the JSON is loaded
         Users.load();
 
         ArrayList<Account> backendList = new ArrayList<>();
@@ -216,7 +202,6 @@ public class TellerController { // Renamed from AccountController
         for (Users.User u : Users.get()) {
             String name = u.name();
             String username = u.username();
-            // You could map u.role() to your Customer/User objects if needed
 
             // Create a Customer object
             Customer customer = new Customer(new UserDetails(username, u.password(), u.email(), name),

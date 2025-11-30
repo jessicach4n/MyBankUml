@@ -21,7 +21,7 @@ public class UserManager {
     }
 
     /**
-     * Authenticate a user by username and password.
+     * Authenticate a user by username and password
      *
      * @param username the username
      * @param password the password
@@ -33,7 +33,7 @@ public class UserManager {
     }
 
     /**
-     * Authenticate a user by user ID and password.
+     * Authenticate a user by user ID and password
      *
      * @param userId the user ID
      * @param password the password
@@ -45,9 +45,9 @@ public class UserManager {
     }
 
     /**
-     * Change a user's password.
+     * Change a user's password
      *
-     * @param userId the user ID
+     * @param userId the user id
      * @param currentPassword the current password
      * @param newPassword the new password
      * @return true if successful, false otherwise
@@ -57,7 +57,7 @@ public class UserManager {
     }
 
     /**
-     * Check if a username already exists.
+     * Check if a username already exists
      *
      * @param username the username to check
      * @return true if exists, false otherwise
@@ -66,7 +66,7 @@ public class UserManager {
         return authentication.userExists(username);
     }
 
-    // Convert domain User -> persistence User
+    // Convert domain User > persistence User
     public static Users.User convertToPersistence(User user) {
         return new Users.User(
                 user.getId(),
@@ -75,11 +75,11 @@ public class UserManager {
                 user.getRole().name(),
                 user.getPassword(),
                 user.getEmailString(),
-                new ArrayList<>() // convert domain accounts to Users.Account eventually
+                new ArrayList<>()
         );
     }
 
-    // Convert persistence User -> domain User
+    // Convert persistence User > domain User
     public static User convertFromPersistence(Users.User pUser) {
         Role role = Role.valueOf(pUser.role());
         User user;
@@ -120,7 +120,6 @@ public class UserManager {
                 account = new Card(pAccount.number(), pAccount.balance(), "Active", customer);
                 break;
             default:
-                // Default to Check if unknown type
                 account = new Check(pAccount.number(), pAccount.balance(), "Active", customer);
         }
 
@@ -144,7 +143,7 @@ public class UserManager {
         int day = dateInt % 100;
 
         java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(year, month - 1, day); // Month is 0-based in Calendar
+        cal.set(year, month - 1, day); // Month is 0 based in calendar
         java.util.Date date = cal.getTime();
 
         // Determine transaction type and recipient based on amount
@@ -169,7 +168,7 @@ public class UserManager {
                     a.getAccountNumber(),
                     a.getAccountType(),
                     a.getBalance(),
-                    new ArrayList<>() // optionally convert transactions
+                    new ArrayList<>()
             ));
         }
         return pAccounts;
@@ -262,7 +261,7 @@ public class UserManager {
                 record.id(),
                 record.username(),
                 record.name(),
-                newRole.name(),     // updated role
+                newRole.name(),
                 record.password(),
                 record.email(),
                 new ArrayList<>(record.accounts()) // keep existing accounts
@@ -305,7 +304,7 @@ public class UserManager {
     public Users.User removeAccount(Users.User user, String accountNumber) {
         List<Users.Account> updatedAccounts = user.accounts().stream()
                 .filter(a -> a.number().equals(accountNumber))
-                .toList(); // Java 16+ returns an immutable list, wrap in ArrayList if needed
+                .toList();
 
         return new Users.User(
                 user.id(),

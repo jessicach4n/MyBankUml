@@ -27,18 +27,18 @@ import java.util.stream.Collectors;
 
 public class AdminController {
 
-    // --- LEFT SIDEBAR BUTTONS ---
+    // LEFT SIDEBAR BUTTONS
     @FXML
     private Button btnUsers;
 
     @FXML
     private Button btnBranch;
 
-    // --- SEARCH BAR ---
+    // SEARCH BAR
     @FXML
     private TextField searchField;
 
-    // --- USERS TABLE ---
+    // USERS TABLE
     @FXML
     private TableView<User> usersTable;
 
@@ -99,7 +99,7 @@ public class AdminController {
     }
 
     private void setupEventHandlers() {
-        // Table row double-click handler
+        // Table row double click handler
         usersTable.setRowFactory(tv -> {
             TableRow<User> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent event) -> {
@@ -116,18 +116,18 @@ public class AdminController {
             filterUsers(newValue);
         });
 
-        // Navigation buttons
+        // navigation buttons
         btnUsers.setOnAction(event -> navigateToUsers());
         btnBranch.setOnAction(event -> navigateToBranch());
     }
 
-    // Public method to refresh the user list (can be called when returning from create page)
+    // Refreshes the user list (can be called when returning from create page)
     public void refreshUsers() {
         loadUsers();
-        searchField.clear(); // Clear any active search filter
+        searchField.clear();
     }
 
-    // --- Helper: Convert role to a human-readable position ---
+    // helper to convert role to human-readable
     private String getPositionFromRole(String role) {
         return switch (role.toUpperCase()) {
             case "ADMIN" -> "Administrator";
@@ -137,7 +137,7 @@ public class AdminController {
         };
     }
 
-    // --- Filter users by name or role ---
+    // Filter users by name or role
     private void filterUsers(String keyword) {
         if (keyword == null || keyword.isBlank()) {
             usersTable.setItems(allUsers);
@@ -153,23 +153,23 @@ public class AdminController {
         usersTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
-    // --- Open AdminManageRolePage in a popup window ---
+    // Open AdminManageRolePage in a popup window
     private void openUserDetails(User user) {
         try {
             // Load the FXML for the AdminManageRolePage
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminManageRolePage.fxml"));
             Parent root = loader.load();
 
-            // Optionally, pass the user to the controller
+            // Pass the user to the controller
             AdminManageRoleController controller = loader.getController();
-            controller.setUserData(user.name(), getPositionFromRole(user.role()), user.role()); // Make sure you have a method to accept the user
+            controller.setUserData(user.name(), getPositionFromRole(user.role()), user.role());
 
             // Create a new stage (popup window)
             Stage stage = new Stage();
             stage.setTitle("Manage Roles - " + user.name());
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with other windows
-            stage.showAndWait(); // Show as modal popup
+            stage.initModality(Modality.APPLICATION_MODAL); // block interactions with other windows
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Failed to open AdminManageRolePage for user: " + user.name());
@@ -177,7 +177,7 @@ public class AdminController {
     }
 
 
-    // --- Handle Create Account button ---
+    // Handle Create Account button
     @FXML
     private void handleCreateAccount(ActionEvent event) {
         try {
@@ -186,7 +186,6 @@ public class AdminController {
             );
             Parent root = loader.load();
 
-            // Get the correct controller for AdminCreateAccountPage.fxml
             AdminCreateAccountController controller = loader.getController();
             controller.setBankContext(this.currentBank, this.branchManager);
 
@@ -194,7 +193,7 @@ public class AdminController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Create New Account");
-            stage.show(); // You forgot this too
+            stage.show();
 
         } catch (IOException e) {
             LOGGER.error("Failed to navigate to AdminCreateAccountPage.fxml: " + e.getMessage());
@@ -202,10 +201,9 @@ public class AdminController {
     }
 
 
-    // --- Navigation Handlers ---
+    // Navigation Handlers
     private void navigateToUsers() {
         System.out.println("Already on Users page");
-        // Could reload or highlight active menu
     }
 
     private void navigateToBranch() {
@@ -222,20 +220,15 @@ public class AdminController {
         }
     }
 
-    // --- Logout Handler (Navigation Logic) ---
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
             System.out.println("Teller logged out. Redirecting to logoutSuccessful.fxml...");
 
-            // Load the logoutSuccessful.fxml page
-            // NOTE: Update the path below to match your actual file location!
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/LogoutSuccessful.fxml")));
 
-            // Get the current stage (window)
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Set the new scene
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

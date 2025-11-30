@@ -24,9 +24,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Controller for the Deposit page - handles transfers between customer's own accounts.
- */
 public class DepositController {
 
     @FXML
