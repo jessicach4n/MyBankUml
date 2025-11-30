@@ -1,58 +1,5 @@
 [
   {
-    "id": 1,
-    "username": "kanye",
-    "name": "Kanye West",
-    "role": "CUSTOMER",
-    "password": "kanye123",
-    "email": "kanye@mybank.com",
-    "accounts": [
-      {
-        "number": "1001",
-        "type": "Checking",
-        "balance": 2500000.0,
-        "transactions": [
-          {
-            "date": 20231231,
-            "amount": -150000.0,
-            "details": "Studio equipment",
-            "to_account": "0",
-            "from_account": "1001",
-            "recipient_id": 1,
-            "recipient_name": "Kanye West"
-          },
-          {
-            "date": 20240131,
-            "amount": 500000.0,
-            "details": "Royalty payment",
-            "to_account": "1001",
-            "from_account": "0",
-            "recipient_id": 1,
-            "recipient_name": "Kanye West"
-          },
-          {
-            "date": 20240210,
-            "amount": -25000.0,
-            "details": "Wire to Stanley Kubrick",
-            "to_account": "2001",
-            "from_account": "1001",
-            "recipient_id": 2,
-            "recipient_name": "Stanley Kubrick"
-          },
-          {
-            "date": 20240215,
-            "amount": 100000.0,
-            "details": "Transfer from Beethoven",
-            "to_account": "1001",
-            "from_account": "3001",
-            "recipient_id": 3,
-            "recipient_name": "Ludwig van Beethoven"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": 2,
     "username": "kubrick",
     "name": "Stanley Kubrick",
@@ -201,6 +148,138 @@
     "role": "CUSTOMER",
     "password": "pass789",
     "email": "dave@email.com",
+    "accounts": []
+  },
+  {
+    "id": 1,
+    "username": "kanye",
+    "name": "Kanye West",
+    "role": "CUSTOMER",
+    "password": "kanye123",
+    "email": "kanye@mybank.com",
+    "accounts": [
+      {
+        "number": "1001",
+        "type": "Checking",
+        "balance": 2495000.0,
+        "transactions": [
+          {
+            "date": 20231231,
+            "amount": -150000.0,
+            "details": "Studio equipment",
+            "to_account": "0",
+            "from_account": "1001",
+            "recipient_id": 1,
+            "recipient_name": "Kanye West"
+          },
+          {
+            "date": 20240131,
+            "amount": 500000.0,
+            "details": "Royalty payment",
+            "to_account": "1001",
+            "from_account": "0",
+            "recipient_id": 1,
+            "recipient_name": "Kanye West"
+          },
+          {
+            "date": 20240210,
+            "amount": -25000.0,
+            "details": "Wire to Stanley Kubrick",
+            "to_account": "2001",
+            "from_account": "1001",
+            "recipient_id": 2,
+            "recipient_name": "Stanley Kubrick"
+          },
+          {
+            "date": 20240215,
+            "amount": 100000.0,
+            "details": "Transfer from Beethoven",
+            "to_account": "1001",
+            "from_account": "3001",
+            "recipient_id": 3,
+            "recipient_name": "Ludwig van Beethoven"
+          },
+          {
+            "date": 20251129,
+            "amount": -5000.0,
+            "details": "test",
+            "to_account": "1002",
+            "from_account": "1001",
+            "recipient_id": 1,
+            "recipient_name": "Kanye West"
+          }
+        ]
+      },
+      {
+        "number": "1002",
+        "type": "Check",
+        "balance": 5000.0,
+        "transactions": [
+          {
+            "date": 20251129,
+            "amount": 5000.0,
+            "details": "test",
+            "to_account": "1002",
+            "from_account": "1001",
+            "recipient_id": 1,
+            "recipient_name": "Kanye West"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 2,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 2,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 2,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 2,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 2,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
     "accounts": []
   }
 ]

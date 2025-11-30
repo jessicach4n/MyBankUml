@@ -55,3 +55,6 @@ buildNumber.properties
 
 # MacOS
 .DS_Store
+
+# Docs
+AGENTS.md

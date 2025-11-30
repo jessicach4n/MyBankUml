@@ -1,1 +1,19 @@
-{"branches":[]}
+{
+  "branches": [
+    {
+      "branchID": 101,
+      "branchName": "Downtown HQ",
+      "address": "123 Main St, Metropolis"
+    },
+    {
+      "branchID": 102,
+      "branchName": "Uptown Service Center",
+      "address": "456 Elm Ave, Metropolis"
+    },
+    {
+      "branchID": 103,
+      "branchName": "Airport Kiosk",
+      "address": "Terminal 1, Skyway Blvd"
+    }
+  ]
+}
