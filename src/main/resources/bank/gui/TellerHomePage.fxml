@@ -85,6 +85,24 @@
                         <Insets left="20.0" />
                      </padding>
                   </Button>
+
+                  <Button fx:id="open_new_account_button" onAction="#handleOpenNewAccount" alignment="CENTER_LEFT" mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Open New Account" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Button>
+
+                  <Button fx:id="close_account_button" onAction="#handleCloseAccount" alignment="CENTER_LEFT" mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Close Account" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Button>
                </children>
             </VBox>
 

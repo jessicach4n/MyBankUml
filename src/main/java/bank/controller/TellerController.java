@@ -56,6 +56,15 @@ public class TellerController { // Renamed from AccountController
 
     private static final InternalLogger LOGGER = new InternalLogger();
 
+    private bank.user.User currentTellerUser;
+
+    /**
+     * Set the current teller user (called from login).
+     */
+    public void setCurrentTeller(bank.user.User teller) {
+        this.currentTellerUser = teller;
+    }
+
     // --- Initialization ---
     @FXML
     public void initialize() {
@@ -96,8 +105,12 @@ public class TellerController { // Renamed from AccountController
             Parent root = loader.load();
 
             CustomerInformationController controller = loader.getController();
-            // TODO: Add setAccount method to CustomerInformationController if needed
-            // controller.setAccount(account);
+
+            // Get the customer from the account and set it in the controller
+            if (account != null && account.getCustomer() != null) {
+                // Pass the customer to the controller
+                controller.setCurrentUser(account.getCustomer());
+            }
 
             Stage stage = (Stage) accountsTable.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -105,6 +118,68 @@ public class TellerController { // Renamed from AccountController
 
         } catch (IOException e) {
             LOGGER.error("Failed to navigate to the Customer information page.: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Navigate to Open New Account page
+     */
+    @FXML
+    private void handleOpenNewAccount(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/TellerOpenNewAccount.fxml"));
+            Parent root = loader.load();
+
+            OpenNewAccountController controller = loader.getController();
+            // Pass teller if needed
+            if (currentTellerUser instanceof bank.user.Teller) {
+                controller.setCurrentTeller((bank.user.Teller) currentTellerUser);
+            }
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to Open New Account page: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Navigate to Close Account page with selected account
+     */
+    @FXML
+    private void handleCloseAccount(javafx.event.ActionEvent event) {
+        // Get selected account from table
+        Account selectedAccount = accountsTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAccount == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Account Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select an account from the table to close.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/ClosingAccount.fxml"));
+            Parent root = loader.load();
+
+            ClosingAccountController controller = loader.getController();
+
+            // Pass the teller and account to close
+            if (currentTellerUser instanceof bank.user.Teller) {
+                controller.setCurrentTeller((bank.user.Teller) currentTellerUser);
+            }
+            controller.setAccountToClose(selectedAccount);
+
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to navigate to Close Account page: " + e.getMessage());
         }
     }
 

@@ -1,10 +1,11 @@
 package bank.controller;
 
 import bank.account.Account;
-import bank.user.Administrator;
+import bank.transaction.Transaction;
 import bank.user.Customer;
 import bank.user.Role;
 import bank.user.Teller;
+import bank.user.User;
 import bank.user.UserDetails;
 import bank.user.UserManager;
 import bank.user.repository.JsonUserRepository;
@@ -12,31 +13,27 @@ import bank.utils.InternalLogger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import bank.transaction.Transaction;
-import bank.user.Customer;
-import bank.user.User;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.util.Objects;
 
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,11 +107,15 @@ public class CustomerInformationController {
     private VBox transactionList;
 
     @FXML
+    private FlowPane accountCardsContainer;
+
+    @FXML
     private javafx.scene.control.Button depositButton;
 
     @FXML
     private javafx.scene.control.Button withdrawButton;
 
+    private Account selectedAccount;
     private User currentUser;
 
     /**
@@ -152,21 +153,10 @@ public class CustomerInformationController {
         if (currentUser instanceof Customer) {
             Customer customer = (Customer) currentUser;
 
-            // Get first account if available
+            populateAccountCards(customer);
+
             if (customer.getAccounts() != null && !customer.getAccounts().isEmpty()) {
-                Account firstAccount = customer.getAccount(0);
-
-                if (accountNumberField != null) {
-                    accountNumberField.setText(firstAccount.getAccountNumber());
-                }
-
-                if (balanceLabel != null) {
-                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
-                    balanceLabel.setText(currencyFormat.format(firstAccount.getBalance()));
-                }
-
-                // Display transactions
-                displayTransactions(firstAccount);
+                selectAccount(customer.getAccount(0));
             } else {
                 // No accounts
                 if (accountNumberField != null) {
@@ -179,19 +169,90 @@ public class CustomerInformationController {
         }
     }
 
-    @FXML
-    private void handleOpenNewAccount(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/bank/gui/TellerOpenNewAccount.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+    /**
+     * Populate the account cards panel with the customer's accounts and balances.
+     */
+    private void populateAccountCards(Customer customer) {
+        if (accountCardsContainer == null) return;
 
-        } catch (IOException e) {
-            LOGGER.error("Could not navigate to TellerOpenNewAccount.fxml: " + e.getMessage());
+        accountCardsContainer.getChildren().clear();
+
+        if (customer.getAccounts() == null || customer.getAccounts().isEmpty()) {
+            Label emptyLabel = new Label("No accounts available");
+            emptyLabel.setStyle("-fx-text-fill: #666666;");
+            accountCardsContainer.getChildren().add(emptyLabel);
+            return;
+        }
+
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        String[] backgrounds = new String[] {"#70FFD6", "#98E8D5", "#b8f7e6"};
+
+        int index = 0;
+        for (Account acct : customer.getAccounts()) {
+            VBox card = new VBox(6);
+            card.setPrefWidth(220);
+            String baseStyle = "-fx-background-color: " + backgrounds[index % backgrounds.length] + "; -fx-background-radius: 8; -fx-padding: 12;";
+            if (acct.equals(selectedAccount)) {
+                baseStyle += "; -fx-border-color: #1e1e1e; -fx-border-width: 2;";
+            }
+            card.setStyle(baseStyle);
+
+            Label title = new Label(acct.getAccountType() + " Account");
+            title.setFont(Font.font("System Bold", 12));
+
+            Label subtype = new Label(deriveAccountLabel(acct));
+            subtype.setFont(Font.font(11));
+
+            Label balance = new Label(currencyFormat.format(acct.getBalance()));
+            balance.setFont(Font.font("System Bold", 14));
+
+            Pane spacer = new Pane();
+            VBox.setVgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+            Label acctNumber = new Label(acct.getAccountNumber());
+            acctNumber.setFont(Font.font(12));
+
+            card.getChildren().addAll(title, subtype, balance, spacer, acctNumber);
+            card.setOnMouseClicked(event -> selectAccount(acct));
+            accountCardsContainer.getChildren().add(card);
+            index++;
         }
     }
-        /**
+
+    /**
+     * Update UI for the selected account.
+     */
+    private void selectAccount(Account account) {
+        this.selectedAccount = account;
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
+        if (accountNumberField != null) {
+            accountNumberField.setText(account.getAccountNumber());
+        }
+        if (balanceLabel != null) {
+            balanceLabel.setText(currencyFormat.format(account.getBalance()));
+        }
+
+        displayTransactions(account);
+
+        // Refresh cards to show selection border
+        if (currentUser instanceof Customer customer) {
+            populateAccountCards(customer);
+        }
+    }
+
+    private String deriveAccountLabel(Account account) {
+        String type = account.getAccountType();
+        if (type == null) return "Account";
+        return switch (type.toLowerCase(Locale.ROOT)) {
+            case "check", "checking" -> "Checking";
+            case "saving", "savings" -> "Savings";
+            case "card", "visa" -> "Card";
+            default -> type;
+        };
+    }
+
+    /**
      * Display transactions for the given account
      */
     private void displayTransactions(Account account) {

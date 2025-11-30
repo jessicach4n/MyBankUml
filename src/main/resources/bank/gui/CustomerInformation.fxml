@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -32,13 +33,6 @@
                      </font>
                   </Text>
                   <Pane HBox.hgrow="ALWAYS" />
-                  <!-- Simple Arrow Icon Representation -->
-                  <Label text="➔" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <style>-fx-rotate: 180; -fx-border-color: white; -fx-border-radius: 3; -fx-padding: 0 4 0 4;</style>
-                  </Label>
                </children>
             </HBox>
 
@@ -129,14 +123,6 @@
                      </font>
                   </Label>
                   <Pane HBox.hgrow="ALWAYS" />
-                  <Button fx:id="close_account_btn" mnemonicParsing="false" onAction="#handleCloseAccount" style="-fx-background-color: white; -fx-border-color: #DC3545; -fx-border-radius: 4; -fx-text-fill: #DC3545;" text="Close Account">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
-                     </padding>
-                  </Button>
                </children>
             </HBox>
 
@@ -167,11 +153,11 @@
             </HBox>
 
             <!-- Middle Section (Balance & Cards) -->
-            <HBox spacing="40.0" VBox.vgrow="ALWAYS">
+            <HBox spacing="140.0" VBox.vgrow="ALWAYS">
                <children>
                   
                   <!-- Left Column: Balance -->
-                  <VBox spacing="10.0" prefWidth="250.0">
+                  <VBox spacing="10.0" prefWidth="380.0">
                      <children>
                         <Label text="Balance" textFill="#666666" />
                         <Label fx:id="balanceLabel" text="\$ 1187.89">
@@ -180,11 +166,6 @@
                            </font>
                         </Label>
                         <Pane prefHeight="10.0" />
-                        <Button fx:id="make_transaction_btn" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Make Transaction">
-                           <font>
-                              <Font name="System Bold" size="13.0" />
-                           </font>
-                        </Button>
                      </children>
                      <padding>
                         <Insets top="10.0" />
@@ -196,66 +177,8 @@
                      <children>
                         <Label text="Accounts" textFill="#666666" />
                         
-                        <!-- Account Cards -->
-                        <HBox spacing="15.0">
-                           <children>
-                              <!-- Card 1 -->
-                              <VBox prefHeight="100.0" prefWidth="220.0" style="-fx-background-color: #70FFD6; -fx-background-radius: 8;">
-                                 <padding>
-                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                 </padding>
-                                 <children>
-                                    <Label text="Checking Account">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Visa Debit">
-                                       <font>
-                                          <Font size="11.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane VBox.vgrow="ALWAYS" />
-                                    <Label text="4151 9080 3345 1825">
-                                       <font>
-                                          <Font size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
+                        <FlowPane fx:id="accountCardsContainer" hgap="15.0" vgap="15.0" prefWrapLength="500.0" />
 
-                              <!-- Card 2 -->
-                              <VBox prefHeight="100.0" prefWidth="220.0" style="-fx-background-color: #98E8D5; -fx-background-radius: 8;">
-                                 <padding>
-                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                 </padding>
-                                 <children>
-                                    <Label text="Visa Account">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Visa Credit">
-                                       <font>
-                                          <Font size="11.0" />
-                                       </font>
-                                    </Label>
-                                    <Pane VBox.vgrow="ALWAYS" />
-                                    <Label text="4515 1992 1276 5628">
-                                       <font>
-                                          <Font size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-
-                        <Button fx:id="open_new_account_btn" mnemonicParsing="false" onAction="#handleOpenNewAccount" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Open New Account">
-                           <font>
-                              <Font name="System Bold" size="13.0" />
-                           </font>
-                        </Button>
                      </children>
                   </VBox>
                </children>

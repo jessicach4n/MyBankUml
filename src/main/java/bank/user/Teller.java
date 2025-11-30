@@ -46,18 +46,25 @@ public class Teller extends User {
             throw new IllegalArgumentException("User with ID " + customerId + " not found");
         }
 
-        // Convert transactions from Account to Users.Transaction
-        List<Users.Transaction> txList = account.getTransactions().stream()
-                .map(t -> new Users.Transaction(
-                        t.getDate().getTime(),          // convert Date to long
-                        (long) t.getAmount(),           // convert double to long (matches Users.Transaction)
-                        t.getType(),                    // use type as details
-                        0,                              // to_account (if applicable, otherwise 0)
-                        Long.parseLong(t.getAccount().getAccountNumber()), // from_account
-                        t.getAccount().getCustomer().getId(),             // recipient_id
-                        t.getRecipient()               // recipient_name
-                ))
-                .toList();
+        // Capture name for lambda (must be effectively final)
+        final String customerName = oldUser.name();
+        final String accountNum = account.getAccountNumber();
+
+        // Convert transactions from Account to Users.Transaction (if any exist)
+        List<Users.Transaction> txList = new ArrayList<>();
+        if (account.getTransactions() != null && !account.getTransactions().isEmpty()) {
+            txList = account.getTransactions().stream()
+                    .map(t -> new Users.Transaction(
+                            t.getDate().getTime(),          // convert Date to long
+                            t.getAmount(),                  // amount is now double in Users.Transaction
+                            t.getType(),                    // use type as details
+                            "0",                            // to_account (String, "0" for no destination)
+                            accountNum,                     // from_account (use account parameter)
+                            customerId,                     // recipient_id (use customerId parameter)
+                            customerName                    // recipient_name (use customer's name)
+                    ))
+                    .toList();
+        }
 
 
         // Convert Account to Users.Account record
@@ -92,21 +99,49 @@ public class Teller extends User {
 
     public void closeAccount(long userId, String accountNumber) {
         Users.load();
-        var list = Users.get();
+        List<Users.User> users = Users.get();
+        Users.User oldUser = null;
 
-        for (var u : list) {
+        // Find the user
+        for (Users.User u : users) {
             if (u.id() == userId) {
-
-                // remove the account
-                u.accounts().removeIf(acc -> acc.number().equals(accountNumber));
-
-                // delete user if no accounts left
-                if (u.accounts().isEmpty()) {
-                    list.remove(u);
-                }
-
+                oldUser = u;
                 break;
             }
+        }
+
+        if (oldUser == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " not found");
+        }
+
+        // Create new list of accounts WITHOUT the account to close
+        List<Users.Account> updatedAccounts = new ArrayList<>();
+        for (Users.Account acc : oldUser.accounts()) {
+            if (!acc.number().equals(accountNumber)) {
+                updatedAccounts.add(acc);
+            }
+        }
+
+        // If no accounts left, remove the user entirely
+        if (updatedAccounts.isEmpty()) {
+            users.remove(oldUser);
+            logger.info("User " + userId + " removed (no accounts remaining)");
+        } else {
+            // Create new User record with updated accounts
+            Users.User updatedUser = new Users.User(
+                    oldUser.id(),
+                    oldUser.username(),
+                    oldUser.name(),
+                    oldUser.role(),
+                    oldUser.password(),
+                    oldUser.email(),
+                    updatedAccounts
+            );
+
+            // Replace old user with updated user
+            users.remove(oldUser);
+            users.add(updatedUser);
+            logger.info("Account " + accountNumber + " closed for user " + userId);
         }
 
         Users.save();

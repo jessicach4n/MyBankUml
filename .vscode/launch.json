@@ -20,6 +20,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "bank.Main",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "bank.Main",
             "projectName": "bank"
         },
         {
