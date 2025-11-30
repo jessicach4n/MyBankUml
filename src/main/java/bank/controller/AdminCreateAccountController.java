@@ -1,5 +1,7 @@
 package bank.controller;
 
+import bank.branch.Bank;
+import bank.branch.BranchManager;
 import bank.user.UserManager;
 import bank.user.Users;
 import bank.user.repository.JsonUserRepository;
@@ -19,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CreateAccountController {
+public class AdminCreateAccountController {
 
     // ------------------------
     // FXML Bindings
@@ -49,15 +51,25 @@ public class CreateAccountController {
     private static final InternalLogger LOGGER = new InternalLogger();
 
     // ------------------------
+    // Context (ADDED)
+    // ------------------------
+    private Bank currentBank;
+    private BranchManager branchManager;
+
+    // Called by previous controller
+    public void setBankContext(Bank bank, BranchManager manager) {
+        this.currentBank = bank;
+        this.branchManager = manager;
+    }
+
+    // ------------------------
     // Initialization
     // ------------------------
     @FXML
     public void initialize() {
-        // Initialize UserManager
         JsonUserRepository userRepository = new JsonUserRepository();
         userManager = new UserManager(userRepository);
 
-        // Populate roleComboBox with roles
         roleComboBox.getItems().addAll("Customer", "Teller", "Manager", "Admin");
     }
 
@@ -144,6 +156,7 @@ public class CreateAccountController {
 
             // Get the controller and refresh the user list
             AdminController adminController = loader.getController();
+            adminController.initializeAdminContext(this.branchManager, this.currentBank);
             adminController.refreshUsers();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

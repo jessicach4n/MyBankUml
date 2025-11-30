@@ -181,16 +181,26 @@ public class AdminController {
     @FXML
     private void handleCreateAccount(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminCreateAccountPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/bank/gui/AdminCreateAccountPage.fxml")
+            );
             Parent root = loader.load();
 
+            // Get the correct controller for AdminCreateAccountPage.fxml
+            AdminCreateAccountController controller = loader.getController();
+            controller.setBankContext(this.currentBank, this.branchManager);
+
+            // Navigate in the same window
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Create New Account");
+            stage.show(); // You forgot this too
+
         } catch (IOException e) {
             LOGGER.error("Failed to navigate to AdminCreateAccountPage.fxml: " + e.getMessage());
         }
     }
+
 
     // --- Navigation Handlers ---
     private void navigateToUsers() {
