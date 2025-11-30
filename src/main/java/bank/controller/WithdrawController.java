@@ -2,6 +2,7 @@ package bank.controller;
 
 import bank.account.Account;
 import bank.user.Customer;
+import bank.user.Role;
 import bank.user.User;
 import bank.user.UserManager;
 import bank.user.Users;
@@ -147,8 +148,10 @@ public class WithdrawController {
     private void populateRecipientCustomers() {
         java.util.List<User> allUsers = userManager.getUsers();
         for (User user : allUsers) {
-            // Only show other customers (not current user and only customers)
-            if (user.getId() != currentUser.getId() && user instanceof Customer) {
+            // Only show other customers (not current user and only CUSTOMER role)
+            if (user.getId() != currentUser.getId()
+                && user instanceof Customer
+                && user.getRole() == Role.CUSTOMER) {
                 String display = user.getName() + " (ID: " + user.getId() + ")";
                 recipientCustomerCombo.getItems().add(display);
             }
@@ -173,17 +176,32 @@ public class WithdrawController {
     private void populateRecipientAccounts(String customerDisplay) {
         recipientAccountCombo.getItems().clear();
 
-        // Extract user ID from display string
-        long userId = extractUserIdFromDisplay(customerDisplay);
-        User recipient = userManager.findUserById(userId);
+        try {
+            // Extract user ID from display string
+            long userId = extractUserIdFromDisplay(customerDisplay);
+            System.out.println("DEBUG: Looking for user ID: " + userId);
 
-        if (recipient instanceof Customer) {
-            Customer customer = (Customer) recipient;
-            for (Account account : customer.getAccounts()) {
-                // Hide balance for security - only show account number and type
-                String display = getRecipientAccountDisplay(account);
-                recipientAccountCombo.getItems().add(display);
+            User recipient = userManager.findUserById(userId);
+            System.out.println("DEBUG: Found user: " + (recipient != null ? recipient.getName() : "null"));
+
+            if (recipient instanceof Customer) {
+                Customer customer = (Customer) recipient;
+                System.out.println("DEBUG: Customer has " + customer.getAccounts().size() + " accounts");
+
+                for (Account account : customer.getAccounts()) {
+                    // Hide balance for security - only show account number and type
+                    String display = getRecipientAccountDisplay(account);
+                    System.out.println("DEBUG: Adding account: " + display);
+                    recipientAccountCombo.getItems().add(display);
+                }
+
+                System.out.println("DEBUG: Total items in combo: " + recipientAccountCombo.getItems().size());
+            } else {
+                System.out.println("DEBUG: User is not a Customer, it's: " + (recipient != null ? recipient.getClass().getSimpleName() : "null"));
             }
+        } catch (Exception e) {
+            System.err.println("ERROR populating recipient accounts: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
