@@ -109,6 +109,12 @@ public class CustomerInformationController {
     @FXML
     private VBox transactionList;
 
+    @FXML
+    private javafx.scene.control.Button depositButton;
+
+    @FXML
+    private javafx.scene.control.Button withdrawButton;
+
     private User currentUser;
 
     /**
@@ -278,6 +284,50 @@ public class CustomerInformationController {
             return parts[0].substring(0, Math.min(2, parts[0].length())).toUpperCase();
         } else {
             return (parts[0].charAt(0) + "" + parts[parts.length - 1].charAt(0)).toUpperCase();
+        }
+    }
+
+    /**
+     * Handle Deposit button click.
+     * Navigates to the Deposit page.
+     */
+    @FXML
+    private void handleNavigateDeposit(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/Deposit.fxml"));
+            Parent root = loader.load();
+
+            DepositController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Could not load Deposit.fxml: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handle Withdraw button click.
+     * Navigates to the Withdraw page.
+     */
+    @FXML
+    private void handleNavigateWithdraw(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/Withdraw.fxml"));
+            Parent root = loader.load();
+
+            WithdrawController controller = loader.getController();
+            controller.setCurrentUser(currentUser);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Could not load Withdraw.fxml: " + e.getMessage());
         }
     }
 

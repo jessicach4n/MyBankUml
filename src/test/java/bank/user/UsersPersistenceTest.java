@@ -15,7 +15,7 @@ class UsersPersistenceTest {
 
     @BeforeEach
     void setup() throws Exception {
-        // Copy the resource template (with users 1,2,3) to data/users.json
+        // Copy the resource template (with 7 users: 3 customers + 4 staff) to data/users.json
         var resource = getClass().getClassLoader().getResource("bank/users.json");
         assertNotNull(resource, "users.json resource not found");
 
@@ -32,9 +32,9 @@ class UsersPersistenceTest {
 
     @Test
     void testAddUserAndPersist() {
-        // Add a new user (Dave)
+        // Add a new user (Dave) - note: ID 4 conflicts with existing johndoe, using ID 8
         Users.User newUser = new Users.User(
-                4,
+                8,
                 "daveUser",
                 "Dave",
                 "CUSTOMER",
@@ -44,19 +44,19 @@ class UsersPersistenceTest {
         );
 
         Users.add(newUser);
-        Users.save(); // now data/users.json contains 1,2,3 + 4
+        Users.save(); // now data/users.json contains 7 existing users + 1 new = 8
 
         // Clear memory and reload
         Users.reset();
         Users.load();
 
-        // Verify we now have 4 users
+        // Verify we now have 8 users
         List<Users.User> users = Users.get();
-        assertEquals(4, users.size(), "Should have 4 users after adding Dave");
+        assertEquals(8, users.size(), "Should have 8 users after adding Dave");
 
         // Verify Dave is present
         Users.User addedUser = users.stream()
-                .filter(u -> u.id() == 4)
+                .filter(u -> u.id() == 8)
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Added user not found"));
 
