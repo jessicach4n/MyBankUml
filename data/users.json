@@ -10,43 +10,52 @@
       {
         "number": "1001",
         "type": "Checking",
-        "balance": 2500000.0,
+        "balance": 2000000.0,
         "transactions": [
           {
             "date": 20231231,
-            "amount": -150000,
+            "amount": -150000.0,
             "details": "Studio equipment",
-            "to_account": 0,
-            "from_account": 1001,
+            "to_account": "0",
+            "from_account": "1001",
             "recipient_id": 1,
             "recipient_name": "Kanye West"
           },
           {
             "date": 20240131,
-            "amount": 500000,
+            "amount": 500000.0,
             "details": "Royalty payment",
-            "to_account": 1001,
-            "from_account": 0,
+            "to_account": "1001",
+            "from_account": "0",
             "recipient_id": 1,
             "recipient_name": "Kanye West"
           },
           {
             "date": 20240210,
-            "amount": -25000,
+            "amount": -25000.0,
             "details": "Wire to Stanley Kubrick",
-            "to_account": 2001,
-            "from_account": 1001,
+            "to_account": "2001",
+            "from_account": "1001",
             "recipient_id": 2,
             "recipient_name": "Stanley Kubrick"
           },
           {
             "date": 20240215,
-            "amount": 100000,
+            "amount": 100000.0,
             "details": "Transfer from Beethoven",
-            "to_account": 1001,
-            "from_account": 3001,
+            "to_account": "1001",
+            "from_account": "3001",
             "recipient_id": 3,
             "recipient_name": "Ludwig van Beethoven"
+          },
+          {
+            "date": 20251129,
+            "amount": -500000.0,
+            "details": "hihi",
+            "to_account": "2001",
+            "from_account": "1001",
+            "recipient_id": 2,
+            "recipient_name": "Stanley Kubrick"
           }
         ]
       }
@@ -63,43 +72,52 @@
       {
         "number": "2001",
         "type": "Savings",
-        "balance": 5000000.0,
+        "balance": 5500000.0,
         "transactions": [
           {
             "date": 20231130,
-            "amount": -300000,
+            "amount": -300000.0,
             "details": "Film production costs",
-            "to_account": 0,
-            "from_account": 2001,
+            "to_account": "0",
+            "from_account": "2001",
             "recipient_id": 2,
             "recipient_name": "Stanley Kubrick"
           },
           {
             "date": 20231231,
-            "amount": 800000,
+            "amount": 800000.0,
             "details": "Box office revenue",
-            "to_account": 2001,
-            "from_account": 0,
+            "to_account": "2001",
+            "from_account": "0",
             "recipient_id": 2,
             "recipient_name": "Stanley Kubrick"
           },
           {
             "date": 20240210,
-            "amount": 25000,
+            "amount": 25000.0,
             "details": "Received from Kanye West",
-            "to_account": 2001,
-            "from_account": 1001,
+            "to_account": "2001",
+            "from_account": "1001",
             "recipient_id": 1,
             "recipient_name": "Kanye West"
           },
           {
             "date": 20240301,
-            "amount": -120000,
+            "amount": -120000.0,
             "details": "Donation to Beethoven",
-            "to_account": 3001,
-            "from_account": 2001,
+            "to_account": "3001",
+            "from_account": "2001",
             "recipient_id": 3,
             "recipient_name": "Ludwig van Beethoven"
+          },
+          {
+            "date": 20251129,
+            "amount": 500000.0,
+            "details": "hihi",
+            "to_account": "2001",
+            "from_account": "1001",
+            "recipient_id": 1,
+            "recipient_name": "Kanye West"
           }
         ]
       }
@@ -120,37 +138,37 @@
         "transactions": [
           {
             "date": 20231201,
-            "amount": -50000,
+            "amount": -50000.0,
             "details": "Concert hall rental",
-            "to_account": 0,
-            "from_account": 3001,
+            "to_account": "0",
+            "from_account": "3001",
             "recipient_id": 3,
             "recipient_name": "Ludwig van Beethoven"
           },
           {
             "date": 20240101,
-            "amount": 200000,
+            "amount": 200000.0,
             "details": "Patron donation",
-            "to_account": 3001,
-            "from_account": 0,
+            "to_account": "3001",
+            "from_account": "0",
             "recipient_id": 3,
             "recipient_name": "Ludwig van Beethoven"
           },
           {
             "date": 20240215,
-            "amount": -100000,
+            "amount": -100000.0,
             "details": "Transfer to Kanye West",
-            "to_account": 1001,
-            "from_account": 3001,
+            "to_account": "1001",
+            "from_account": "3001",
             "recipient_id": 1,
             "recipient_name": "Kanye West"
           },
           {
             "date": 20240301,
-            "amount": 120000,
+            "amount": 120000.0,
             "details": "Received donation from Kubrick",
-            "to_account": 3001,
-            "from_account": 2001,
+            "to_account": "3001",
+            "from_account": "2001",
             "recipient_id": 2,
             "recipient_name": "Stanley Kubrick"
           }
@@ -196,11 +214,11 @@
   },
   {
     "id": 8,
-    "username": "jiming",
-    "name": "jiming",
-    "role": "TELLER",
-    "password": "jiming123",
-    "email": "jiming@mybank.com",
+    "username": "daveUser",
+    "name": "Dave",
+    "role": "CUSTOMER",
+    "password": "pass789",
+    "email": "dave@email.com",
     "accounts": []
   }
 ]

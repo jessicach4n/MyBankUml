@@ -25,7 +25,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
- * Controller for the Withdraw page - handles bill payments to external recipients.
+ * Controller for the Withdraw page - handles transfers to other customer accounts.
  */
 public class WithdrawController {
 
@@ -42,10 +42,13 @@ public class WithdrawController {
     private ComboBox<String> fromAccountCombo;
 
     @FXML
-    private TextField recipientField;
+    private ComboBox<String> recipientCustomerCombo;
 
     @FXML
-    private TextField billTypeField;
+    private ComboBox<String> recipientAccountCombo;
+
+    @FXML
+    private TextField descriptionField;
 
     @FXML
     private TextField amountField;
@@ -78,6 +81,8 @@ public class WithdrawController {
         this.currentUser = user;
         displayProfileInfo();
         populateAccountCombo();
+        populateRecipientCustomers();
+        setupRecipientCustomerListener();
     }
 
     /**
@@ -137,6 +142,69 @@ public class WithdrawController {
     }
 
     /**
+     * Populate recipient customer combo box with all other customers.
+     */
+    private void populateRecipientCustomers() {
+        java.util.List<User> allUsers = userManager.getUsers();
+        for (User user : allUsers) {
+            // Only show other customers (not current user and only customers)
+            if (user.getId() != currentUser.getId() && user instanceof Customer) {
+                String display = user.getName() + " (ID: " + user.getId() + ")";
+                recipientCustomerCombo.getItems().add(display);
+            }
+        }
+    }
+
+    /**
+     * Setup listener for recipient customer selection to populate their accounts.
+     */
+    private void setupRecipientCustomerListener() {
+        recipientCustomerCombo.setOnAction(event -> {
+            String selectedCustomer = recipientCustomerCombo.getValue();
+            if (selectedCustomer != null) {
+                populateRecipientAccounts(selectedCustomer);
+            }
+        });
+    }
+
+    /**
+     * Populate recipient account combo box based on selected customer.
+     */
+    private void populateRecipientAccounts(String customerDisplay) {
+        recipientAccountCombo.getItems().clear();
+
+        // Extract user ID from display string
+        long userId = extractUserIdFromDisplay(customerDisplay);
+        User recipient = userManager.findUserById(userId);
+
+        if (recipient instanceof Customer) {
+            Customer customer = (Customer) recipient;
+            for (Account account : customer.getAccounts()) {
+                // Hide balance for security - only show account number and type
+                String display = getRecipientAccountDisplay(account);
+                recipientAccountCombo.getItems().add(display);
+            }
+        }
+    }
+
+    /**
+     * Format recipient account for display WITHOUT balance (for security).
+     * Format: "Account {number} - {type}"
+     */
+    private String getRecipientAccountDisplay(Account account) {
+        return "Account " + account.getAccountNumber() + " - " + account.getAccountType();
+    }
+
+    /**
+     * Extract user ID from customer display string.
+     */
+    private long extractUserIdFromDisplay(String display) {
+        // Format: "Name (ID: 123)"
+        String idPart = display.substring(display.indexOf("ID: ") + 4, display.lastIndexOf(")"));
+        return Long.parseLong(idPart);
+    }
+
+    /**
      * Generate initials from a full name.
      */
     private String getInitials(String fullName) {
@@ -153,17 +221,19 @@ public class WithdrawController {
     }
 
     /**
-     * Handle submit button - process withdrawal transaction.
+     * Handle submit button - process transfer to another customer's account.
      */
     @FXML
     private void handleSubmit(ActionEvent event) {
         // Step 1: Validate input
         String fromDisplay = fromAccountCombo.getValue();
-        String recipientName = recipientField.getText().trim();
-        String billType = billTypeField.getText().trim();
+        String recipientCustomerDisplay = recipientCustomerCombo.getValue();
+        String recipientAccountDisplay = recipientAccountCombo.getValue();
+        String description = descriptionField.getText().trim();
         String amountStr = amountField.getText().trim();
 
-        if (fromDisplay == null || recipientName.isEmpty() || billType.isEmpty() || amountStr.isEmpty()) {
+        if (fromDisplay == null || recipientCustomerDisplay == null ||
+            recipientAccountDisplay == null || description.isEmpty() || amountStr.isEmpty()) {
             messageLabel.setText("Please fill in all fields.");
             messageLabel.setStyle("-fx-text-fill: #DC3545;");
             return;
@@ -183,11 +253,10 @@ public class WithdrawController {
             return;
         }
 
-        // Step 2: Get account
+        // Step 2: Get accounts
         Account fromAccount = getAccountFromDisplay(fromDisplay);
-
         if (fromAccount == null) {
-            messageLabel.setText("Invalid account selection.");
+            messageLabel.setText("Invalid source account selection.");
             messageLabel.setStyle("-fx-text-fill: #DC3545;");
             return;
         }
@@ -198,24 +267,40 @@ public class WithdrawController {
             return;
         }
 
+        // Get recipient user and account
+        long recipientUserId = extractUserIdFromDisplay(recipientCustomerDisplay);
+        User recipientUser = userManager.findUserById(recipientUserId);
+
+        if (!(recipientUser instanceof Customer)) {
+            messageLabel.setText("Invalid recipient customer.");
+            messageLabel.setStyle("-fx-text-fill: #DC3545;");
+            return;
+        }
+
+        // Extract recipient account number from display
+        String recipientAccountNumber = recipientAccountDisplay.split(" - ")[0].replace("Account ", "");
+
         try {
-            // Step 3: Execute withdrawal using the helper method
-            Users.withdraw(
-                currentUser.getId(),
-                fromAccount.getAccountNumber(),
-                amount,
-                recipientName,
-                billType
+            // Step 3: Execute transaction using the helper method
+            Users.transaction(
+                currentUser.getId(),                 // Sender user ID
+                fromAccount.getAccountNumber(),      // Sender account number
+                recipientUserId,                     // Recipient user ID
+                recipientAccountNumber,              // Recipient account number
+                amount,                              // Amount
+                description                          // Description
             );
 
             // Step 4: Success flow
-            messageLabel.setText("Payment successful!");
+            messageLabel.setText("Transfer successful!");
             messageLabel.setStyle("-fx-text-fill: #28A745;");
 
             // Clear form
             fromAccountCombo.setValue(null);
-            recipientField.clear();
-            billTypeField.clear();
+            recipientCustomerCombo.setValue(null);
+            recipientAccountCombo.getItems().clear();
+            recipientAccountCombo.setValue(null);
+            descriptionField.clear();
             amountField.clear();
 
             // Navigate back after 1 second
@@ -225,7 +310,7 @@ public class WithdrawController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            messageLabel.setText("Error processing payment: " + e.getMessage());
+            messageLabel.setText("Error processing transfer: " + e.getMessage());
             messageLabel.setStyle("-fx-text-fill: #DC3545;");
         }
     }

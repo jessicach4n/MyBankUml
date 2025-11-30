@@ -82,22 +82,22 @@ class UsersJsonTest {
         Users.load();
 
         List<Users.User> users = Users.get();
-        assertEquals(3, users.size(), "Should load 3 users");
+        assertEquals(7, users.size(), "Should load 7 users");
 
         // Check Kanye
         Users.User kanye = users.get(0);
         assertEquals(1, kanye.id());
         assertEquals("Kanye West", kanye.name());
-        assertEquals("customer", kanye.role());
+        assertEquals("CUSTOMER", kanye.role());
         assertEquals(1, kanye.accounts().size());
 
         var kanyeAccount = kanye.accounts().get(0);
         assertEquals("Checking", kanyeAccount.type());
-        assertEquals(2500000, kanyeAccount.balance());
+        assertEquals(2500000.0, kanyeAccount.balance());
         assertEquals(4, kanyeAccount.transactions().size());
 
         var firstTransaction = kanyeAccount.transactions().get(0);
-        assertEquals(-150000, firstTransaction.amount());
+        assertEquals(-150000.0, firstTransaction.amount());
         assertEquals("Studio equipment", firstTransaction.details());
 
         // Check Kubrick
@@ -118,7 +118,7 @@ class UsersJsonTest {
 
         var beethovenAccount = beethoven.accounts().get(0);
         assertEquals("Checking", beethovenAccount.type());
-        assertEquals(1500000, beethovenAccount.balance());
+        assertEquals(1500000.0, beethovenAccount.balance());
         assertEquals(4, beethovenAccount.transactions().size());
     }
 }
