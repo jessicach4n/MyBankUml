@@ -2,6 +2,8 @@ package bank.controller;
 
 import bank.account.Account;
 import bank.account.Card;
+import bank.account.Check;
+import bank.account.Saving;
 import bank.user.Customer;
 import bank.user.UserDetails;
 import bank.utils.InternalLogger;
@@ -17,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -47,6 +50,9 @@ public class TellerController { // Renamed from AccountController
 
     @FXML
     private Button exitButton; // The Exit button (for logout)
+
+    @FXML
+    private Button open_new_account_button;
 
     private static final InternalLogger LOGGER = new InternalLogger();
 
@@ -140,11 +146,30 @@ public class TellerController { // Renamed from AccountController
             // Create a Customer object
             Customer customer = new Customer(new UserDetails(username, u.password(), u.email(), name),
                     0, null, null);
+            customer.setId(u.id());
 
             // Add accounts
             if (u.accounts() != null) {
                 for (Users.Account acc : u.accounts()) {
-                    Account account = new Card(acc.number(), acc.balance(), acc.type(), customer);
+                    Account account = null;
+                    switch (acc.type()) {
+                        case "Checking":
+                        case "Check":
+                            account = new Check(acc.number(), acc.balance(), acc.type(), customer);
+                            break;
+
+                        case "Card":
+                            account = new Card(acc.number(), acc.balance(), acc.type(), customer);
+                            break;
+
+                        case "Savings":
+                        case "Saving":
+                            account = new Saving(acc.number(), acc.balance(), acc.type(), customer);
+                            break;
+
+                        default:
+                            System.out.println(acc.type());
+                    }
                     backendList.add(account);
                 }
             }

@@ -129,7 +129,7 @@
                      </font>
                   </Label>
                   <Pane HBox.hgrow="ALWAYS" />
-                  <Button fx:id="close_account_btn" mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: #DC3545; -fx-border-radius: 4; -fx-text-fill: #DC3545;" text="Close Account">
+                  <Button fx:id="close_account_btn" mnemonicParsing="false" onAction="#handleCloseAccount" style="-fx-background-color: white; -fx-border-color: #DC3545; -fx-border-radius: 4; -fx-text-fill: #DC3545;" text="Close Account">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -251,7 +251,7 @@
                            </children>
                         </HBox>
 
-                        <Button fx:id="open_new_account_btn" mnemonicParsing="false" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Open New Account">
+                        <Button fx:id="open_new_account_btn" mnemonicParsing="false" onAction="#handleOpenNewAccount" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #DDDDDD; -fx-text-fill: #000000;" text="Open New Account">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>

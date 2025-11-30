@@ -7,6 +7,10 @@ public class Check extends Account {
         super(accountNumber, "Check", balance, status, customer);
     }
 
+    public Check(String accountNumber, double balance, String status) {
+        super(accountNumber, "Check", balance, status);
+    }
+
     public void title(){
         System.out.println("**Check Title**");
     }

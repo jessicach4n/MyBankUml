@@ -1,13 +1,13 @@
 package bank.user;
 
 import java.util.ArrayList;
+import java.util.List;
 import bank.account.Account;
 
 public class Customer extends User {
 
     private int age;
     private String telNo;
-    private final ArrayList<Account> accounts; // Each customer has a list of accounts (Check, Card etc.)
     
     // Instantiate Customer with no accounts
     public Customer(UserDetails userDetails, int age, String telNo, ArrayList<Account> accounts) {
