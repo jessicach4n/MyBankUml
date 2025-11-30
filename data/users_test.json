@@ -16,5 +16,77 @@
     "password": "pass456",
     "email": "bob@email.com",
     "accounts": []
+  },
+  {
+    "id": 5,
+    "username": "New Name",
+    "name": "Shayan Aminaei",
+    "role": "CUSTOMER",
+    "password": "New Password",
+    "email": "new@email.com",
+    "accounts": []
+  },
+  {
+    "id": 7,
+    "username": "adminUser",
+    "name": "Admin Name",
+    "role": "ADMIN",
+    "password": "adminPass",
+    "email": "admin@example.com",
+    "accounts": []
+  },
+  {
+    "id": 8,
+    "username": "genericUser",
+    "name": "Generic Name",
+    "role": "TELLER",
+    "password": "genPass",
+    "email": "generic@example.com",
+    "accounts": []
+  },
+  {
+    "id": 10,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 11,
+    "username": "genericUser",
+    "name": "Generic Name",
+    "role": "CUSTOMER",
+    "password": "genPass",
+    "email": "generic@example.com",
+    "accounts": []
+  },
+  {
+    "id": 12,
+    "username": "adminUser",
+    "name": "Admin Name",
+    "role": "ADMIN",
+    "password": "adminPass",
+    "email": "admin@example.com",
+    "accounts": []
+  },
+  {
+    "id": 13,
+    "username": "tellerUser",
+    "name": "Teller Name",
+    "role": "TELLER",
+    "password": "tellerPass",
+    "email": "teller@example.com",
+    "accounts": []
+  },
+  {
+    "id": 14,
+    "username": "customerUser",
+    "name": "Shayan Aminaei",
+    "role": "CUSTOMER",
+    "password": "customerPass",
+    "email": "customer@example.com",
+    "accounts": []
   }
 ]
