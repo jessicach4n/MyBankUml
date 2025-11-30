@@ -102,7 +102,6 @@ public class ClosingAccountController {
                 currentTeller = new Teller(tellerDetails);
             }
 
-            // Actually close the account!
             long customerId = accountToClose.getCustomer().getId();
             String accountNumber = accountToClose.getAccountNumber();
 

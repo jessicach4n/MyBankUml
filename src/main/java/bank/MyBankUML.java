@@ -10,7 +10,6 @@ import java.net.URL;
 
 public class MyBankUML extends Application { 
 
-    // The main entry point for all JavaFX applications.
     @Override
     public void start(Stage primaryStage) throws Exception {
         
@@ -38,8 +37,6 @@ public class MyBankUML extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    // Standard Java main method to launch the JavaFX application
     public static void main(String[] args) {
         launch(args);
     }

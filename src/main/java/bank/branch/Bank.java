@@ -19,7 +19,6 @@ public class Bank {
         return ++idCounter;
     }
 
-    // Method used by BranchManagement.addBranch
     public void addBranch(Branch branch) {
         if (!branches.contains(branch)) {
             branches.add(branch);
@@ -28,8 +27,6 @@ public class Bank {
         }
     }
 
-    // Method used by BranchManagement.removeBranch
-    // Returns true if it was successfully removed
     public boolean removeBranch(Branch branch) {
         return branches.remove(branch);
     }

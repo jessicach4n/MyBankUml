@@ -25,9 +25,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Controller for the Withdraw page - handles transfers to other customer accounts.
- */
 public class WithdrawController {
 
     @FXML
@@ -66,17 +63,13 @@ public class WithdrawController {
     private User currentUser;
     private UserManager userManager;
 
-    /**
-     * Initialize the controller.
-     */
     @FXML
     public void initialize() {
-        // Initialize UserManager
         userManager = new UserManager(new bank.user.repository.JsonUserRepository());
     }
 
     /**
-     * Set the current user and populate the UI.
+     * Set the current user and populate the UI
      */
     public void setCurrentUser(User user) {
         this.currentUser = user;
@@ -87,7 +80,7 @@ public class WithdrawController {
     }
 
     /**
-     * Display user profile information in the sidebar.
+     * Display user profile information in the sidebar
      */
     private void displayProfileInfo() {
         if (currentUser == null) return;
@@ -106,7 +99,7 @@ public class WithdrawController {
     }
 
     /**
-     * Populate account combo box with customer's accounts.
+     * Populate account combo box with customer's accounts
      */
     private void populateAccountCombo() {
         if (currentUser instanceof Customer) {
@@ -119,7 +112,7 @@ public class WithdrawController {
     }
 
     /**
-     * Format account for display in combo box.
+     * Format account for display in combo box
      * Format: "Account {number} - ${balance}"
      */
     private String getAccountDisplay(Account account) {
@@ -128,7 +121,7 @@ public class WithdrawController {
     }
 
     /**
-     * Extract account from combo box display string.
+     * Extract account from combo box display string
      */
     private Account getAccountFromDisplay(String display) {
         if (display == null) return null;
@@ -143,7 +136,7 @@ public class WithdrawController {
     }
 
     /**
-     * Populate recipient customer combo box with all other customers.
+     * Populate recipient customer combo box with all other customers
      */
     private void populateRecipientCustomers() {
         java.util.List<User> allUsers = userManager.getUsers();
@@ -159,7 +152,7 @@ public class WithdrawController {
     }
 
     /**
-     * Setup listener for recipient customer selection to populate their accounts.
+     * Setup listener for recipient customer selection to populate their accounts
      */
     private void setupRecipientCustomerListener() {
         recipientCustomerCombo.setOnAction(event -> {
@@ -171,7 +164,7 @@ public class WithdrawController {
     }
 
     /**
-     * Populate recipient account combo box based on selected customer.
+     * Populate recipient account combo box based on selected customer
      */
     private void populateRecipientAccounts(String customerDisplay) {
         recipientAccountCombo.getItems().clear();
@@ -206,7 +199,7 @@ public class WithdrawController {
     }
 
     /**
-     * Format recipient account for display WITHOUT balance (for security).
+     * Format recipient account for display WITHOUT balance (for security)
      * Format: "Account {number} - {type}"
      */
     private String getRecipientAccountDisplay(Account account) {
@@ -214,7 +207,7 @@ public class WithdrawController {
     }
 
     /**
-     * Extract user ID from customer display string.
+     * Extract user ID from customer display string
      */
     private long extractUserIdFromDisplay(String display) {
         // Format: "Name (ID: 123)"
@@ -223,7 +216,7 @@ public class WithdrawController {
     }
 
     /**
-     * Generate initials from a full name.
+     * Generate initials from a full name
      */
     private String getInitials(String fullName) {
         if (fullName == null || fullName.trim().isEmpty()) {
@@ -239,7 +232,7 @@ public class WithdrawController {
     }
 
     /**
-     * Handle submit button - process transfer to another customer's account.
+     * Handle submit button - process transfer to another customer's account
      */
     @FXML
     private void handleSubmit(ActionEvent event) {
@@ -301,12 +294,12 @@ public class WithdrawController {
         try {
             // Step 3: Execute transaction using the helper method
             Users.transaction(
-                currentUser.getId(),                 // Sender user ID
-                fromAccount.getAccountNumber(),      // Sender account number
-                recipientUserId,                     // Recipient user ID
-                recipientAccountNumber,              // Recipient account number
-                amount,                              // Amount
-                description                          // Description
+                currentUser.getId(),
+                fromAccount.getAccountNumber(),
+                recipientUserId,
+                recipientAccountNumber,
+                amount,
+                description
             );
 
             // Step 4: Success flow

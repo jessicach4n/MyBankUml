@@ -60,8 +60,6 @@ public class Users {
 
     public static void load()
     {
-        // Try loading from jsonFile path (data/users.json or custom path) first
-        // This ensures we read from the same location we write to
         try (Reader reader = Files.newBufferedReader(jsonFile)) {
             User[] arr = GSON.fromJson(reader, User[].class);
             if (arr == null) arr = new User[0];
@@ -78,7 +76,7 @@ public class Users {
             LOGGER.warning("Could not load from " + jsonFile.toAbsolutePath() + ", trying resources");
         }
 
-        // Fallback: try loading from resources folder (for initial setup)
+        // Fallback: try loading from resources folder
         try (Reader r = new java.io.InputStreamReader(
                 Users.class.getResourceAsStream("/bank/users.json")))
         {
@@ -100,7 +98,7 @@ public class Users {
             LOGGER.log(Level.SEVERE, "Failed to load users from resources", e);
         }
 
-        // If both fail, start with empty list
+        // if both fail, start with empty list
         USERS = new ArrayList<>();
         USER_MAP = new HashMap<>();
         LOGGER.warning("Starting with empty user list");
@@ -136,9 +134,9 @@ public class Users {
     }
 
     /**
-     * Execute a transaction between two accounts (can be same user or different users).
-     * Creates two transactions: withdrawal from account 1, deposit to account 2.
-     * Updates both account balances and saves to JSON.
+     * Execute a transaction between two accounts (can be same user or different users)
+     * Creates two transactions: withdrawal from account 1, deposit to account 2
+     * Updates both account balances and saves to JSON
      *
      * @param u1 User 1 ID (sender)
      * @param a1 Account 1 number (from)
@@ -156,7 +154,6 @@ public class Users {
 
         long date = bank.Convert.date(java.time.LocalDate.now().toString());
 
-        // Get users
         User U1 = Users.get(u1);
         User U2 = Users.get(u2);
 
@@ -231,8 +228,8 @@ public class Users {
     }
 
     /**
-     * Execute a withdrawal to an external recipient (non-user).
-     * Creates one withdrawal transaction and updates account balance.
+     * Execute a withdrawal to an external recipient (non-user)
+     * Creates one withdrawal transaction and updates account balance
      *
      * @param userId User ID
      * @param accountNumber Account number to withdraw from
@@ -338,16 +335,16 @@ public class Users {
                 amount,
                 details,
                 accountNumber,
-                "0",  // No source account (external)
-                0,  // No sender ID (external)
+                "0",
+                0,
                 senderName
         );
 
-        // Create NEW transaction list with defensive copy
+        // Create new transaction list with defensive copy
         List<Transaction> newTransactionList = new ArrayList<>(account.transactions());
         newTransactionList.add(deposit);
 
-        // Update account with new balance and NEW list
+        // Update account with new balance and new list
         Account updatedAccount = new Account(
                 account.number(),
                 account.type(),
@@ -363,7 +360,7 @@ public class Users {
     }
 
     /**
-     * Helper method to find an account by number within a user's accounts.
+     * Helper method to find an account by number within a user's accounts
      *
      * @param user The user whose accounts to search
      * @param accountNumber The account number to find
@@ -382,7 +379,7 @@ public class Users {
     }
 
     /**
-     * Helper method to replace an account in a user's account list.
+     * Helper method to replace an account in a user's account list
      *
      * @param user The user whose account to replace
      * @param oldAccount The account to replace

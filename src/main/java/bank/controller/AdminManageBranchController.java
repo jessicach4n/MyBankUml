@@ -52,7 +52,6 @@ public class AdminManageBranchController implements Initializable {
     // Observable list for TableView
     private ObservableList<Branch> branchObservableList = FXCollections.observableArrayList();
 
-    /** Dependency injection of manager and bank */
     public void setBranchManager(BranchManager manager, Bank bank) {
         this.branchManager = manager;
         this.currentBank = bank;
@@ -67,17 +66,15 @@ public class AdminManageBranchController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("branchName"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
 
-        // Setup delete column
         setupDeleteColumn();
 
-        // Load admin info
         loadAdminInfo();
 
         btnUsers.setOnAction(event -> navigateToUsers());
     }
 
 
-    /** Adds temporary sample branches to the table for testing */
+    // Adds temporary sample branches to the table for testing
     private void loadTempBranches() {
         branchObservableList.clear();
 
@@ -90,7 +87,7 @@ public class AdminManageBranchController implements Initializable {
         branchTable.setItems(branchObservableList);
     }
 
-    /** Reloads the branches from the manager into the table */
+    // Reloads the branches from the manager into the table
     private void reloadBranches() {
         if (branchManager != null && currentBank != null) {
             branchObservableList.setAll(branchManager.getBranchList(currentBank));
@@ -98,7 +95,7 @@ public class AdminManageBranchController implements Initializable {
         }
     }
 
-    /** Configure the delete column with a button for each row */
+    // Configure the delete column with a button for each row
     private void setupDeleteColumn() {
         deleteColumn.setCellFactory(col -> new TableCell<>() {
             private final Button deleteBtn = new Button("Delete");
@@ -123,7 +120,7 @@ public class AdminManageBranchController implements Initializable {
         });
     }
 
-    /** Handles deleting a branch */
+    // Handles deleting a branch
     private void handleDeleteBranch(Branch branch) {
         boolean removed = branchManager.removeBranch(branch);
         if (removed) {
@@ -141,18 +138,16 @@ public class AdminManageBranchController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminAddNewBranchPage.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and set the bank context
             AdminAddNewBranchController controller = loader.getController();
-            controller.setBankContext(currentBank, branchManager); // pass your current bank and branch manager
+            controller.setBankContext(currentBank, branchManager);
 
-            // Create a new stage (window) for the add branch form
+            // Create a new window for the add branch form
             Stage stage = new Stage();
             stage.setTitle("Add New Branch");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL); // Blocks input to other windows until closed
-            stage.showAndWait(); // Wait for the window to close
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
-            // Optional: reload the branches after adding a new one
             reloadBranches();
 
         } catch (IOException e) {
@@ -161,9 +156,9 @@ public class AdminManageBranchController implements Initializable {
         }
     }
 
-    /** Load the admin profile info dynamically */
+    // Load the admin profile info dynamically
     private void loadAdminInfo() {
-        String fullName = "John Doe"; // Replace with actual session info
+        String fullName = "John Doe";
         fullNameLabel.setText(fullName);
 
         String[] parts = fullName.split(" ");
@@ -180,13 +175,10 @@ public class AdminManageBranchController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminHomePage.fxml"));
             Parent root = loader.load();
 
-            // Get the controller for the new page
             AdminController controller = loader.getController();
 
-            // Pass the current Bank and BranchManager context
             controller.initializeAdminContext(branchManager, currentBank);
 
-            // Set the scene
             Stage stage = (Stage) btnBranch.getScene().getWindow();
             stage.setScene(new Scene(root));
 

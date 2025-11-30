@@ -37,9 +37,6 @@ import java.util.Objects;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Controller for the Customer Information page.
- */
 public class CustomerInformationController {
 
     @FXML private TextField customer_name_fld;
@@ -64,13 +61,11 @@ public class CustomerInformationController {
         }
     }
 
-    /** Called by TellerController when switching screens */
     public void setAccount(Account account) {
         this.account = account;
         fillFields();
     }
 
-    /** Fill UI fields using selected account */
     private void fillFields() {
         if (account == null) return;
 
@@ -81,7 +76,6 @@ public class CustomerInformationController {
         balance_lbl.setText("$ " + account.getBalance());
     }
 
-    /** Back button: return to Teller page */
     @FXML
     private Label welcomeLabel;
 
@@ -118,17 +112,11 @@ public class CustomerInformationController {
     private Account selectedAccount;
     private User currentUser;
 
-    /**
-     * Set the current user (called from LoginController after successful login).
-     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
         displayCustomerInfo();
     }
 
-    /**
-     * Display customer information on the page.
-     */
     private void displayCustomerInfo() {
         if (currentUser == null) return;
 
@@ -235,7 +223,7 @@ public class CustomerInformationController {
 
         displayTransactions(account);
 
-        // Refresh cards to show selection border
+        // refresh cards to show selection border
         if (currentUser instanceof Customer customer) {
             populateAccountCards(customer);
         }
@@ -289,7 +277,6 @@ public class CustomerInformationController {
         HBox row = new HBox(10);
         row.setStyle("-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-width: 0 0 1 0;");
 
-        // Date
         Label dateLabel = new Label(dateFormat.format(transaction.getDate()));
         dateLabel.setPrefWidth(100);
         dateLabel.setStyle("-fx-text-fill: #666666;");
@@ -307,18 +294,15 @@ public class CustomerInformationController {
         descLabel.setPrefWidth(250);
         descLabel.setFont(Font.font(12));
 
-        // Spacer
         Pane spacer = new Pane();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // Amount
         double amount = transaction.getAmount();
         Label amountLabel = new Label(currencyFormat.format(Math.abs(amount)));
         amountLabel.setPrefWidth(100);
         amountLabel.setFont(Font.font("System Bold", 12));
         amountLabel.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-        // Color based on transaction type
         if (amount >= 0) {
             amountLabel.setStyle("-fx-text-fill: #28A745;"); // Green for deposits
             amountLabel.setText("+ " + currencyFormat.format(amount));
@@ -333,7 +317,7 @@ public class CustomerInformationController {
 
     /**
      * Generate initials from a full name.
-     * E.g., "Kanye West" -> "KW"
+     * E.g., "Kanye West" becomes "KW"
      */
     private String getInitials(String fullName) {
         if (fullName == null || fullName.trim().isEmpty()) {
@@ -349,7 +333,6 @@ public class CustomerInformationController {
     }
 
     /**
-     * Handle Deposit button click.
      * Navigates to the Deposit page.
      */
     @FXML
@@ -371,7 +354,6 @@ public class CustomerInformationController {
     }
 
     /**
-     * Handle Withdraw button click.
      * Navigates to the Withdraw page.
      */
     @FXML
@@ -393,8 +375,7 @@ public class CustomerInformationController {
     }
 
     /**
-     * Handle logout button click.
-     * Navigates to the logout successful page.
+     * Navigates to the logout successful page
      */
     @FXML
     private void handleLogout(ActionEvent event) {
@@ -439,6 +420,5 @@ public class CustomerInformationController {
         }
     }
     public void initialize() {
-        // Initialize any default UI elements if needed
     }
 }

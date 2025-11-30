@@ -30,10 +30,8 @@ public class OpenNewAccountController {
     @FXML
     private ComboBox<String> customerComboBox;
 
-    // Store the logged-in teller (you may need to pass this from login or session)
     private Teller currentTeller;
 
-    // You can set this via a setter or through a session manager
     public void setCurrentTeller(Teller teller) {
         this.currentTeller = teller;
     }
@@ -43,9 +41,6 @@ public class OpenNewAccountController {
         populateCustomers();
     }
 
-    /**
-     * Populate the customer dropdown with all customers
-     */
     private void populateCustomers() {
         Users.load();
         for (Users.User user : Users.get()) {
@@ -57,9 +52,6 @@ public class OpenNewAccountController {
         }
     }
 
-    /**
-     * Extract customer ID from the display string
-     */
     private long extractCustomerId(String display) {
         // Format: "Name (ID: 123)"
         String idPart = display.substring(display.indexOf("ID: ") + 4, display.lastIndexOf(")"));
@@ -162,13 +154,11 @@ public class OpenNewAccountController {
             }
         }
 
-        // Generate account number following pattern: {customerId}{001, 002, ...}
-        // Start from {customerId}001
         int suffix = 1;
         String accountNumber;
 
         do {
-            // Format: customerId + zero-padded 3-digit suffix
+            // Format: customerId + zero padded 3 digit suffix
             accountNumber = String.format("%d%03d", customerId, suffix);
             suffix++;
         } while (existingNumbers.contains(accountNumber));

@@ -23,9 +23,7 @@ import java.util.ArrayList;
 
 public class AdminCreateAccountController {
 
-    // ------------------------
     // FXML Bindings
-    // ------------------------
     @FXML
     private TextField nameField;
 
@@ -50,9 +48,7 @@ public class AdminCreateAccountController {
     private UserManager userManager;
     private static final InternalLogger LOGGER = new InternalLogger();
 
-    // ------------------------
-    // Context (ADDED)
-    // ------------------------
+    // Context
     private Bank currentBank;
     private BranchManager branchManager;
 
@@ -62,9 +58,7 @@ public class AdminCreateAccountController {
         this.branchManager = manager;
     }
 
-    // ------------------------
     // Initialization
-    // ------------------------
     @FXML
     public void initialize() {
         JsonUserRepository userRepository = new JsonUserRepository();
@@ -73,16 +67,13 @@ public class AdminCreateAccountController {
         roleComboBox.getItems().addAll("Customer", "Teller", "Manager", "Admin");
     }
 
-    // ------------------------
     // Button Handlers
-    // ------------------------
     @FXML
     private void handleSubmit(ActionEvent event) {
         String name = nameField.getText().trim();
         String position = positionField.getText().trim();
         String role = roleComboBox.getValue();
 
-        // Basic validation
         if (name.isEmpty() || position.isEmpty() || role == null) {
             messageLabel.setText("Please fill in all fields.");
             messageLabel.setStyle("-fx-text-fill: #FF0000;");
@@ -90,19 +81,10 @@ public class AdminCreateAccountController {
         }
 
         try {
-            // Convert role to uppercase for consistency with Role enum
             String roleUpperCase = role.toUpperCase();
-
-            // Generate a unique user ID
             long userId = generateUniqueUserId();
-
-            // Generate username from name (lowercase, no spaces)
             String username = name.toLowerCase().replace(" ", "");
-
-            // Generate email from username
             String email = username + "@mybank.com";
-
-            // Default password (should be changed on first login in production)
             String password = username + "123";
 
             // Create new user record
@@ -140,7 +122,7 @@ public class AdminCreateAccountController {
 
     @FXML
     private void handleCancel(ActionEvent event) {
-        // Clear all fields
+        // Clear everything
         nameField.clear();
         positionField.clear();
         roleComboBox.getSelectionModel().clearSelection();
@@ -154,7 +136,6 @@ public class AdminCreateAccountController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/gui/AdminHomePage.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and refresh the user list
             AdminController adminController = loader.getController();
             adminController.initializeAdminContext(this.branchManager, this.currentBank);
             adminController.refreshUsers();
@@ -170,9 +151,7 @@ public class AdminCreateAccountController {
         }
     }
 
-    // ------------------------
-    // Helper Methods
-    // ------------------------
+    // Helper
     private long generateUniqueUserId() {
         // Get all existing users
         Users.load();

@@ -55,13 +55,13 @@ public class Teller extends User {
         if (account.getTransactions() != null && !account.getTransactions().isEmpty()) {
             txList = account.getTransactions().stream()
                     .map(t -> new Users.Transaction(
-                            t.getDate().getTime(),          // convert Date to long
-                            t.getAmount(),                  // amount is now double in Users.Transaction
-                            t.getType(),                    // use type as details
-                            "0",                            // to_account (String, "0" for no destination)
-                            accountNum,                     // from_account (use account parameter)
-                            customerId,                     // recipient_id (use customerId parameter)
-                            customerName                    // recipient_name (use customer's name)
+                            t.getDate().getTime(), 
+                            t.getAmount(),
+                            t.getType(),
+                            "0",
+                            accountNum,
+                            customerId,
+                            customerName
                     ))
                     .toList();
         }

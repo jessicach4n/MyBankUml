@@ -8,7 +8,6 @@ public class Branch {
     private String address;
     private transient Bank bank;
 
-    // Constructor requires all four core attributes
     public Branch(String branchName, String address, Bank bank) {
         this.branchName = branchName;
         this.address = address;

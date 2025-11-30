@@ -37,13 +37,10 @@ public class LoginController {
     private Button loginButton;
 
     private UserManager userManager;
-    private User currentUser;  // Stores the authenticated user
+    private User currentUser;  // Store the authenticated user
     private BranchManager branchManager;
     private Bank bank;
-    /**
-     * Initialize the controller.
-     * Sets up the UserManager and configures the login button action.
-     */
+
     @FXML
     public void initialize() {
         // Initialize UserManager with JsonUserRepository
@@ -61,8 +58,7 @@ public class LoginController {
     }
 
     /**
-     * Handle the login button click.
-     * Validates credentials and navigates to the appropriate page based on user role.
+     * Validates credentials and navigates to the appropriate page based on user role
      */
     @FXML
     private void handleLogin(ActionEvent event) {
@@ -96,7 +92,7 @@ public class LoginController {
     }
 
     /**
-     * Navigate to the appropriate page based on the user's role.
+     * Navigate to the appropriate page based on the user's role
      * - CUSTOMER: CustomerInformation page
      * - TELLER: TellerHomePage
      * - MANAGER: ManagerHomePage (to be implemented)
@@ -136,14 +132,10 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Get the controller and pass the current user if needed
             Object controller = loader.getController();
             if (controller instanceof TellerController) {
-                // You can add setCurrentUser method to TellerController later
-                // ((TellerController) controller).setCurrentUser(currentUser);
                 System.out.println("Loaded TellerController for " + roleDescription);
             } else if (controller instanceof CustomerInformationController) {
-                // Pass user info to CustomerInformationController
                 ((CustomerInformationController) controller).setCurrentUser(currentUser);
                 System.out.println("Loaded CustomerInformationController with user: " + currentUser.getName());
             } else if (controller instanceof AdminController adminController) {
@@ -166,9 +158,7 @@ public class LoginController {
         }
     }
 
-    /**
-     * Display an alert dialog.
-     */
+    // Alert dialogue
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -177,10 +167,6 @@ public class LoginController {
         alert.showAndWait();
     }
 
-    /**
-     * Get the currently authenticated user.
-     * This can be used by other controllers to access the logged-in user.
-     */
     public User getCurrentUser() {
         return currentUser;
     }

@@ -15,7 +15,7 @@ public abstract class Account {
     private String accountType;
     private double balance;
     private String status;
-    protected Customer customer; // Should this be here?
+    protected Customer customer;
     private ArrayList<Transaction> transactions;
 
     private final InternalLogger logger = new InternalLogger();

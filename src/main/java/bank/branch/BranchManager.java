@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-// This implementation is super not robust, but I think its ok
 public class BranchManager {
 
     private static final String BRANCH_FILE = "data/branches.json";
@@ -18,7 +17,7 @@ public class BranchManager {
 
     }
 
-    /** Load branches from JSON into a bank */
+    // Load branches from JSON into a bank
     public void loadBranches(Bank bank) {
         try (Reader reader = new FileReader(BRANCH_FILE)) {
             Type type = new TypeToken<Map<String, List<Branch>>>() {}.getType();
@@ -26,7 +25,7 @@ public class BranchManager {
             if (map != null && map.containsKey("branches")) {
                 List<Branch> loaded = map.get("branches");
                 for (Branch b : loaded) {
-                    b.setBank(bank); // assign the bank reference
+                    b.setBank(bank);
                     bank.addBranch(b);
                 }
             }
@@ -38,7 +37,7 @@ public class BranchManager {
         }
     }
 
-    /** Save branches to JSON */
+    // Save branches to JSON
     private void saveBranches(Bank bank) {
         try (Writer writer = new FileWriter(BRANCH_FILE)) {
             Map<String, List<Branch>> map = Map.of("branches", bank.getBranches());
@@ -49,7 +48,7 @@ public class BranchManager {
         }
     }
 
-    /** Add a branch and save */
+    // Add branch and save
     public Branch addBranch(String name, String address, Bank bank) {
         Branch branch = new Branch(name, address, bank);
         bank.addBranch(branch);
@@ -58,7 +57,7 @@ public class BranchManager {
         return branch;
     }
 
-    /** Remove a branch and save */
+    // remove branch and then save
     public boolean removeBranch(Branch branch) {
         Bank bank = branch.getBank();
         if (bank == null) {
